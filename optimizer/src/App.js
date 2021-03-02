@@ -4,8 +4,31 @@ import './App.css';
 import 'antd/dist/antd.css';
 
 
-import { Layout, Menu, Typography, Table, Tag, Space, Drawer, Form, Button, Col, Row, Input, Select, DatePicker } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined, PlusOutlined } from '@ant-design/icons';
+import { 
+  Layout, 
+  Menu, 
+  Typography, 
+  Table, 
+  Tag, 
+  Space, 
+  Drawer, 
+  Form, 
+  Button, 
+  Col, 
+  Row, 
+  Input, 
+  Select, 
+  DatePicker,
+  PageHeader, 
+  Statistic, 
+  Progress
+} from 'antd';
+
+import { 
+  PlusOutlined, 
+  ScheduleOutlined, 
+  InfoCircleOutlined 
+} from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -85,9 +108,61 @@ const data = [
 ];
 
 
+const renderContent = () => (
+    <Row>
+    <Statistic
+      title="Activité mesurée"
+      suffix="MBq"
+      value={3825}
+
+    />
+    <Statistic
+      title="Heure de mesure"
+      suffix="AM"
+      value={"08:00"}
+      style={{
+        margin: '0 32px',
+      }}
+    />
+    <Statistic
+      title="Volume reçu"
+      suffix="ml"
+      value={8.5}
+    />
+    <Statistic
+      title="Demi-vie reçue"
+      suffix="min"
+      value={109.8}
+      style={{
+        margin: '0 32px',
+      }}
+    />
+    <Progress 
+      strokeColor={{
+        '0%': 'red',
+        '100%': 'green',
+      }}
+      type="circle" 
+      percent={80} 
+      format={percent => `${percent * 10} MBq`} 
+      />
+  </Row>
+);
+
+
+const HeaderContent = ({ children, extra }) => (
+  <div className="content">
+    <div className="main">{children}</div>
+    <div className="extra">{extra}</div>
+  </div>
+);
+
+
 class App extends React.Component {
 
-  state = { visible: false };
+  state = { 
+    visible: false
+  };
 
   showDrawer = () => {
     this.setState({
@@ -223,6 +298,25 @@ class App extends React.Component {
     )
   }
 
+  renderHeader() {
+    return(
+      <PageHeader
+      className="site-page-header-responsive"
+      title="MBq optimizer"
+      subTitle="3/3/2021"
+      tags={<Tag color="blue">Running</Tag>}
+      extra={[
+        <Button key="1">Sort</Button>,
+        <Button key="2" type="primary" onClick={this.showDrawer}>
+          <PlusOutlined /> New user
+        </Button>
+      ]}
+    >
+      <HeaderContent>{renderContent()}</HeaderContent>
+    </PageHeader>
+    )
+  }
+
 render() {
   return (
     <>
@@ -237,23 +331,13 @@ render() {
         console.log(collapsed, type);
       }}
     >
-
-
         <Title className="logo"  >Scheduler</Title>
-
-
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-        <Menu.Item key="1" icon={<UserOutlined />}>
-          nav 1
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+        <Menu.Item key="1" icon={<ScheduleOutlined />}>
+          Patients
         </Menu.Item>
-        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-          nav 2
-        </Menu.Item>
-        <Menu.Item key="3" icon={<UploadOutlined />}>
-          nav 3
-        </Menu.Item>
-        <Menu.Item key="4" icon={<UserOutlined />}>
-          nav 4
+        <Menu.Item key="2" icon={<InfoCircleOutlined />}>
+          Infos
         </Menu.Item>
       </Menu>
     </Sider>
@@ -264,10 +348,7 @@ render() {
 
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
-
-          <Button type="primary" onClick={this.showDrawer}>
-            <PlusOutlined /> New account
-          </Button>
+          {this.renderHeader()}
 
           <Table columns={columns} dataSource={data} />
         </div>
