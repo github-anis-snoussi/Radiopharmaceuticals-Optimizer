@@ -142,7 +142,6 @@ const renderContent = () => (
         '0%': 'red',
         '100%': 'green',
       }}
-      type="circle" 
       percent={80} 
       format={percent => `${percent * 10} MBq`} 
       />
