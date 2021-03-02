@@ -37,6 +37,15 @@ import arrayMove from 'array-move';
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 const { Option } = Select;
+const { Countdown } = Statistic;
+
+
+const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
+
+function onFinish() {
+  console.log('finished!');
+}
+
 
 const DragHandle = sortableHandle(() => (
   <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
@@ -159,6 +168,7 @@ const renderContent = () => (
         margin: '0 32px',
       }}
     />
+    <Countdown valueStyle={{ color: '#1890ff' }} title="Time Remaining" value={deadline} onFinish={onFinish} />
     <Progress 
       strokeColor={{
         '0%': 'red',
@@ -415,9 +425,8 @@ render() {
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
           {this.renderHeader()}
-
-          {/* <Table columns={columns} dataSource={data} /> */}
           {this.renderTable()}
+
         </div>
 
       </Content>
