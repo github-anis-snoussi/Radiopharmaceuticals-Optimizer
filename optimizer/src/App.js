@@ -27,14 +27,33 @@ import {
 import { 
   PlusOutlined, 
   ScheduleOutlined, 
-  InfoCircleOutlined 
+  InfoCircleOutlined,
+  MenuOutlined
 } from '@ant-design/icons';
+
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 const { Option } = Select;
 
+const DragHandle = sortableHandle(() => (
+  <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
+));
+
+const SortableItem = sortableElement(props => <tr {...props} />);
+const SortableContainer = sortableContainer(props => <tbody {...props} />);
+
+
 const columns = [
+  {
+    title: 'Sort',
+    dataIndex: 'sort',
+    width: 30,
+    className: 'drag-visible',
+    render: () => <DragHandle />,
+  },
   {
     title: 'Name',
     dataIndex: 'name',
@@ -90,6 +109,7 @@ const data = [
     age: 32,
     address: 'New York No. 1 Lake Park',
     tags: ['nice', 'developer'],
+    index: 0,
   },
   {
     key: '2',
@@ -97,6 +117,7 @@ const data = [
     age: 42,
     address: 'London No. 1 Lake Park',
     tags: ['loser'],
+    index: 1,
   },
   {
     key: '3',
@@ -104,6 +125,7 @@ const data = [
     age: 32,
     address: 'Sidney No. 1 Lake Park',
     tags: ['cool', 'teacher'],
+    index: 2,
   },
 ];
 
@@ -160,7 +182,8 @@ const HeaderContent = ({ children, extra }) => (
 class App extends React.Component {
 
   state = { 
-    visible: false
+    visible: false,
+    dataSource: data,
   };
 
   showDrawer = () => {
@@ -316,6 +339,51 @@ class App extends React.Component {
     )
   }
 
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { dataSource } = this.state;
+    if (oldIndex !== newIndex) {
+      const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter(el => !!el);
+      console.log('Sorted items: ', newData);
+      this.setState({ dataSource: newData });
+    }
+  };
+
+  DraggableContainer = props => (
+    <SortableContainer
+      useDragHandle
+      disableAutoscroll
+      helperClass="row-dragging"
+      onSortEnd={this.onSortEnd}
+      {...props}
+    />
+  );
+
+  DraggableBodyRow = ({ className, style, ...restProps }) => {
+    const { dataSource } = this.state;
+    // function findIndex base on Table rowKey props and should always be a right array index
+    const index = dataSource.findIndex(x => x.index === restProps['data-row-key']);
+    return <SortableItem index={index} {...restProps} />;
+  };
+
+  renderTable() {
+    const { dataSource } = this.state;
+
+    return (
+      <Table
+        pagination={false}
+        dataSource={dataSource}
+        columns={columns}
+        rowKey="index"
+        components={{
+          body: {
+            wrapper: this.DraggableContainer,
+            row: this.DraggableBodyRow,
+          },
+        }}
+      />
+    );
+  }
+
 render() {
   return (
     <>
@@ -344,17 +412,16 @@ render() {
       <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
       <Content style={{ margin: '24px 16px 0' }}>
 
-
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
           {this.renderHeader()}
 
-          <Table columns={columns} dataSource={data} />
+          {/* <Table columns={columns} dataSource={data} /> */}
+          {this.renderTable()}
         </div>
 
-
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>MBq optimizer 2021 Created by Anis Snoussi</Footer>
     </Layout>
   </Layout>
   {this.renderDrawer()}
