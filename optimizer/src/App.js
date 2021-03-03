@@ -4,13 +4,14 @@ import './App.css';
 import 'antd/dist/antd.css';
 
 
+import AppHeader from "./Components/AppHeader"
+import PatientsTable from "./Components/PatientsTable"
+
+
 import { 
   Layout, 
   Menu, 
   Typography, 
-  Table, 
-  Tag, 
-  Space, 
   Drawer, 
   Form, 
   Button, 
@@ -19,97 +20,19 @@ import {
   Input, 
   Select, 
   DatePicker,
-  PageHeader, 
-  Statistic, 
-  Progress
 } from 'antd';
 
 import { 
   PlusOutlined, 
   ScheduleOutlined, 
   InfoCircleOutlined,
-  MenuOutlined
 } from '@ant-design/icons';
-
-import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
-import arrayMove from 'array-move';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
 const { Option } = Select;
-const { Countdown } = Statistic;
 
 
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30; // Moment is also OK
-
-function onFinish() {
-  console.log('finished!');
-}
-
-
-const DragHandle = sortableHandle(() => (
-  <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
-));
-
-const SortableItem = sortableElement(props => <tr {...props} />);
-const SortableContainer = sortableContainer(props => <tbody {...props} />);
-
-
-const columns = [
-  {
-    title: 'Sort',
-    dataIndex: 'sort',
-    width: 30,
-    className: 'drag-visible',
-    render: () => <DragHandle />,
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    render: tags => (
-      <>
-        {tags.map(tag => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
 
 const data = [
   {
@@ -137,56 +60,6 @@ const data = [
     index: 2,
   },
 ];
-
-
-const renderContent = () => (
-    <Row>
-    <Statistic
-      title="Activité mesurée"
-      suffix="MBq"
-      value={3825}
-
-    />
-    <Statistic
-      title="Heure de mesure"
-      suffix="AM"
-      value={"08:00"}
-      style={{
-        margin: '0 32px',
-      }}
-    />
-    <Statistic
-      title="Volume reçu"
-      suffix="ml"
-      value={8.5}
-    />
-    <Statistic
-      title="Demi-vie reçue"
-      suffix="min"
-      value={109.8}
-      style={{
-        margin: '0 32px',
-      }}
-    />
-    <Countdown valueStyle={{ color: '#1890ff' }} title="Time Remaining" value={deadline} onFinish={onFinish} />
-    <Progress 
-      strokeColor={{
-        '0%': 'red',
-        '100%': 'green',
-      }}
-      percent={80} 
-      format={percent => `${percent * 10} MBq`} 
-      />
-  </Row>
-);
-
-
-const HeaderContent = ({ children, extra }) => (
-  <div className="content">
-    <div className="main">{children}</div>
-    <div className="extra">{extra}</div>
-  </div>
-);
 
 
 class App extends React.Component {
@@ -330,69 +203,6 @@ class App extends React.Component {
     )
   }
 
-  renderHeader() {
-    return(
-      <PageHeader
-      className="site-page-header-responsive"
-      title="MBq optimizer"
-      subTitle="3/3/2021"
-      tags={<Tag color="blue">Running</Tag>}
-      extra={[
-        <Button key="1">Sort</Button>,
-        <Button key="2" type="primary" onClick={this.showDrawer}>
-          <PlusOutlined /> New user
-        </Button>
-      ]}
-    >
-      <HeaderContent>{renderContent()}</HeaderContent>
-    </PageHeader>
-    )
-  }
-
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { dataSource } = this.state;
-    if (oldIndex !== newIndex) {
-      const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter(el => !!el);
-      console.log('Sorted items: ', newData);
-      this.setState({ dataSource: newData });
-    }
-  };
-
-  DraggableContainer = props => (
-    <SortableContainer
-      useDragHandle
-      disableAutoscroll
-      helperClass="row-dragging"
-      onSortEnd={this.onSortEnd}
-      {...props}
-    />
-  );
-
-  DraggableBodyRow = ({ className, style, ...restProps }) => {
-    const { dataSource } = this.state;
-    // function findIndex base on Table rowKey props and should always be a right array index
-    const index = dataSource.findIndex(x => x.index === restProps['data-row-key']);
-    return <SortableItem index={index} {...restProps} />;
-  };
-
-  renderTable() {
-    const { dataSource } = this.state;
-
-    return (
-      <Table
-        pagination={false}
-        dataSource={dataSource}
-        columns={columns}
-        rowKey="index"
-        components={{
-          body: {
-            wrapper: this.DraggableContainer,
-            row: this.DraggableBodyRow,
-          },
-        }}
-      />
-    );
-  }
 
 render() {
   return (
@@ -424,8 +234,18 @@ render() {
 
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
-          {this.renderHeader()}
-          {this.renderTable()}
+          <AppHeader>
+            <Button key="1" >Sort</Button>
+            <Button key="2" type="primary" onClick={this.showDrawer}>
+              <PlusOutlined /> New user
+            </Button>
+          </AppHeader>
+
+
+          <PatientsTable 
+            dataSource={this.state.dataSource} 
+            updateData={(newData) => this.setState({dataSource : newData})} 
+          />
 
         </div>
 
