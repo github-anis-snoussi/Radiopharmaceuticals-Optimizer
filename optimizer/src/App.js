@@ -20,16 +20,22 @@ import {
   Input, 
   Select, 
   DatePicker,
+  Modal,
+  InputNumber,
+  TimePicker,
+  Divider
 } from 'antd';
 
 import { 
   PlusOutlined, 
   ScheduleOutlined, 
   InfoCircleOutlined,
+  ExperimentOutlined,
+  BankOutlined
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 
 
@@ -65,20 +71,33 @@ const data = [
 class App extends React.Component {
 
   state = { 
-    visible: false,
+    isDrawerVisible: false,
+    isModalVisible: true,
     dataSource: data,
   };
 
   showDrawer = () => {
     this.setState({
-      visible: true,
+      isDrawerVisible: true,
     });
   };
 
-  onClose = () => {
+  onCloseDrawer = () => {
     this.setState({
-      visible: false,
+      isDrawerVisible: false,
     });
+  };
+
+  showModal = () => {
+    this.setState({isModalVisible : true});
+  };
+
+  handleOk = () => {
+    this.setState({isModalVisible : false});
+  };
+
+  handleCancel = () => {
+    this.setState({isModalVisible : false});
   };
 
   renderDrawer() {
@@ -86,8 +105,8 @@ class App extends React.Component {
       <Drawer
       title="Create a new account"
       width={720}
-      onClose={this.onClose}
-      visible={this.state.visible}
+      onClose={this.onCloseDrawer}
+      visible={this.state.isDrawerVisible}
       bodyStyle={{ paddingBottom: 80 }}
       footer={
         <div
@@ -95,10 +114,10 @@ class App extends React.Component {
             textAlign: 'right',
           }}
         >
-          <Button onClick={this.onClose} style={{ marginRight: 8 }}>
+          <Button onClick={this.onCloseDrawer} style={{ marginRight: 8 }}>
             Cancel
           </Button>
-          <Button onClick={this.onClose} type="primary">
+          <Button onClick={this.onCloseDrawer} type="primary">
             Submit
           </Button>
         </div>
@@ -203,6 +222,62 @@ class App extends React.Component {
     )
   }
 
+  renderModal() {
+
+    return(
+      <Modal title="Welcome" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Activité mesurée (MBq)</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            <InputNumber
+              defaultValue={0}
+              onChange={() => {console.log("e")}}
+            />
+          </Col>
+        </Row>
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Heure de mesure</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            <TimePicker onChange={() => {console.log('ee')}} />
+          </Col>
+        </Row>
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Volume  reçu  (ml)</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            <InputNumber
+              defaultValue={0}
+              onChange={() => {console.log("e")}}
+            />
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Demi-vie reçue (min)</Text>
+          </Col>
+          <Col className="gutter-row" span={6}>
+            <InputNumber
+              defaultValue={0}
+              onChange={() => {console.log("e")}}
+            />
+          </Col>
+        </Row>
+
+        <Divider orientation="left">Additional Data</Divider>
+        <Input placeholder="Lab name" prefix={<BankOutlined />} />
+      </Modal>
+    )
+  }
+
 
 render() {
   return (
@@ -254,6 +329,7 @@ render() {
     </Layout>
   </Layout>
   {this.renderDrawer()}
+  {this.renderModal()}
   </>
   );
 }
