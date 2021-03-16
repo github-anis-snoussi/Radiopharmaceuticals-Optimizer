@@ -2,8 +2,8 @@ import React from "react";
 import "../App.css";
 import 'antd/dist/antd.css';
 
-import { Table, Tag, Space, } from 'antd';
-import {MenuOutlined} from '@ant-design/icons';
+import { Table, Space, Button, Popconfirm, message, Spin } from 'antd';
+import {MenuOutlined, ClockCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
@@ -16,6 +16,16 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement(props => <tr {...props} />);
 const SortableContainer = sortableContainer(props => <tbody {...props} />);
   
+function confirm(e) {
+  console.log(e);
+  message.success('Click on Yes');
+}
+
+function cancel(e) {
+  console.log(e);
+  message.error('Click on No');
+}
+
 
 const columns = [
     {
@@ -32,9 +42,9 @@ const columns = [
       render: text => <a>{text}</a>,
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: 'Weight (Kg)',
+      dataIndex: 'weight',
+      key: 'weight',
     },
     {
       title: 'Address',
@@ -42,32 +52,54 @@ const columns = [
       key: 'address',
     },
     {
-      title: 'Tags',
+      title: 'Status',
       key: 'tags',
       dataIndex: 'tags',
       render: tags => (
         <>
           {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
+
+            if (tag === 'done') {
+              return (
+                <CheckCircleOutlined  style={{color : 'green', fontSize: '23px'}} />
+              );
             }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
+
+            if (tag === 'test') {
+              return (
+                <Spin />
+              );
+            }
+
+            if (tag === 'waiting') {
+              return (
+                <ClockCircleOutlined style={{color : 'orange', fontSize: '23px'}} />
+              );
+            }
+
           })}
         </>
       ),
     },
     {
-      title: 'Action',
+      title: 'Actions',
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
+          <Button  size="small" >
+            Inject {record.name}
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this patient?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button  size="small" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
