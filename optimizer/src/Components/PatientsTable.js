@@ -47,9 +47,10 @@ const columns = [
       key: 'weight',
     },
     {
-      title: 'Address',
+      title: 'Test Duration (min)',
       dataIndex: 'address',
       key: 'address',
+      render: text => <p>{text} minutes</p>,
     },
     {
       title: 'Status',
