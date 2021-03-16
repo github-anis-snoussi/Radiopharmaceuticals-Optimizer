@@ -33,7 +33,11 @@ const columns = [
       dataIndex: 'sort',
       width: 30,
       className: 'drag-visible',
-      render: () => <DragHandle />,
+      render: (a, b) => {
+        if(b.tags[0] === "waiting"){
+          return <DragHandle />
+        }
+      },
     },
     {
       title: 'Name',
@@ -124,9 +128,11 @@ class PatientsTable extends React.Component {
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
-    if (oldIndex !== newIndex) {
+    if(dataSource[newIndex].tags[0] !== 'waiting'){
+      return
+    }else if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter(el => !!el);
-      console.log('Sorted items: ', newData);
+      // console.log('Sorted items: ', newData);
       this.props.updateData(newData);
     }
   };
