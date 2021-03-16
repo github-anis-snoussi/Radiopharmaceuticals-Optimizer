@@ -87,9 +87,21 @@ const columns = [
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <Button  size="small" >
-            Inject {record.name}
-          </Button>
+
+          <Popconfirm
+            title="Are you sure to inject this patient?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+
+            <Button  size="small" >
+              Inject {record.name}
+            </Button>
+
+          </Popconfirm>
+
           <Popconfirm
             title="Are you sure to delete this patient?"
             onConfirm={confirm}
@@ -101,6 +113,7 @@ const columns = [
               Delete
             </Button>
           </Popconfirm>
+
         </Space>
       ),
     },

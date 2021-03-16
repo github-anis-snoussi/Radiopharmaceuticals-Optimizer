@@ -28,18 +28,17 @@ const HeaderContent = ({ children, extra }) => (
   </div>
 );
 
-const renderContent = () => (
+const renderContent = (measuredActivity, measureTime, receivedVolume, halfLife) => (
   <Row>
   <Statistic
     title="Activité mesurée"
     suffix="MBq"
-    value={3825}
+    value={measuredActivity}
 
   />
   <Statistic
     title="Heure de mesure"
-    suffix="AM"
-    value={"08:00"}
+    value={new Date(measureTime).toLocaleTimeString().replace(/:\d+ /, ' ')}
     style={{
       margin: '0 32px',
     }}
@@ -47,12 +46,12 @@ const renderContent = () => (
   <Statistic
     title="Volume reçu"
     suffix="ml"
-    value={8.5}
+    value={receivedVolume}
   />
   <Statistic
     title="Demi-vie reçue"
     suffix="min"
-    value={109.8}
+    value={halfLife}
     style={{
       margin: '0 32px',
     }}
@@ -81,12 +80,14 @@ class AppHeader extends React.Component {
     return (
       <PageHeader
       className="site-page-header-responsive"
-      title="MBq optimizer"
-      subTitle="3/3/2021"
+      title={this.props.name}
+      subTitle={new Date().toDateString()}
       tags={<Tag color="blue">Running</Tag>}
       extra={this.props.children}
     >
-      <HeaderContent>{renderContent()}</HeaderContent>
+      <HeaderContent>
+        {renderContent(this.props.measuredActivity, this.props.measureTime, this.props.receivedVolume, this.props.halfLife)}
+        </HeaderContent>
     </PageHeader>
     );
   }

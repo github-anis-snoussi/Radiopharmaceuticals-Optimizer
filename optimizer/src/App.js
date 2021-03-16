@@ -87,6 +87,14 @@ const data = [
 class App extends React.Component {
 
   state = { 
+    // initial data
+    measuredActivity : 0,
+    measureTime : null,
+    receivedVolume: 0,
+    halfLife: 0,
+    name: 'MBq optimizer',
+
+    // app status
     isDrawerVisible: false,
     isModalVisible: true,
     dataSource: data,
@@ -250,7 +258,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={6}>
             <InputNumber
               defaultValue={0}
-              onChange={() => {console.log("e")}}
+              onChange={(measuredActivity) => {this.setState({measuredActivity : measuredActivity})}}
             />
           </Col>
         </Row>
@@ -260,7 +268,7 @@ class App extends React.Component {
             <Text type="secondary">Heure de mesure</Text>
           </Col>
           <Col className="gutter-row" span={6}>
-            <TimePicker onChange={() => {console.log('ee')}} />
+            <TimePicker onChange={(measureTime) => {this.setState({measureTime : measureTime})}} />
           </Col>
         </Row>
 
@@ -271,7 +279,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={6}>
             <InputNumber
               defaultValue={0}
-              onChange={() => {console.log("e")}}
+              onChange={(receivedVolume) => {this.setState({receivedVolume : receivedVolume})}}
             />
           </Col>
         </Row>
@@ -283,13 +291,17 @@ class App extends React.Component {
           <Col className="gutter-row" span={6}>
             <InputNumber
               defaultValue={0}
-              onChange={() => {console.log("e")}}
+              onChange={(halfLife) => {this.setState({halfLife : halfLife})}}
             />
           </Col>
         </Row>
 
         <Divider orientation="left">Additional Data</Divider>
-        <Input placeholder="Lab name" prefix={<BankOutlined />} />
+        <Input 
+          placeholder="Lab name" 
+          prefix={<BankOutlined />} 
+          onChange={(name) => {this.setState({name: name.target.value})}}
+        />
       </Modal>
     )
   }
@@ -325,7 +337,13 @@ render() {
 
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
-          <AppHeader>
+          <AppHeader 
+            measuredActivity={this.state.measuredActivity}
+            measureTime={this.state.measureTime}
+            receivedVolume={this.state.receivedVolume}
+            halfLife={this.state.halfLife}
+            name={this.state.name}
+          >
             <Button key="1" >Sort</Button>
             <Button key="2" type="primary" onClick={this.showDrawer}>
               <PlusOutlined /> New user
