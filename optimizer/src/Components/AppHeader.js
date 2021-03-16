@@ -38,7 +38,10 @@ const renderContent = (measuredActivity, measureTime, receivedVolume, halfLife) 
   />
   <Statistic
     title="Heure de mesure"
-    value={new Date(measureTime).toLocaleTimeString().replace(/:\d+ /, ' ')}
+    value={new Date(measureTime).toLocaleTimeString(navigator.language, {
+      hour: '2-digit',
+      minute:'2-digit',
+    })}
     style={{
       margin: '0 32px',
     }}
