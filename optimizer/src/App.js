@@ -85,19 +85,31 @@ const data = [
 
 class App extends React.Component {
 
-  state = { 
-    // initial data
-    measuredActivity : 0,
-    measureTime : null,
-    receivedVolume: 0,
-    halfLife: 0,
-    name: 'MBq optimizer',
+  constructor(props){
+    super(props)
+    this.state = { 
+      // initial data
+      measuredActivity : 0,
+      measureTime : null,
+      receivedVolume: 0,
+      halfLife: 0,
+      name: 'MBq optimizer',
+  
+      // app status
+      isDrawerVisible: false,
+      isModalVisible: true,
+      dataSource: data,
+  
+      // new patient data (stupid, I know)
+      patienName: "",
+      patientAge : 0,
+      patientWeight: 0
+  
+    };
+    this.onAddPatient = this.onAddPatient.bind(this)
+  }
 
-    // app status
-    isDrawerVisible: false,
-    isModalVisible: true,
-    dataSource: data,
-  };
+
 
   showDrawer = () => {
     this.setState({
@@ -123,6 +135,12 @@ class App extends React.Component {
     this.setState({isModalVisible : false});
   };
 
+
+  onAddPatient() {
+    const {patienName , patientAge , patientWeight } = this.state
+    console.log({patienName , patientAge , patientWeight})
+  }
+
   renderDrawer() {
     return(
       <Drawer
@@ -140,7 +158,7 @@ class App extends React.Component {
           <Button onClick={this.onCloseDrawer} style={{ marginRight: 8 }}>
             Cancel
           </Button>
-          <Button onClick={this.onCloseDrawer} type="primary">
+          <Button onClick={this.onAddPatient} type="primary">
             Submit
           </Button>
         </div>
@@ -155,7 +173,10 @@ class App extends React.Component {
               label="Name"
               rules={[{ required: true, message: 'Please enter user name' }]}
             >
-              <Input placeholder="Please enter user name" />
+              <Input 
+                placeholder="Please enter user name" 
+                onChange={(name) => {this.setState({patienName : name.target.value})}}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -168,7 +189,11 @@ class App extends React.Component {
               label="Weight (Kg)"
               rules={[{ required: true, message: 'Please enter the weight' }]}
             >
-              <InputNumber style={{width : "100%"}} min={0} />
+              <InputNumber 
+                style={{width : "100%"}} 
+                min={0} 
+                onChange={(weight) => {this.setState({patientWeight : weight})}}
+              />
             </Form.Item>
           </Col>
 
@@ -178,7 +203,11 @@ class App extends React.Component {
               label="Test Duration (min)"
               rules={[{ required: true, message: 'Please enter the duration' }]}
             >
-              <InputNumber style={{width : "100%"}} min={0} />
+              <InputNumber 
+                style={{width : "100%"}} 
+                min={0} 
+                onChange={(age) => {this.setState({patientAge : age})}}
+                />
             </Form.Item>
           </Col>
 
