@@ -41,6 +41,7 @@ const { Option } = Select;
 
 const data = [
   {
+    key: '1',
     name: 'John Brown',
     weight: 32,
     duration: 30,
@@ -48,6 +49,7 @@ const data = [
     index: 0,
   },
   {
+    key: '2',
     name: 'Jim Green',
     weight: 42,
     duration: 30,
@@ -55,6 +57,7 @@ const data = [
     index: 1,
   },
   {
+    key: '3',
     name: 'Joe Black',
     weight: 32,
     duration: 30,
@@ -62,6 +65,7 @@ const data = [
     index: 2,
   },
   {
+    key: '4',
     name: 'Mark Smith',
     weight: 60,
     duration: 45,
@@ -69,6 +73,7 @@ const data = [
     index: 3,
   },
   {
+    key: '5',
     name: 'Sami Jr',
     weight: 64,
     duration: 30,
@@ -140,19 +145,17 @@ class App extends React.Component {
       duration: patientAge,
       tags: ['waiting'],
       index: this.state.dataSource.length,
+      key: (this.state.dataSource.length +1).toString(),
     }
     
-    let newPatientList = this.state.dataSource
-    newPatientList.push(newPatient)
-
-
-    this.setState({
-      dataSource : newPatientList,
+    this.setState(state => ({
+      dataSource: [...state.dataSource, newPatient],
       patienName: "",
       patientAge : 0,
       patientWeight: 0,
       isDrawerVisible: false,
-    })
+    }));
+
   }
 
   renderDrawer() {
