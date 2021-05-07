@@ -106,18 +106,6 @@ const columns = [
 
           </Popconfirm>
 
-          <Popconfirm
-            title="Are you sure to delete this patient?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button  size="small" danger>
-              Delete
-            </Button>
-          </Popconfirm>
-
         </Space>
       ),
     },
