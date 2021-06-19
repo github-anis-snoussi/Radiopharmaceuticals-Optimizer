@@ -2,6 +2,7 @@ import datetime
 from math import exp
 from math import log
 
+
 def diff_time (time1, time2) :
     diff = time1 - time2
     diff_in_seconds = diff.total_seconds()
@@ -12,14 +13,18 @@ def decay (a0, half_life, t):
     a = a0 * exp(-log(2) * t / half_life)
     return(a)
 
+
 def activity_at_first_inj (patient_inj_time_list, rp_settings):
     ta = decay (rp_settings["rp_activity"], rp_settings["rp_half_life"], diff_time(patient_inj_time_list[0], rp_settings["mesure_time"]))
     ra = ta * ( rp_settings["rp_vol"] - rp_settings["wasted_vol"])/rp_settings["rp_vol"]
     return(ra)
 
+
+
 def usable_activity (total_rp_activity, total_rp_vol, unextractable_rp_vol):
     a = total_rp_activity * (total_rp_vol - unextractable_rp_vol) / total_rp_vol
     return (a)
+
 
 def generate_patient_inj_time_list (patient_list, patient_scan_time_list, rp_settings):
     patient_scan_time_list.append(0)
@@ -36,6 +41,8 @@ def generate_patient_inj_time_list (patient_list, patient_scan_time_list, rp_set
     patient_list.pop()
     return (patient_inj_time_list)
 
+
+# traja3 activity restant after finish injection
 def calcul_final_expected_activity (patient_list, rp_settings):
     patient_dose_list = [patient_list[i]["dose"] for i in range(len(patient_list))]
     patient_scan_time_list = [patient_list[i]["scan_time"] for i in range(len(patient_list))]
@@ -99,6 +106,7 @@ def sorting_after_every_injection (patient_list):
             return m["inj_time"]
         patient_list.sort(key=injtime)
 
+# traja3 activity tawika 
 def activity_now (patient_list, rp_settings):
     k = 0
     for i in range(len(patient_list)):
@@ -140,23 +148,31 @@ patient_list = [{"name":"rami", "dose":183, "scan_time":45, "injected":False, "i
                 {"name":"kiki", "dose":300, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
                 {"name":"saki", "dose":300, "scan_time":40, "injected":False, "inj_time":datetime.datetime.max}]
 
-
+# must be done before every sorting.
 sorting_after_every_injection (patient_list)
-for i in range(len(patient_list)):
-    print (patient_list[i])
-print (calcul_final_expected_activity (patient_list, rp_settings) ["usable_remaining_activity"])
 
-
+# sort according to rapport
 first_sorting (patient_list)
-for i in range(len(patient_list)):
-    print (patient_list[i])
-print (calcul_final_expected_activity (patient_list, rp_settings) ["usable_remaining_activity"])
 
-
+ # sort by looping
 second_sorting (patient_list, rp_settings)
-for i in range(len(patient_list)):
-    print (patient_list[i])
-print (calcul_final_expected_activity (patient_list, rp_settings) ["usable_remaining_activity"])
 
 
-print (activity_now (patient_list, rp_settings) ["usable_activity_now"])
+
+
+
+# "rp_activity": measured activity elli wosletek.
+# "rp_half_life":half life melle5er.
+# "mesure_time": when u measured rp_activity.
+# "first_inj_time": awel injection expected time.
+# "rp_vol": volume elli woslek.
+# "wasted_vol": wated volume in first purge only.
+# "unextractable_vol": volume bech yab9a fel flacon.
+
+
+
+# "name": ismou
+# "dose": needed activity
+# "scan_time": in minites
+# "injected": status
+# "inj_time": if not injected injected => nothing // else injection time
