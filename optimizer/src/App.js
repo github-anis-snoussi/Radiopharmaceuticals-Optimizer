@@ -17,8 +17,7 @@ import {
   Button, 
   Col, 
   Row, 
-  Input, 
-  Select,
+  Input,
   Modal,
   InputNumber,
   TimePicker,
@@ -29,14 +28,11 @@ import {
   PlusOutlined, 
   ScheduleOutlined, 
   InfoCircleOutlined,
-  ExperimentOutlined,
   BankOutlined
 } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
-const { Option } = Select;
-
 
 
 const data = [
