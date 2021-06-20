@@ -1,0 +1,6 @@
+redis
+flask
+flask_session
+gunicorn
+requests
+pillow

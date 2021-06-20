@@ -1,0 +1,40 @@
+version: "3.3"
+
+services:
+
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - 5000:5000
+
+  redis:
+    container_name: cutcat-session
+    image: redis:alpine
+    networks:
+      - net
+
+  web:
+    build: ./web
+    restart: always
+    volumes:
+      - ./web/app:/app
+    environment:
+      NODE_ENV: "development"
+      CHOKIDAR_USEPOLLING: "true"
+
+  # We set-up an NGINX to have a unique endpoint for app & api
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - api
+      - app
+
+networks:
+  net:
