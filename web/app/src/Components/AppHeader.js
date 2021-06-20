@@ -80,16 +80,17 @@ class AppHeader extends React.Component {
   }
 
   render() {
+    const {name, children, measuredActivity, measureTime, receivedVolume, halfLife} = this.props
     return (
       <PageHeader
       className="site-page-header-responsive"
-      title={this.props.name}
+      title={name}
       subTitle={new Date().toDateString()}
       tags={<Tag color="blue">Running</Tag>}
-      extra={this.props.children}
+      extra={children}
     >
       <HeaderContent>
-        {renderContent(this.props.measuredActivity, this.props.measureTime, this.props.receivedVolume, this.props.halfLife)}
+        {renderContent(measuredActivity, measureTime, receivedVolume, halfLife)}
         </HeaderContent>
     </PageHeader>
     );

@@ -2,12 +2,12 @@ import React from "react";
 import "../App.css";
 import 'antd/dist/antd.css';
 
-import { Table, Space, Button, Popconfirm, message, Spin } from 'antd';
-import {MenuOutlined, ClockCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
+import { Table, Space, Button, Popconfirm, message, Spin, Typography } from 'antd';
+import {MenuOutlined, ClockCircleOutlined, CheckCircleOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
-
+const { Text } = Typography;
 
 const DragHandle = sortableHandle(() => (
 <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />
@@ -43,7 +43,7 @@ const columns = [
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
+      render: text => <Text style={{color : '#1890ff'}} >{text}</Text>
     },
     {
       title: 'Weight (Kg)',
@@ -81,6 +81,12 @@ const columns = [
                 <ClockCircleOutlined style={{color : 'orange', fontSize: '23px'}} />
               );
             }
+
+            return (
+              <ExclamationCircleOutlined style={{color : 'red', fontSize: '23px'}} />
+            );
+
+            
 
           })}
         </>
