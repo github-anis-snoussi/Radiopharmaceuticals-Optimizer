@@ -99,7 +99,8 @@ class App extends React.Component {
       // new patient data (stupid, I know)
       patienName: "",
       patientAge : 0,
-      patientWeight: 0
+      patientWeight: 0,
+      patientMeasureTime : null
   
     };
     this.onAddPatient = this.onAddPatient.bind(this)
@@ -194,8 +195,24 @@ class App extends React.Component {
           </Col>
         </Row>
 
+
         <Row gutter={16}>
-          
+          <Col span={24}>
+            <Form.Item
+              name="name"
+              label="Heure de mesure"
+              rules={[{ required: true, message: 'Heure de mesure' }]}
+            >
+              <TimePicker 
+                onChange={(measureTime) => {this.setState({patientMeasureTime : measureTime})}} 
+                style={{width : '100%'}}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               name="weight"
@@ -223,8 +240,8 @@ class App extends React.Component {
                 />
             </Form.Item>
           </Col>
-
         </Row>
+
 
       </Form>
     </Drawer>
