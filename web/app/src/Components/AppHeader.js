@@ -28,17 +28,17 @@ const HeaderContent = ({ children, extra }) => (
   </div>
 );
 
-const renderContent = (measuredActivity, measureTime, receivedVolume, halfLife) => (
+const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
   <Row>
   <Statistic
     title="Activité mesurée"
     suffix="MBq"
-    value={measuredActivity}
+    value={rp_activity}
 
   />
   <Statistic
     title="Heure de mesure"
-    value={new Date(measureTime).toLocaleTimeString(navigator.language, {
+    value={new Date(mesure_time).toLocaleTimeString(navigator.language, {
       hour: '2-digit',
       minute:'2-digit',
     })}
@@ -49,12 +49,12 @@ const renderContent = (measuredActivity, measureTime, receivedVolume, halfLife) 
   <Statistic
     title="Volume reçu"
     suffix="ml"
-    value={receivedVolume}
+    value={rp_vol}
   />
   <Statistic
     title="Demi-vie reçue"
     suffix="min"
-    value={halfLife}
+    value={rp_half_life}
     style={{
       margin: '0 32px',
     }}
@@ -80,7 +80,7 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const {name, children, measuredActivity, measureTime, receivedVolume, halfLife} = this.props
+    const {name, children, rp_activity, mesure_time, rp_vol, rp_half_life} = this.props
     return (
       <PageHeader
       className="site-page-header-responsive"
@@ -90,7 +90,7 @@ class AppHeader extends React.Component {
       extra={children}
     >
       <HeaderContent>
-        {renderContent(measuredActivity, measureTime, receivedVolume, halfLife)}
+        {renderContent(rp_activity, mesure_time, rp_vol, rp_half_life)}
         </HeaderContent>
     </PageHeader>
     );

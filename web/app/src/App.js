@@ -84,11 +84,14 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this.state = { 
-      // initial data
-      measuredActivity : 0,
-      measureTime : null,
-      receivedVolume: 0,
-      halfLife: 0,
+      // rp_settings
+      rp_activity : 0,
+      mesure_time : null,
+      first_inj_time : null,
+      rp_half_life: 0,
+      rp_vol: 0,
+      wasted_vol: 0,
+      unextractable_vol: 0,
       name: 'MBq optimizer',
   
       // app status
@@ -236,47 +239,86 @@ class App extends React.Component {
     return(
       <Modal title="Welcome" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
 
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{marginBottom : 10}} >
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Activité mesurée (MBq)</Text>
+            <Text type="secondary">RP Half Life (min)</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" span={14}>
             <InputNumber
+              style={{width : '100%'}}
               defaultValue={0}
-              onChange={(measuredActivity) => {this.setState({measuredActivity : measuredActivity})}}
+              onChange={(rp_half_life) => {this.setState({rp_half_life : rp_half_life})}}
             />
           </Col>
         </Row>
 
         <Row gutter={16} style={{marginBottom : 10}}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Heure de mesure</Text>
+            <Text type="secondary">RP Activity (MBq)</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
-            <TimePicker onChange={(measureTime) => {this.setState({measureTime : measureTime})}} />
+          <Col className="gutter-row" span={14}>
+            <InputNumber
+              style={{width : '100%'}}
+              defaultValue={0}
+              onChange={(rp_activity) => {this.setState({rp_activity : rp_activity})}}
+            />
           </Col>
         </Row>
 
         <Row gutter={16} style={{marginBottom : 10}}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Volume  reçu  (ml)</Text>
+            <Text type="secondary">Measure Time</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" span={14}>
+            <TimePicker style={{width : '100%'}} onChange={(mesure_time) => {this.setState({mesure_time : mesure_time})}} />
+          </Col>
+        </Row>
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">First Injection Time Time</Text>
+          </Col>
+          <Col className="gutter-row" span={14}>
+            <TimePicker style={{width : '100%'}} onChange={(mesure_time) => {this.setState({mesure_time : mesure_time})}} />
+          </Col>
+        </Row>
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">RP Volume  (ml)</Text>
+          </Col>
+          <Col className="gutter-row" span={14}>
             <InputNumber
+              style={{width : '100%'}}
               defaultValue={0}
-              onChange={(receivedVolume) => {this.setState({receivedVolume : receivedVolume})}}
+              onChange={(rp_vol) => {this.setState({rp_vol : rp_vol})}}
             />
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={16} style={{marginBottom : 10}}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Demi-vie reçue (min)</Text>
+            <Text type="secondary">Wasted Volume  (ml)</Text>
           </Col>
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" span={14}  >
             <InputNumber
+              style={{width : '100%'}}
               defaultValue={0}
-              onChange={(halfLife) => {this.setState({halfLife : halfLife})}}
+              onChange={(wasted_vol) => {this.setState({wasted_vol : wasted_vol})}}
+            />
+          </Col>
+        </Row>
+
+
+        <Row gutter={16} style={{marginBottom : 10}}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Unextractable Volume  (ml)</Text>
+          </Col>
+          <Col className="gutter-row" span={14}>
+            <InputNumber
+              style={{width : '100%'}}
+              defaultValue={0}
+              onChange={(unextractable_vol) => {this.setState({unextractable_vol : unextractable_vol})}}
             />
           </Col>
         </Row>
@@ -323,10 +365,10 @@ render() {
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
 
           <AppHeader 
-            measuredActivity={this.state.measuredActivity}
-            measureTime={this.state.measureTime}
-            receivedVolume={this.state.receivedVolume}
-            halfLife={this.state.halfLife}
+            rp_activity={this.state.rp_activity}
+            mesure_time={this.state.mesure_time}
+            rp_vol={this.state.rp_vol}
+            rp_half_life={this.state.rp_half_life}
             name={this.state.name}
           >
             <Button key="1" >Sort</Button>
