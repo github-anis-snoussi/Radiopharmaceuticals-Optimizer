@@ -39,7 +39,7 @@ const data = [
   {
     key: '1',
     name: 'John Brown',
-    weight: 32,
+    dose: 32,
     duration: 30,
     tags: ['done'],
     index: 0,
@@ -47,7 +47,7 @@ const data = [
   {
     key: '2',
     name: 'Jim Green',
-    weight: 42,
+    dose: 42,
     duration: 30,
     tags: ['test'],
     index: 1,
@@ -55,7 +55,7 @@ const data = [
   {
     key: '3',
     name: 'Joe Black',
-    weight: 32,
+    dose: 32,
     duration: 30,
     tags: ['waiting'],
     index: 2,
@@ -63,7 +63,7 @@ const data = [
   {
     key: '4',
     name: 'Mark Smith',
-    weight: 60,
+    dose: 60,
     duration: 45,
     tags: ['waiting'],
     index: 3,
@@ -71,7 +71,7 @@ const data = [
   {
     key: '5',
     name: 'Sami Jr',
-    weight: 64,
+    dose: 64,
     duration: 30,
     tags: ['waiting'],
     index: 4,
@@ -140,7 +140,7 @@ class App extends React.Component {
 
     const newPatient = {
       name: patienName,
-      weight: patientDose,
+      dose: patientDose,
       duration: patientScanDuration,
       tags: ['waiting'],
       index: this.state.dataSource.length,
@@ -203,7 +203,7 @@ class App extends React.Component {
               <Form.Item
                 name="dose"
                 label="Dose (MBq)"
-                rules={[{ required: true, message: 'Please enter the weight' }]}
+                rules={[{ required: true, message: 'Please enter the dose' }]}
               >
                 <InputNumber 
                   style={{width : "100%"}} 
@@ -279,7 +279,7 @@ class App extends React.Component {
             <Text type="secondary">First Injection Time Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker style={{width : '100%'}} onChange={(mesure_time) => {this.setState({mesure_time : mesure_time})}} />
+            <TimePicker style={{width : '100%'}} onChange={(first_inj_time) => {this.setState({first_inj_time : first_inj_time})}} />
           </Col>
         </Row>
 

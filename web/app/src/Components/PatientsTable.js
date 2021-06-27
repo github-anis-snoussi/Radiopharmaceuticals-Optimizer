@@ -16,13 +16,11 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement(props => <tr {...props} />);
 const SortableContainer = sortableContainer(props => <tbody {...props} />);
   
-function confirm(e) {
-  console.log(e);
+function confirm() {
   message.success('Click on Yes');
 }
 
-function cancel(e) {
-  console.log(e);
+function cancel() {
   message.error('Click on No');
 }
 
@@ -46,9 +44,9 @@ const columns = [
       render: text => <Text style={{color : '#1890ff'}} >{text}</Text>
     },
     {
-      title: 'Weight (Kg)',
-      dataIndex: 'weight',
-      key: 'weight',
+      title: 'Dose (MBq)',
+      dataIndex: 'dose',
+      key: 'dose',
     },
     {
       title: 'Test Duration (min)',
@@ -62,11 +60,11 @@ const columns = [
       dataIndex: 'tags',
       render: tags => (
         <>
-          {tags.map(tag => {
+          {tags.map((tag, idx) => {
 
             if (tag === 'done') {
               return (
-                <CheckCircleOutlined  style={{color : 'green', fontSize: '23px'}} />
+                <CheckCircleOutlined key={idx} style={{color : 'green', fontSize: '23px'}} />
               );
             }
 
@@ -78,12 +76,12 @@ const columns = [
 
             if (tag === 'waiting') {
               return (
-                <ClockCircleOutlined style={{color : 'orange', fontSize: '23px'}} />
+                <ClockCircleOutlined key={idx} style={{color : 'orange', fontSize: '23px'}} />
               );
             }
 
             return (
-              <ExclamationCircleOutlined style={{color : 'red', fontSize: '23px'}} />
+              <ExclamationCircleOutlined key={idx} style={{color : 'red', fontSize: '23px'}} />
             );
 
             
