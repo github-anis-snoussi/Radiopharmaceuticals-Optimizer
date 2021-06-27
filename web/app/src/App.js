@@ -157,77 +157,77 @@ class App extends React.Component {
   renderDrawer() {
     return(
       <Drawer
-      title="Create a new account"
-      width={720}
-      onClose={this.onCloseDrawer}
-      visible={this.state.isDrawerVisible}
-      bodyStyle={{ paddingBottom: 80 }}
-      footer={
-        <div
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          <Button onClick={this.onCloseDrawer} style={{ marginRight: 8 }}>
-            Cancel
-          </Button>
-          <Button onClick={this.onAddPatient} type="primary">
-            Submit
-          </Button>
-        </div>
-      }
-    >
-      <Form layout="vertical" >
+        title="Create a new account"
+        width={720}
+        onClose={this.onCloseDrawer}
+        visible={this.state.isDrawerVisible}
+        bodyStyle={{ paddingBottom: 80 }}
+        footer={
+          <div
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <Button onClick={this.onCloseDrawer} style={{ marginRight: 8 }}>
+              Cancel
+            </Button>
+            <Button onClick={this.onAddPatient} type="primary">
+              Submit
+            </Button>
+          </div>
+        }
+      >
+        <Form layout="vertical" >
 
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: 'Please enter user name' }]}
-            >
-              <Input 
-                placeholder="Please enter user name" 
-                onChange={(name) => {this.setState({patienName : name.target.value})}}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              name="dose"
-              label="Dose (MBq)"
-              rules={[{ required: true, message: 'Please enter the weight' }]}
-            >
-              <InputNumber 
-                style={{width : "100%"}} 
-                min={0} 
-                onChange={(dose) => {this.setState({patientDose : dose})}}
-              />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item
-              name="duration"
-              label="Scan Duration (min)"
-              rules={[{ required: true, message: 'Please enter the duration' }]}
-            >
-              <InputNumber 
-                style={{width : "100%"}} 
-                min={0} 
-                onChange={(age) => {this.setState({patientScanDuration : age})}}
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="name"
+                label="Name"
+                rules={[{ required: true, message: 'Please enter user name' }]}
+              >
+                <Input 
+                  placeholder="Please enter user name" 
+                  onChange={(name) => {this.setState({patienName : name.target.value})}}
                 />
-            </Form.Item>
-          </Col>
-        </Row>
+              </Form.Item>
+            </Col>
+          </Row>
 
 
-      </Form>
-    </Drawer>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="dose"
+                label="Dose (MBq)"
+                rules={[{ required: true, message: 'Please enter the weight' }]}
+              >
+                <InputNumber 
+                  style={{width : "100%"}} 
+                  min={0} 
+                  onChange={(dose) => {this.setState({patientDose : dose})}}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item
+                name="duration"
+                label="Scan Duration (min)"
+                rules={[{ required: true, message: 'Please enter the duration' }]}
+              >
+                <InputNumber 
+                  style={{width : "100%"}} 
+                  min={0} 
+                  onChange={(age) => {this.setState({patientScanDuration : age})}}
+                  />
+              </Form.Item>
+            </Col>
+          </Row>
+
+
+        </Form>
+      </Drawer>
     )
   }
 
@@ -331,7 +331,7 @@ render() {
           >
             <Button key="1" >Sort</Button>
             <Button key="2" type="primary" onClick={this.showDrawer}>
-              <PlusOutlined /> New user
+              <PlusOutlined /> New Patient
             </Button>
           </AppHeader>
 
