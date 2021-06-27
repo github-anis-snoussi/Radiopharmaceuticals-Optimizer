@@ -35,46 +35,46 @@ const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
 
 
-const data = [
+const dummyData = [
   {
-    key: '1',
+    key: '1', // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
+    index: 0,
     name: 'John Brown',
     dose: 32,
     duration: 30,
     tags: ['done'],
-    index: 0,
   },
   {
     key: '2',
+    index: 1,
     name: 'Jim Green',
     dose: 42,
     duration: 30,
     tags: ['test'],
-    index: 1,
   },
   {
     key: '3',
+    index: 2,
     name: 'Joe Black',
     dose: 32,
     duration: 30,
     tags: ['waiting'],
-    index: 2,
   },
   {
     key: '4',
+    index: 3,
     name: 'Mark Smith',
     dose: 60,
     duration: 45,
     tags: ['waiting'],
-    index: 3,
   },
   {
     key: '5',
+    index: 4,
     name: 'Sami Jr',
     dose: 64,
     duration: 30,
     tags: ['waiting'],
-    index: 4,
   },
 ];
 
@@ -97,15 +97,18 @@ class App extends React.Component {
       // app status
       isDrawerVisible: false,
       isModalVisible: true,
-      dataSource: data,
+
+      //patients list
+      dataSource: dummyData,
   
-      // new patient data (stupid, I know)
+      // new patient input (stupid, I know)
       patienName: "",
       patientScanDuration : 0,
       patientDose: 0,
   
     };
     this.onAddPatient = this.onAddPatient.bind(this)
+    this.sortPatients = this.sortPatients.bind(this)
   }
 
 
@@ -333,6 +336,10 @@ class App extends React.Component {
     )
   }
 
+  sortPatients() {
+    console.log(this.state.dataSource)
+  }
+
 
 render() {
   return (
@@ -371,7 +378,7 @@ render() {
             rp_half_life={this.state.rp_half_life}
             name={this.state.name}
           >
-            <Button key="1" >Sort</Button>
+            <Button key="1" onClick={this.sortPatients} >Sort</Button>
             <Button key="2" type="primary" onClick={this.showDrawer}>
               <PlusOutlined /> New Patient
             </Button>
