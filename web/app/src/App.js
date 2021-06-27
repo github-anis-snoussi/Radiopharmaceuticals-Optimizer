@@ -98,9 +98,8 @@ class App extends React.Component {
   
       // new patient data (stupid, I know)
       patienName: "",
-      patientAge : 0,
-      patientWeight: 0,
-      patientMeasureTime : null
+      patientScanDuration : 0,
+      patientDose: 0,
   
     };
     this.onAddPatient = this.onAddPatient.bind(this)
@@ -134,12 +133,12 @@ class App extends React.Component {
 
 
   onAddPatient() {
-    const {patienName , patientAge , patientWeight } = this.state
+    const {patienName , patientScanDuration , patientDose } = this.state
 
     const newPatient = {
       name: patienName,
-      weight: patientWeight,
-      duration: patientAge,
+      weight: patientDose,
+      duration: patientScanDuration,
       tags: ['waiting'],
       index: this.state.dataSource.length,
       key: (this.state.dataSource.length +1).toString(),
@@ -148,8 +147,8 @@ class App extends React.Component {
     this.setState(state => ({
       dataSource: [...state.dataSource, newPatient],
       patienName: "",
-      patientAge : 0,
-      patientWeight: 0,
+      patientScanDuration : 0,
+      patientDose: 0,
       isDrawerVisible: false,
     }));
 
@@ -197,32 +196,16 @@ class App extends React.Component {
 
 
         <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="name"
-              label="Heure de mesure"
-              rules={[{ required: true, message: 'Heure de mesure' }]}
-            >
-              <TimePicker 
-                onChange={(measureTime) => {this.setState({patientMeasureTime : measureTime})}} 
-                style={{width : '100%'}}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-
-
-        <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              name="weight"
-              label="Weight (Kg)"
+              name="dose"
+              label="Dose (MBq)"
               rules={[{ required: true, message: 'Please enter the weight' }]}
             >
               <InputNumber 
                 style={{width : "100%"}} 
                 min={0} 
-                onChange={(weight) => {this.setState({patientWeight : weight})}}
+                onChange={(dose) => {this.setState({patientDose : dose})}}
               />
             </Form.Item>
           </Col>
@@ -230,13 +213,13 @@ class App extends React.Component {
           <Col span={12}>
             <Form.Item
               name="duration"
-              label="Test Duration (min)"
+              label="Scan Duration (min)"
               rules={[{ required: true, message: 'Please enter the duration' }]}
             >
               <InputNumber 
                 style={{width : "100%"}} 
                 min={0} 
-                onChange={(age) => {this.setState({patientAge : age})}}
+                onChange={(age) => {this.setState({patientScanDuration : age})}}
                 />
             </Form.Item>
           </Col>
