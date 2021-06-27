@@ -338,6 +338,7 @@ class App extends React.Component {
 
   sortPatients() {
     console.log(this.state.dataSource)
+    this.setState({dataSource : [...dummyData]})
   }
 
 
