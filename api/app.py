@@ -1,12 +1,4 @@
-from datetime import timedelta
 import os
-import calendar
-import time
-from urllib.request import Request, urlopen
-import urllib.parse
-import requests
-from PIL import Image
-
 from redis import Redis
 from flask import Flask, render_template_string, request, session, redirect, url_for
 from flask_session import Session
@@ -27,7 +19,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 # Configure Redis for storing the session data on the server-side
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = False
+app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_REDIS'] = Redis(host='redis', port=6379)
 
 # Configure the upload path
