@@ -1,117 +1,109 @@
-import React from "react"
+import React from "react";
 
-import './App.css';
-import 'antd/dist/antd.css';
+import "./App.css";
+import "antd/dist/antd.css";
 
+import AppHeader from "./Components/AppHeader";
+import PatientsTable from "./Components/PatientsTable";
 
-import AppHeader from "./Components/AppHeader"
-import PatientsTable from "./Components/PatientsTable"
-
-
-import { 
-  Layout, 
-  Menu, 
-  Typography, 
-  Drawer, 
-  Form, 
-  Button, 
-  Col, 
-  Row, 
+import {
+  Layout,
+  Menu,
+  Typography,
+  Drawer,
+  Form,
+  Button,
+  Col,
+  Row,
   Input,
   Modal,
   InputNumber,
   TimePicker,
   Divider,
-} from 'antd';
+} from "antd";
 
-import { 
-  PlusOutlined, 
-  ScheduleOutlined, 
+import {
+  PlusOutlined,
+  ScheduleOutlined,
   InfoCircleOutlined,
-  BankOutlined
-} from '@ant-design/icons';
+  BankOutlined,
+} from "@ant-design/icons";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
 
-
 const dummyData = [
   {
-    key: '1', // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
+    key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
     index: 0,
-    name: 'John Brown',
+    name: "John Brown",
     dose: 32,
     duration: 30,
-    tags: ['done'],
+    tags: ["done"],
   },
   {
-    key: '2',
+    key: "2",
     index: 1,
-    name: 'Jim Green',
+    name: "Jim Green",
     dose: 42,
     duration: 30,
-    tags: ['test'],
+    tags: ["test"],
   },
   {
-    key: '3',
+    key: "3",
     index: 2,
-    name: 'Joe Black',
+    name: "Joe Black",
     dose: 32,
     duration: 30,
-    tags: ['waiting'],
+    tags: ["waiting"],
   },
   {
-    key: '4',
+    key: "4",
     index: 3,
-    name: 'Mark Smith',
+    name: "Mark Smith",
     dose: 60,
     duration: 45,
-    tags: ['waiting'],
+    tags: ["waiting"],
   },
   {
-    key: '5',
+    key: "5",
     index: 4,
-    name: 'Sami Jr',
+    name: "Sami Jr",
     dose: 64,
     duration: 30,
-    tags: ['waiting'],
+    tags: ["waiting"],
   },
 ];
 
-
 class App extends React.Component {
-
-  constructor(props){
-    super(props)
-    this.state = { 
+  constructor(props) {
+    super(props);
+    this.state = {
       // rp_settings
-      rp_activity : 0,
-      mesure_time : null,
-      first_inj_time : null,
+      rp_activity: 0,
+      mesure_time: null,
+      first_inj_time: null,
       rp_half_life: 0,
       rp_vol: 0,
       wasted_vol: 0,
       unextractable_vol: 0,
-      name: 'MBq optimizer',
-  
+      name: "MBq optimizer",
+
       // app status
       isDrawerVisible: false,
       isModalVisible: true,
 
       //patients list
       dataSource: dummyData,
-  
+
       // new patient input (stupid, I know)
       patienName: "",
-      patientScanDuration : 0,
+      patientScanDuration: 0,
       patientDose: 0,
-  
     };
-    this.onAddPatient = this.onAddPatient.bind(this)
-    this.sortPatients = this.sortPatients.bind(this)
+    this.onAddPatient = this.onAddPatient.bind(this);
+    this.sortPatients = this.sortPatients.bind(this);
   }
-
-
 
   showDrawer = () => {
     this.setState({
@@ -126,42 +118,40 @@ class App extends React.Component {
   };
 
   showModal = () => {
-    this.setState({isModalVisible : true});
+    this.setState({ isModalVisible: true });
   };
 
   handleOk = () => {
-    this.setState({isModalVisible : false});
+    this.setState({ isModalVisible: false });
   };
 
   handleCancel = () => {
-    this.setState({isModalVisible : false});
+    this.setState({ isModalVisible: false });
   };
 
-
   onAddPatient() {
-    const {patienName , patientScanDuration , patientDose } = this.state
+    const { patienName, patientScanDuration, patientDose } = this.state;
 
     const newPatient = {
       name: patienName,
       dose: patientDose,
       duration: patientScanDuration,
-      tags: ['waiting'],
+      tags: ["waiting"],
       index: this.state.dataSource.length,
-      key: (this.state.dataSource.length +1).toString(),
-    }
-    
-    this.setState(state => ({
+      key: (this.state.dataSource.length + 1).toString(),
+    };
+
+    this.setState((state) => ({
       dataSource: [...state.dataSource, newPatient],
       patienName: "",
-      patientScanDuration : 0,
+      patientScanDuration: 0,
       patientDose: 0,
       isDrawerVisible: false,
     }));
-
   }
 
   renderDrawer() {
-    return(
+    return (
       <Drawer
         title="Create a new account"
         width={720}
@@ -171,7 +161,7 @@ class App extends React.Component {
         footer={
           <div
             style={{
-              textAlign: 'right',
+              textAlign: "right",
             }}
           >
             <Button onClick={this.onCloseDrawer} style={{ marginRight: 8 }}>
@@ -183,35 +173,37 @@ class App extends React.Component {
           </div>
         }
       >
-        <Form layout="vertical" >
-
+        <Form layout="vertical">
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
                 name="name"
                 label="Name"
-                rules={[{ required: true, message: 'Please enter user name' }]}
+                rules={[{ required: true, message: "Please enter user name" }]}
               >
-                <Input 
-                  placeholder="Please enter user name" 
-                  onChange={(name) => {this.setState({patienName : name.target.value})}}
+                <Input
+                  placeholder="Please enter user name"
+                  onChange={(name) => {
+                    this.setState({ patienName: name.target.value });
+                  }}
                 />
               </Form.Item>
             </Col>
           </Row>
-
 
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="dose"
                 label="Dose (MBq)"
-                rules={[{ required: true, message: 'Please enter the dose' }]}
+                rules={[{ required: true, message: "Please enter the dose" }]}
               >
-                <InputNumber 
-                  style={{width : "100%"}} 
-                  min={0} 
-                  onChange={(dose) => {this.setState({patientDose : dose})}}
+                <InputNumber
+                  style={{ width: "100%" }}
+                  min={0}
+                  onChange={(dose) => {
+                    this.setState({ patientDose: dose });
+                  }}
                 />
               </Form.Item>
             </Col>
@@ -220,188 +212,220 @@ class App extends React.Component {
               <Form.Item
                 name="duration"
                 label="Scan Duration (min)"
-                rules={[{ required: true, message: 'Please enter the duration' }]}
+                rules={[
+                  { required: true, message: "Please enter the duration" },
+                ]}
               >
-                <InputNumber 
-                  style={{width : "100%"}} 
-                  min={0} 
-                  onChange={(age) => {this.setState({patientScanDuration : age})}}
-                  />
+                <InputNumber
+                  style={{ width: "100%" }}
+                  min={0}
+                  onChange={(age) => {
+                    this.setState({ patientScanDuration: age });
+                  }}
+                />
               </Form.Item>
             </Col>
           </Row>
-
-
         </Form>
       </Drawer>
-    )
+    );
   }
 
   renderModal() {
-
-    return(
-      <Modal title="Welcome" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
-
-        <Row gutter={16} style={{marginBottom : 10}} >
+    return (
+      <Modal
+        title="Welcome"
+        visible={this.state.isModalVisible}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+      >
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
             <Text type="secondary">RP Half Life (min)</Text>
           </Col>
           <Col className="gutter-row" span={14}>
             <InputNumber
-              style={{width : '100%'}}
+              style={{ width: "100%" }}
               defaultValue={0}
-              onChange={(rp_half_life) => {this.setState({rp_half_life : rp_half_life})}}
+              onChange={(rp_half_life) => {
+                this.setState({ rp_half_life: rp_half_life });
+              }}
             />
           </Col>
         </Row>
 
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
             <Text type="secondary">RP Activity (MBq)</Text>
           </Col>
           <Col className="gutter-row" span={14}>
             <InputNumber
-              style={{width : '100%'}}
+              style={{ width: "100%" }}
               defaultValue={0}
-              onChange={(rp_activity) => {this.setState({rp_activity : rp_activity})}}
+              onChange={(rp_activity) => {
+                this.setState({ rp_activity: rp_activity });
+              }}
             />
           </Col>
         </Row>
 
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
             <Text type="secondary">Measure Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker style={{width : '100%'}} onChange={(mesure_time) => {this.setState({mesure_time : mesure_time})}} />
+            <TimePicker
+              style={{ width: "100%" }}
+              onChange={(mesure_time) => {
+                this.setState({ mesure_time: mesure_time });
+              }}
+            />
           </Col>
         </Row>
 
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
             <Text type="secondary">First Injection Time Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker style={{width : '100%'}} onChange={(first_inj_time) => {this.setState({first_inj_time : first_inj_time})}} />
-          </Col>
-        </Row>
-
-        <Row gutter={16} style={{marginBottom : 10}}>
-          <Col className="gutter-row" span={10}>
-            <Text type="secondary">RP Volume  (ml)</Text>
-          </Col>
-          <Col className="gutter-row" span={14}>
-            <InputNumber
-              style={{width : '100%'}}
-              defaultValue={0}
-              onChange={(rp_vol) => {this.setState({rp_vol : rp_vol})}}
+            <TimePicker
+              style={{ width: "100%" }}
+              onChange={(first_inj_time) => {
+                this.setState({ first_inj_time: first_inj_time });
+              }}
             />
           </Col>
         </Row>
 
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Wasted Volume  (ml)</Text>
+            <Text type="secondary">RP Volume (ml)</Text>
           </Col>
-          <Col className="gutter-row" span={14}  >
+          <Col className="gutter-row" span={14}>
             <InputNumber
-              style={{width : '100%'}}
+              style={{ width: "100%" }}
               defaultValue={0}
-              onChange={(wasted_vol) => {this.setState({wasted_vol : wasted_vol})}}
+              onChange={(rp_vol) => {
+                this.setState({ rp_vol: rp_vol });
+              }}
             />
           </Col>
         </Row>
 
-
-        <Row gutter={16} style={{marginBottom : 10}}>
+        <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">Unextractable Volume  (ml)</Text>
+            <Text type="secondary">Wasted Volume (ml)</Text>
           </Col>
           <Col className="gutter-row" span={14}>
             <InputNumber
-              style={{width : '100%'}}
+              style={{ width: "100%" }}
               defaultValue={0}
-              onChange={(unextractable_vol) => {this.setState({unextractable_vol : unextractable_vol})}}
+              onChange={(wasted_vol) => {
+                this.setState({ wasted_vol: wasted_vol });
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row gutter={16} style={{ marginBottom: 10 }}>
+          <Col className="gutter-row" span={10}>
+            <Text type="secondary">Unextractable Volume (ml)</Text>
+          </Col>
+          <Col className="gutter-row" span={14}>
+            <InputNumber
+              style={{ width: "100%" }}
+              defaultValue={0}
+              onChange={(unextractable_vol) => {
+                this.setState({ unextractable_vol: unextractable_vol });
+              }}
             />
           </Col>
         </Row>
 
         <Divider orientation="left">Additional Data</Divider>
-        <Input 
-          placeholder="Lab name" 
-          prefix={<BankOutlined />} 
-          onChange={(name) => {this.setState({name: name.target.value})}}
+        <Input
+          placeholder="Lab name"
+          prefix={<BankOutlined />}
+          onChange={(name) => {
+            this.setState({ name: name.target.value });
+          }}
         />
       </Modal>
-    )
+    );
   }
 
   sortPatients() {
-    console.log(this.state.dataSource)
-    this.setState({dataSource : [...dummyData]})
+    console.log(this.state.dataSource);
+    this.setState({ dataSource: [...dummyData] });
   }
 
-
-render() {
-  return (
-    <>
-    <Layout style={{minHeight:"100vh"}} > 
-    <Sider
-      breakpoint="lg"
-      collapsedWidth="0"
-      onBreakpoint={broken => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
-    >
-        <Title className="logo"  >Scheduler</Title>
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-        <Menu.Item key="1" icon={<ScheduleOutlined />}>
-          Patients
-        </Menu.Item>
-        <Menu.Item key="2" icon={<InfoCircleOutlined />}>
-          Infos
-        </Menu.Item>
-      </Menu>
-    </Sider>
-    <Layout>
-      <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '24px 16px 0' }}>
-
-        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-
-          <AppHeader 
-            rp_activity={this.state.rp_activity}
-            mesure_time={this.state.mesure_time}
-            rp_vol={this.state.rp_vol}
-            rp_half_life={this.state.rp_half_life}
-            name={this.state.name}
+  render() {
+    return (
+      <>
+        <Layout style={{ minHeight: "100vh" }}>
+          <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
+            onBreakpoint={(broken) => {
+              console.log(broken);
+            }}
+            onCollapse={(collapsed, type) => {
+              console.log(collapsed, type);
+            }}
           >
-            <Button key="1" onClick={this.sortPatients} >Sort</Button>
-            <Button key="2" type="primary" onClick={this.showDrawer}>
-              <PlusOutlined /> New Patient
-            </Button>
-          </AppHeader>
+            <Title className="logo">Scheduler</Title>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+              <Menu.Item key="1" icon={<ScheduleOutlined />}>
+                Patients
+              </Menu.Item>
+              <Menu.Item key="2" icon={<InfoCircleOutlined />}>
+                Infos
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Layout>
+            <Header
+              className="site-layout-sub-header-background"
+              style={{ padding: 0 }}
+            />
+            <Content style={{ margin: "24px 16px 0" }}>
+              <div
+                className="site-layout-background"
+                style={{ padding: 24, minHeight: 360 }}
+              >
+                <AppHeader
+                  rp_activity={this.state.rp_activity}
+                  mesure_time={this.state.mesure_time}
+                  rp_vol={this.state.rp_vol}
+                  rp_half_life={this.state.rp_half_life}
+                  name={this.state.name}
+                >
+                  <Button key="1" onClick={this.sortPatients}>
+                    Sort
+                  </Button>
+                  <Button key="2" type="primary" onClick={this.showDrawer}>
+                    <PlusOutlined /> New Patient
+                  </Button>
+                </AppHeader>
 
-
-          <PatientsTable 
-            dataSource={this.state.dataSource} 
-            updateData={(newData) => this.setState({dataSource : newData})} 
-          />
-
-        </div>
-
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>MBq optimizer 2021 Created by Anis Snoussi</Footer>
-    </Layout>
-  </Layout>
-  {this.renderDrawer()}
-  {this.renderModal()}
-  </>
-  );
-}
+                <PatientsTable
+                  dataSource={this.state.dataSource}
+                  updateData={(newData) =>
+                    this.setState({ dataSource: newData })
+                  }
+                />
+              </div>
+            </Content>
+            <Footer style={{ textAlign: "center" }}>
+              MBq optimizer 2021 Created by Anis Snoussi
+            </Footer>
+          </Layout>
+        </Layout>
+        {this.renderDrawer()}
+        {this.renderModal()}
+      </>
+    );
+  }
 }
 
 export default App;
