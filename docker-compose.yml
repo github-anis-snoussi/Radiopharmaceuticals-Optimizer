@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - 5000:5000
+    networks:
+      - net
 
   redis:
     container_name: cutcat-session
@@ -21,6 +23,8 @@ services:
     environment:
       NODE_ENV: "development"
       CHOKIDAR_USEPOLLING: "true"
+    networks:
+      - net
 
   # We set-up an NGINX to have a unique endpoint for app & api
   nginx:
@@ -34,6 +38,8 @@ services:
     depends_on:
       - api
       - web
+    networks:
+      - net
 
 networks:
   net:

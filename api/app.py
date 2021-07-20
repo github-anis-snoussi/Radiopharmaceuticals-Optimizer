@@ -37,7 +37,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 server_session = Session(app)
 
 
-@app.route('/set_nickname', methods=['GET', 'POST'])
+@app.route('/api/set_nickname', methods=['GET', 'POST'])
 def set_nickname():
     if request.method == 'POST':
 
@@ -56,7 +56,7 @@ def set_nickname():
         """
 
 
-@app.route('/show_nickname')
+@app.route('/api/show_nickname')
 def show_nickname():
     if session['nickname'] :
         return render_template_string("""
