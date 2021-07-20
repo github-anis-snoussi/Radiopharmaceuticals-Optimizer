@@ -48,7 +48,7 @@ def set_nickname():
         return redirect(url_for('show_nickname'))
 
     return """
-        <form method="post" action="/set_nickname" enctype="multipart/form-data">
+        <form method="post" action="/api/set_nickname" enctype="multipart/form-data">
             <label for="nickname">Set your nickname:</label>
             <input type="text" id="nickname-image" name="nickname_data" required />
             <button type="submit">Submit</button
