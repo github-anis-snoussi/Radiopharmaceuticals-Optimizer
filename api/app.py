@@ -61,7 +61,7 @@ def show_nickname():
             """)
 
 
-@app.route('/delete_nickname')
+@app.route('/api/delete_nickname')
 def delete_nickname():
     # Clear the nickname stored in the session object
     session.pop('nickname', default=None)
