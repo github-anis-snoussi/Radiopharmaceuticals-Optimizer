@@ -1,11 +1,9 @@
 import os
+import datetime
 from redis import Redis
 from flask import Flask, render_template_string, request, session, redirect, url_for
 from flask_session import Session
 
-
-# Path for uploaded photos
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
 
 
 # Create the Flask application
@@ -22,54 +20,69 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_REDIS'] = Redis(host=os.environ.get("REDIS_HOST"), port=6379)
 
-# Configure the upload path
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 server_session = Session(app)
 
 
-@app.route('/api/set_nickname', methods=['GET', 'POST'])
-def set_nickname():
-    if request.method == 'POST':
-
-        # Save the form data to the session object
-        nick = request.form['nickname_data']
-        session['nickname'] = nick
-
-        return redirect(url_for('show_nickname'))
-
-    return """
-        <form method="post" action="/api/set_nickname" enctype="multipart/form-data">
-            <label for="nickname">Set your nickname:</label>
-            <input type="text" id="nickname-image" name="nickname_data" required />
-            <button type="submit">Submit</button
-        </form>
-        """
-
-
-@app.route('/api/show_nickname')
-def show_nickname():
-    if session['nickname'] :
-        return render_template_string("""
-                    <p> {{ session['nickname'] }} </p>
-                    <p> {{ session.sid }} </p>
-            """)
-    else:
-        return render_template_string("""
-                    <h1>Welcome! Please set your nickname <a href="{{ url_for('set_nickname') }}">here.</a></h1>
-            """)
-
-
-@app.route('/api/delete_nickname')
-def delete_nickname():
-    # Clear the nickname stored in the session object
-    session.pop('nickname', default=None)
-    return '<h1>Session deleted!</h1>'
-
 @app.route('/api/ping')
 def ping_pong():
-    return 'posng'
+    return 'pong'
+
+
+@app.route('/api/session', methods=['GET', 'POST', 'DELETE'])
+def session_utils():
+    if request.method == 'POST':
+        try:
+            rp_settings = request.get_json()
+
+            session["rp_activity"] = rp_settings['rp_activity']
+            session["rp_half_life"] = rp_settings['rp_half_life']
+            session["mesure_time"] = rp_settings['mesure_time']
+            session["first_inj_time"] = rp_settings['first_inj_time']
+            session["rp_vol"] = rp_settings['rp_vol']
+            session["wasted_vol"] = rp_settings['wasted_vol']
+            session["unextractable_vol"] = rp_settings['unextractable_vol']
+
+            return 'Session initialised.'
+
+        except Exception as e:
+            #Clear the session
+            session.pop('rp_activity', default=None)
+            session.pop('rp_half_life', default=None)
+            session.pop('mesure_time', default=None)
+            session.pop('first_inj_time', default=None)
+            session.pop('rp_vol', default=None)
+            session.pop('wasted_vol', default=None)
+            session.pop('unextractable_vol', default=None)
+
+            return 'yo! be careful.'
+
+    elif request.method == 'DELETE':
+        
+        session.pop('rp_activity', default=None)
+        session.pop('rp_half_life', default=None)
+        session.pop('mesure_time', default=None)
+        session.pop('first_inj_time', default=None)
+        session.pop('rp_vol', default=None)
+        session.pop('wasted_vol', default=None)
+        session.pop('unextractable_vol', default=None)
+
+        return 'Session deleted.'
+
+
+    else :
+        # check if session is set
+        if not session.get('mesure_time') :
+            return 'Please initialise the session.'
+        
+        # Session is set, so we return measure time.
+        mesure_time = session["mesure_time"]
+        date = datetime.datetime.fromtimestamp(mesure_time / 1e3)
+
+        # return the measure time for this session
+        return "Current measure time : {}".format(str(date))
+
 
 
 
