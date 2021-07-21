@@ -41,7 +41,7 @@ const dummyData = [
     dose: 32,
     duration: 30,
     injectionTime: null,
-    tags: ["done"],
+    status: "done",
   },
   {
     key: "2",
@@ -50,7 +50,7 @@ const dummyData = [
     dose: 42,
     duration: 30,
     injectionTime: moment("12:08:23", "HH:mm:ss"),
-    tags: ["test"],
+    status: "test",
   },
   {
     key: "3",
@@ -59,7 +59,7 @@ const dummyData = [
     dose: 32,
     duration: 30,
     injectionTime: null,
-    tags: ["waiting"],
+    status: "waiting",
   },
   {
     key: "4",
@@ -68,7 +68,7 @@ const dummyData = [
     dose: 60,
     duration: 45,
     injectionTime: null,
-    tags: ["waiting"],
+    status: "waiting",
   },
   {
     key: "5",
@@ -77,7 +77,7 @@ const dummyData = [
     dose: 64,
     duration: 30,
     injectionTime: moment("12:08:23", "HH:mm:ss"),
-    tags: ["waiting"],
+    status: "waiting",
   },
 ];
 
@@ -142,7 +142,7 @@ class App extends React.Component {
       name: patienName,
       dose: patientDose,
       duration: patientScanDuration,
-      tags: ["waiting"],
+      status: ["waiting"],
       index: this.state.dataSource.length,
       key: (this.state.dataSource.length + 1).toString(),
     };

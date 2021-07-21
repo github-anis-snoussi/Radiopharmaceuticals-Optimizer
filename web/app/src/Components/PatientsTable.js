@@ -50,7 +50,7 @@ const columns = [
     width: 30,
     className: "drag-visible",
     render: (a, b) => {
-      if (b.tags[0] === "waiting") {
+      if (b.status[0] === "waiting") {
         return <DragHandle />;
       }
     },
@@ -108,49 +108,37 @@ const columns = [
   },
   {
     title: "Status",
-    key: "tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        {tags.map((tag, idx) => {
-          if (tag === "done") {
-            return (
-              <CheckCircleOutlined
-                key={idx}
-                style={{ color: "green", fontSize: "23px" }}
-              />
-            );
-          }
-
-          if (tag === "test") {
-            return <Spin key={idx} />;
-          }
-
-          if (tag === "waiting") {
-            return (
-              <ClockCircleOutlined
-                key={idx}
-                style={{ color: "orange", fontSize: "23px" }}
-              />
-            );
-          }
-
+    key: "status",
+    dataIndex: "status",
+    render: (status) => {
+      switch (status) {
+        case "done":
+          return (
+            <CheckCircleOutlined style={{ color: "green", fontSize: "23px" }} />
+          );
+        case "test":
+          return <Spin />;
+        case "waiting":
+          return (
+            <ClockCircleOutlined
+              style={{ color: "orange", fontSize: "23px" }}
+            />
+          );
+        default:
           return (
             <ExclamationCircleOutlined
-              key={idx}
               style={{ color: "red", fontSize: "23px" }}
             />
           );
-        })}
-      </>
-    ),
+      }
+    },
   },
 ];
 
 class PatientsTable extends React.Component {
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
-    if (dataSource[newIndex].tags[0] !== "waiting") {
+    if (dataSource[newIndex].status[0] !== "waiting") {
       return;
     } else if (oldIndex !== newIndex) {
       const newData = arrayMove(
