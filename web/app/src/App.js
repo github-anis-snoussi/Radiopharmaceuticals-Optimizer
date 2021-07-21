@@ -93,11 +93,12 @@ class App extends React.Component {
       rp_vol: 0,
       wasted_vol: 0,
       unextractable_vol: 0,
-      name: "MBq optimizer",
+      name: "Rp Optimizer",
 
       // app status
       isDrawerVisible: false,
       isModalVisible: true,
+      selectedKey: 1,
 
       //patients list
       dataSource: dummyData,
@@ -109,6 +110,7 @@ class App extends React.Component {
     };
     this.onAddPatient = this.onAddPatient.bind(this);
     this.sortPatients = this.sortPatients.bind(this);
+    this.selectMenuItem = this.selectMenuItem.bind(this);
   }
 
   showDrawer = () => {
@@ -365,6 +367,10 @@ class App extends React.Component {
     this.setState({ dataSource: [...dummyData] });
   }
 
+  selectMenuItem({ key }) {
+    this.setState({ selectedKey: parseInt(key, 10) });
+  }
+
   render() {
     return (
       <>
@@ -380,9 +386,14 @@ class App extends React.Component {
             }}
           >
             <Title className="logo">Optimizer</Title>
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              onSelect={this.selectMenuItem}
+            >
               <Menu.Item key="1" icon={<ScheduleOutlined />}>
-                Patients
+                Rp Optimizer
               </Menu.Item>
               <Menu.Item key="2" icon={<InfoCircleOutlined />}>
                 Infos
@@ -394,34 +405,46 @@ class App extends React.Component {
               className="site-layout-sub-header-background"
               style={{ padding: 0 }}
             />
+
             <Content style={{ margin: "24px 16px 0" }}>
               <div
                 className="site-layout-background"
                 style={{ padding: 24, minHeight: 360 }}
               >
-                <AppHeader
-                  rp_activity={this.state.rp_activity}
-                  mesure_time={this.state.mesure_time}
-                  rp_vol={this.state.rp_vol}
-                  rp_half_life={this.state.rp_half_life}
-                  name={this.state.name}
-                >
-                  <Button key="1" onClick={this.sortPatients}>
-                    Sort
-                  </Button>
-                  <Button key="2" type="primary" onClick={this.showDrawer}>
-                    <PlusOutlined /> New Patient
-                  </Button>
-                </AppHeader>
+                {this.state.selectedKey === 1 ? (
+                  <>
+                    <AppHeader
+                      rp_activity={this.state.rp_activity}
+                      mesure_time={this.state.mesure_time}
+                      rp_vol={this.state.rp_vol}
+                      rp_half_life={this.state.rp_half_life}
+                      name={this.state.name}
+                    >
+                      <Button key="1" onClick={this.sortPatients}>
+                        Sort
+                      </Button>
+                      <Button key="2" type="primary" onClick={this.showDrawer}>
+                        <PlusOutlined /> New Patient
+                      </Button>
+                    </AppHeader>
 
-                <PatientsTable
-                  dataSource={this.state.dataSource}
-                  updateData={(newData) =>
-                    this.setState({ dataSource: newData })
-                  }
-                />
+                    <PatientsTable
+                      dataSource={this.state.dataSource}
+                      updateData={(newData) =>
+                        this.setState({ dataSource: newData })
+                      }
+                    />
+                  </>
+                ) : null}
+
+                {this.state.selectedKey === 2 ? (
+                  <>
+                    <div>Hello</div>
+                  </>
+                ) : null}
               </div>
             </Content>
+
             <Footer style={{ textAlign: "center" }}>
               MBq optimizer 2021 Created by Anis Snoussi
             </Footer>
