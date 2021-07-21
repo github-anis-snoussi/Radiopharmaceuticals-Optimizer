@@ -3,6 +3,8 @@ from math import exp
 from math import log
 
 
+
+
 def diff_time (time1, time2) :
     diff = time1 - time2
     diff_in_seconds = diff.total_seconds()
@@ -13,18 +15,14 @@ def decay (a0, half_life, t):
     a = a0 * exp(-log(2) * t / half_life)
     return(a)
 
-
 def activity_at_first_inj (patient_inj_time_list, rp_settings):
     ta = decay (rp_settings["rp_activity"], rp_settings["rp_half_life"], diff_time(patient_inj_time_list[0], rp_settings["mesure_time"]))
     ra = ta * ( rp_settings["rp_vol"] - rp_settings["wasted_vol"])/rp_settings["rp_vol"]
     return(ra)
 
-
-
 def usable_activity (total_rp_activity, total_rp_vol, unextractable_rp_vol):
     a = total_rp_activity * (total_rp_vol - unextractable_rp_vol) / total_rp_vol
     return (a)
-
 
 def generate_patient_inj_time_list (patient_list, patient_scan_time_list, rp_settings):
     patient_scan_time_list.append(0)
@@ -40,7 +38,6 @@ def generate_patient_inj_time_list (patient_list, patient_scan_time_list, rp_set
     patient_scan_time_list.pop()
     patient_list.pop()
     return (patient_inj_time_list)
-
 
 # traja3 activity restant after finish injection
 def calcul_final_expected_activity (patient_list, rp_settings):
@@ -138,28 +135,62 @@ def activity_now (patient_list, rp_settings):
         return(now_dict)
 
 
-rp_settings = {"rp_activity":3825, "rp_half_life":109.8, "mesure_time":datetime.datetime(2021,5,10,8,0), "first_inj_time":datetime.datetime(2021,5,10,7,45), "rp_vol":8.5, "wasted_vol":0.5, "unextractable_vol":0.64}
-
-patient_list = [{"name":"rami", "dose":183, "scan_time":45, "injected":False, "inj_time":datetime.datetime.max},
-                {"name":"wael", "dose":120, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
-                {"name":"hama", "dose":200, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
-                {"name":"hihi", "dose":300, "scan_time":30, "injected":True,  "inj_time":datetime.datetime(2021,5,10,9,20)},
-                {"name":"hous", "dose":150, "scan_time":30, "injected":True,  "inj_time":datetime.datetime(2021,5,10,9,0)},
-                {"name":"kiki", "dose":300, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
-                {"name":"saki", "dose":300, "scan_time":40, "injected":False, "inj_time":datetime.datetime.max}]
-
-# must be done before every sorting.
-sorting_after_every_injection (patient_list)
-
-# sort according to rapport
-first_sorting (patient_list)
-
- # sort by looping
-second_sorting (patient_list, rp_settings)
 
 
 
+##################################################################################################################################
+##################################################################################################################################
+# THIS IS TEST DATA :
+##################################################################################################################################
+##################################################################################################################################
 
+# rp_settings = {"rp_activity":3825, "rp_half_life":109.8, "mesure_time":datetime.datetime(2021,5,10,8,0), "first_inj_time":datetime.datetime(2021,5,10,7,45), "rp_vol":8.5, "wasted_vol":0.5, "unextractable_vol":0.64}
+
+# patient_list = [{"name":"rami", "dose":183, "scan_time":45, "injected":False, "inj_time":datetime.datetime.max},
+#                 {"name":"wael", "dose":120, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
+#                 {"name":"hama", "dose":200, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
+#                 {"name":"hihi", "dose":300, "scan_time":30, "injected":True,  "inj_time":datetime.datetime(2021,5,10,9,20)},
+#                 {"name":"hous", "dose":150, "scan_time":30, "injected":True,  "inj_time":datetime.datetime(2021,5,10,9,0)},
+#                 {"name":"kiki", "dose":300, "scan_time":30, "injected":False, "inj_time":datetime.datetime.max},
+#                 {"name":"saki", "dose":300, "scan_time":40, "injected":False, "inj_time":datetime.datetime.max}]
+##################################################################################################################################
+##################################################################################################################################
+
+
+
+
+
+
+
+##################################################################################################################################
+##################################################################################################################################
+# THIS IS CALL EXAMPLE
+##################################################################################################################################
+##################################################################################################################################
+
+# # must be done before every sorting.
+# sorting_after_every_injection (patient_list)
+
+# # sort according to rapport
+# first_sorting (patient_list)
+
+#  # sort by looping
+# second_sorting (patient_list, rp_settings)
+##################################################################################################################################
+##################################################################################################################################
+
+
+
+
+
+
+
+
+##################################################################################################################################
+##################################################################################################################################
+# THIS IS EXPLAINATION OF INPUT
+##################################################################################################################################
+##################################################################################################################################
 
 # "rp_activity": measured activity elli wosletek.
 # "rp_half_life":half life melle5er.
@@ -176,3 +207,5 @@ second_sorting (patient_list, rp_settings)
 # "scan_time": in minites
 # "injected": status
 # "inj_time": if not injected injected => nothing // else injection time
+##################################################################################################################################
+##################################################################################################################################
