@@ -41,3 +41,4 @@ public/workbox-*.js
 
 logs/**
 api/venv/
+api/.env
