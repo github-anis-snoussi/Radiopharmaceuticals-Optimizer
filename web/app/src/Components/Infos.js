@@ -1,7 +1,17 @@
 import React from "react";
 import "../App.css";
 import "antd/dist/antd.css";
-import { Typography, Divider, Form, Button, Input, Rate, Result } from "antd";
+import {
+  Typography,
+  Divider,
+  Form,
+  Button,
+  Input,
+  Rate,
+  Result,
+  Row,
+  Col,
+} from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 const { Title, Paragraph, Text, Link } = Typography;
 const { TextArea } = Input;
@@ -11,6 +21,12 @@ class Infos extends React.Component {
     this.state = {
       status: "submiting", // or can be submited
     };
+    this.onFinish = this.onFinish.bind(this);
+  }
+
+  onFinish(values) {
+    console.log(values);
+    this.setState({ status: "submited" });
   }
 
   render() {
@@ -79,21 +95,36 @@ class Infos extends React.Component {
               </Title>
               <Rate defaultValue={1} />
             </div>
-
-            <Form.Item>
-              <TextArea rows={4} onChange={() => {}} value={""} />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                htmlType="submit"
-                onClick={() => {
-                  this.setState({ status: "submited" });
-                }}
-                type="primary"
-              >
-                Submit
-              </Button>
-            </Form.Item>
+            <Form onFinish={this.onFinish}>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item
+                    name={["name"]}
+                    label="Name"
+                    rules={[{ required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name={["email"]}
+                    label="Email"
+                    rules={[{ type: "email", required: true }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Form.Item name={["description"]} rules={[{ required: true }]}>
+                <TextArea rows={4} onChange={() => {}} value={""} />
+              </Form.Item>
+              <Form.Item>
+                <Button htmlType="submit" type="primary">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </>
         ) : (
           <Result
