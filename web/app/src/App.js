@@ -379,7 +379,7 @@ class App extends React.Component {
               console.log(collapsed, type);
             }}
           >
-            <Title className="logo">Scheduler</Title>
+            <Title className="logo">Optimizer</Title>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
               <Menu.Item key="1" icon={<ScheduleOutlined />}>
                 Patients
