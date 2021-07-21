@@ -52,7 +52,7 @@ const dummyData = [
     dose: 42,
     duration: 30,
     injectionTime: moment("12:18:23", "HH:mm:ss"),
-    status: "test",
+    status: "done",
   },
   {
     key: "3",
@@ -372,7 +372,7 @@ class App extends React.Component {
         dose: e.dose,
         scan_time: e.duration,
         inj_time: e.injectionTime ? e.injectionTime.valueOf() : null,
-        injected: e.injectionTime ? true : false,
+        injected: e.status === "waiting" ? false : true,
 
         // secondary infos
         key: e.key, // should not change (identifies patient)
