@@ -5,6 +5,7 @@ import "antd/dist/antd.css";
 
 import AppHeader from "./Components/AppHeader";
 import PatientsTable from "./Components/PatientsTable";
+import Infos from "./Components/Infos";
 
 import {
   Layout,
@@ -437,11 +438,7 @@ class App extends React.Component {
                   </>
                 ) : null}
 
-                {this.state.selectedKey === 2 ? (
-                  <>
-                    <div>Hello</div>
-                  </>
-                ) : null}
+                {this.state.selectedKey === 2 ? <Infos /> : null}
               </div>
             </Content>
 
