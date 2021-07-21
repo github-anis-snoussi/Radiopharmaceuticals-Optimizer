@@ -145,9 +145,10 @@ class App extends React.Component {
       name: patienName,
       dose: patientDose,
       duration: patientScanDuration,
-      status: ["waiting"],
+      status: "waiting",
       index: this.state.dataSource.length,
       key: (this.state.dataSource.length + 1).toString(),
+      injectionTime: null,
     };
 
     this.setState((state) => ({
