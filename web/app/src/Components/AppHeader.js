@@ -2,15 +2,17 @@ import React from "react";
 import "../App.css";
 import "antd/dist/antd.css";
 
-import { Tag, Row, PageHeader, Statistic, Progress } from "antd";
+import { Tag, Row, PageHeader, Statistic } from "antd";
 
-const { Countdown } = Statistic;
+// import { Progress } from "antd";
 
-const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2; // deadline in 2 days (in ms)
+// const { Countdown } = Statistic;
 
-function onFinish() {
-  console.log("finished!");
-}
+// const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2; // deadline in 2 days (in ms)
+
+// function onFinish() {
+//   console.log("finished!");
+// }
 
 const HeaderContent = ({ children, extra }) => (
   <div className="content">
@@ -41,20 +43,20 @@ const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
         margin: "0 32px",
       }}
     />
-    <Countdown
+    {/* <Countdown
       valueStyle={{ color: "#1890ff" }}
       title="Time Remaining"
       value={deadline}
       onFinish={onFinish}
-    />
-    <Progress
+    /> */}
+    {/* <Progress
       strokeColor={{
         "0%": "red",
         "100%": "green",
       }}
       percent={80}
       format={(percent) => `${percent * 10} MBq`}
-    />
+    /> */}
   </Row>
 );
 
