@@ -50,7 +50,7 @@ const columns = [
     width: 30,
     className: "drag-visible",
     render: (a, b) => {
-      if (b.status[0] === "waiting") {
+      if (b.status === "waiting") {
         return <DragHandle />;
       }
     },
@@ -138,7 +138,7 @@ const columns = [
 class PatientsTable extends React.Component {
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
-    if (dataSource[newIndex].status[0] !== "waiting") {
+    if (dataSource[newIndex].status !== "waiting") {
       return;
     } else if (oldIndex !== newIndex) {
       const newData = arrayMove(
