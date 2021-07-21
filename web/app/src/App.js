@@ -41,7 +41,7 @@ const dummyData = [
     name: "John Brown",
     dose: 32,
     duration: 30,
-    injectionTime: null,
+    injectionTime: moment("12:08:23", "HH:mm:ss"),
     status: "done",
   },
   {
@@ -50,7 +50,7 @@ const dummyData = [
     name: "Jim Green",
     dose: 42,
     duration: 30,
-    injectionTime: moment("12:08:23", "HH:mm:ss"),
+    injectionTime: moment("12:18:23", "HH:mm:ss"),
     status: "test",
   },
   {
@@ -77,7 +77,7 @@ const dummyData = [
     name: "Sami Jr",
     dose: 64,
     duration: 30,
-    injectionTime: moment("12:08:23", "HH:mm:ss"),
+    injectionTime: null,
     status: "waiting",
   },
 ];
@@ -364,8 +364,23 @@ class App extends React.Component {
   }
 
   sortPatients() {
-    console.log(this.state.dataSource);
-    this.setState({ dataSource: [...dummyData] });
+    const formatedPatientInfos = this.state.dataSource.map((e) => {
+      return {
+        // patient infos
+        dose: e.dose,
+        scan_time: e.duration,
+        inj_time: e.injectionTime ? e.injectionTime.valueOf() : null,
+        injected: e.injectionTime ? true : false,
+
+        // secondary infos
+        key: e.key, // should not change (identifies patient)
+        index: e.index, // should not change (identifies patient)
+        status: e.status,
+        name: e.name,
+      };
+    });
+
+    console.log(formatedPatientInfos);
   }
 
   selectMenuItem({ key }) {

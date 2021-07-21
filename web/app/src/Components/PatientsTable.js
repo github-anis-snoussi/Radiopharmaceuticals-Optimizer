@@ -24,7 +24,6 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import moment from "moment";
 
 const { Text } = Typography;
 
@@ -77,15 +76,15 @@ const columns = [
     key: "injectionTime",
     render: (text, record) => {
       if (record.injectionTime) {
-        return <TimePicker size="small" />;
-      } else {
         return (
           <TimePicker
             size="small"
-            defaultValue={moment("12:08:23", "HH:mm:ss")}
+            defaultValue={record.injectionTime}
             disabled
           />
         );
+      } else {
+        return <TimePicker size="small" />;
       }
     },
   },
