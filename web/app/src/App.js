@@ -21,6 +21,7 @@ import {
   InputNumber,
   TimePicker,
   Divider,
+  message,
 } from "antd";
 
 import {
@@ -382,6 +383,7 @@ class App extends React.Component {
     });
 
     console.log(formatedPatientInfos);
+    message.success("Patient List sorted");
   }
 
   selectMenuItem({ key }) {
