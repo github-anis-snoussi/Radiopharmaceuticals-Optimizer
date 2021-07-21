@@ -93,6 +93,19 @@ def sort_patients_list():
         return 'Please initialise the session.'
 
     try:
+        # This the patients list the way we received it
+        received_patient_list = request.get_json()
+        # this will hold the formated patients list
+        patient_list = []
+
+        # we format the received patients list the way we want it
+        for p in received_patient_list:
+            if p['injected']:
+                    patient_list.append({ **p, 'inj_time' : datetime.datetime.fromtimestamp(p['inj_time'] / 1e3)})
+            else:
+                    patient_list.append({ **p, 'inj_time' : datetime.datetime.max})
+
+        # this is the app settings saved in the session
         rp_settings = {
             "rp_activity" : session["rp_activity"],
             "rp_half_life" : session["rp_half_life"],
@@ -103,7 +116,6 @@ def sort_patients_list():
             "unextractable_vol" : session["unextractable_vol"]
         }
 
-        patient_list = request.get_json()
         print(patient_list)
 
 
