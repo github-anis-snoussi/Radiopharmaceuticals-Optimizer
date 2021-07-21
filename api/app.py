@@ -86,6 +86,8 @@ def session_utils():
 
 
 
+# input <= patient_list : array[]
+# output => sorted_list : array[]
 @app.route('/api/sort', methods=['POST'])
 def sort_patients_list():
 
@@ -95,7 +97,7 @@ def sort_patients_list():
 
     try:
         # This the patients list the way we received it
-        received_patient_list = request.get_json()
+        received_patient_list = request.get_json()['patient_list']
         # this will hold the formated patients list
         patient_list = []
 
@@ -121,15 +123,18 @@ def sort_patients_list():
         first_sorting(patient_list)
         second_sorting (patient_list, rp_settings)
 
+        reforamed_patient_list = []
 
-        return { 'sorted_list': patient_list}
+        for patient in patient_list:
+            if (patient['inj_time'].year == 9999):
+                reforamed_patient_list.append({**patient, 'inj_time' : None})
+            else:
+                reforamed_patient_list.append({**patient, 'inj_time' : int(patient['inj_time'].strftime("%s")) * 1000  })
+
+        return { 'sorted_list': reforamed_patient_list }
     
     except Exception as e:
-        return {
-            'error' : str(e),
-            'patient_list' : patient_list,
-            'rp_settings' : rp_settings
-            }
+        return {'error' : str(e)}
 
 
 
@@ -137,14 +142,3 @@ def sort_patients_list():
 
 if __name__ == '__main__':
     app.run( host="0.0.0.0" , port=5000 )
-
-
-
-# # must be done before every sorting.
-# sorting_after_every_injection (patient_list)
-
-# # sort according to rapport
-# first_sorting (patient_list)
-
-#  # sort by looping
-# second_sorting (patient_list, rp_settings)
