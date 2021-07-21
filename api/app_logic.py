@@ -169,7 +169,7 @@ def activity_now (patient_list, rp_settings):
 ##################################################################################################################################
 
 # # must be done before every sorting.
-# sorting_after_every_injection (patient_list)
+# sorting_after_every_injection(patient_list)
 
 # # sort according to rapport
 # first_sorting (patient_list)

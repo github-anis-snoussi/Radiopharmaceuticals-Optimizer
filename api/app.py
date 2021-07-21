@@ -4,7 +4,8 @@ from redis import Redis
 from flask import Flask, render_template_string, request, session, redirect, url_for
 from flask_session import Session
 
-
+# THIS IS THE LOGIC BEHIN THIS APP:
+from app_logic import sorting_after_every_injection, first_sorting, second_sorting
 
 # Create the Flask application
 app = Flask(__name__)
@@ -109,20 +110,26 @@ def sort_patients_list():
         rp_settings = {
             "rp_activity" : session["rp_activity"],
             "rp_half_life" : session["rp_half_life"],
-            "mesure_time" : session["mesure_time"],
-            "first_inj_time" : session["first_inj_time"],
+            "mesure_time" : datetime.datetime.fromtimestamp(session["mesure_time"] / 1e3),
+            "first_inj_time" : datetime.datetime.fromtimestamp(session["first_inj_time"] / 1e3),
             "rp_vol" : session["rp_vol"],
             "wasted_vol" : session["wasted_vol"],
             "unextractable_vol" : session["unextractable_vol"]
         }
 
-        print(patient_list)
+        sorting_after_every_injection(patient_list)
+        first_sorting(patient_list)
+        second_sorting (patient_list, rp_settings)
 
 
-        return 'sorted.'
+        return { 'sorted_list': patient_list}
     
     except Exception as e:
-        return 'Something Went Wrong ...'
+        return {
+            'error' : str(e),
+            'patient_list' : patient_list,
+            'rp_settings' : rp_settings
+            }
 
 
 
@@ -130,3 +137,14 @@ def sort_patients_list():
 
 if __name__ == '__main__':
     app.run( host="0.0.0.0" , port=5000 )
+
+
+
+# # must be done before every sorting.
+# sorting_after_every_injection (patient_list)
+
+# # sort according to rapport
+# first_sorting (patient_list)
+
+#  # sort by looping
+# second_sorting (patient_list, rp_settings)
