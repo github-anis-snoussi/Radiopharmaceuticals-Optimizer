@@ -20,7 +20,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_REDIS'] = Redis(host='redis', port=6379)
+app.config['SESSION_REDIS'] = Redis(host=os.environ.get("REDIS_HOST"), port=6379)
 
 # Configure the upload path
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -66,6 +66,10 @@ def delete_nickname():
     # Clear the nickname stored in the session object
     session.pop('nickname', default=None)
     return '<h1>Session deleted!</h1>'
+
+@app.route('/api/ping')
+def ping_pong():
+    return 'posng'
 
 
 
