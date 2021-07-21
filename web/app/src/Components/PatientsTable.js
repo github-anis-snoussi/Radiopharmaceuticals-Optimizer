@@ -10,6 +10,7 @@ import {
   message,
   Spin,
   Typography,
+  TimePicker,
 } from "antd";
 import {
   MenuOutlined,
@@ -23,6 +24,7 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
+import moment from "moment";
 
 const { Text } = Typography;
 
@@ -71,6 +73,40 @@ const columns = [
     render: (text) => <p>{text} minutes</p>,
   },
   {
+    title: "Injection Time",
+    key: "injectionTime",
+    render: (text, record) => {
+      if (record.injectionTime) {
+        return <TimePicker size="small" />;
+      } else {
+        return (
+          <TimePicker
+            size="small"
+            defaultValue={moment("12:08:23", "HH:mm:ss")}
+            disabled
+          />
+        );
+      }
+    },
+  },
+  {
+    title: "Actions",
+    key: "action",
+    render: (text, record) => (
+      <Space size="middle">
+        <Popconfirm
+          title={`Are you sure you want to Inject ${record.name}`}
+          onConfirm={confirm}
+          onCancel={cancel}
+          okText="Inject"
+          cancelText="Cancel"
+        >
+          <Button size="small">Inject {record.name}</Button>
+        </Popconfirm>
+      </Space>
+    ),
+  },
+  {
     title: "Status",
     key: "tags",
     dataIndex: "tags",
@@ -107,23 +143,6 @@ const columns = [
           );
         })}
       </>
-    ),
-  },
-  {
-    title: "Actions",
-    key: "action",
-    render: (text, record) => (
-      <Space size="middle">
-        <Popconfirm
-          title="Are you sure to inject this patient?"
-          onConfirm={confirm}
-          onCancel={cancel}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button size="small">Inject {record.name}</Button>
-        </Popconfirm>
-      </Space>
     ),
   },
 ];

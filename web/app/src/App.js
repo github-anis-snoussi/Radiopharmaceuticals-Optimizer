@@ -28,6 +28,7 @@ import {
   InfoCircleOutlined,
   BankOutlined,
 } from "@ant-design/icons";
+import moment from "moment";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
@@ -39,6 +40,7 @@ const dummyData = [
     name: "John Brown",
     dose: 32,
     duration: 30,
+    injectionTime: null,
     tags: ["done"],
   },
   {
@@ -47,6 +49,7 @@ const dummyData = [
     name: "Jim Green",
     dose: 42,
     duration: 30,
+    injectionTime: moment("12:08:23", "HH:mm:ss"),
     tags: ["test"],
   },
   {
@@ -55,6 +58,7 @@ const dummyData = [
     name: "Joe Black",
     dose: 32,
     duration: 30,
+    injectionTime: null,
     tags: ["waiting"],
   },
   {
@@ -63,6 +67,7 @@ const dummyData = [
     name: "Mark Smith",
     dose: 60,
     duration: 45,
+    injectionTime: null,
     tags: ["waiting"],
   },
   {
@@ -71,6 +76,7 @@ const dummyData = [
     name: "Sami Jr",
     dose: 64,
     duration: 30,
+    injectionTime: moment("12:08:23", "HH:mm:ss"),
     tags: ["waiting"],
   },
 ];
