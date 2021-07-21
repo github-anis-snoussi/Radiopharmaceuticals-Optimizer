@@ -1,14 +1,16 @@
 import React from "react";
 import "../App.css";
 import "antd/dist/antd.css";
-import { Typography, Divider, Form, Button, Input, Rate } from "antd";
-
+import { Typography, Divider, Form, Button, Input, Rate, Result } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 const { Title, Paragraph, Text, Link } = Typography;
 const { TextArea } = Input;
 class Infos extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      status: "submiting", // or can be submited
+    };
   }
 
   render() {
@@ -62,27 +64,43 @@ class Infos extends React.Component {
         </Typography>
 
         <Divider />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
-            Your Opinion matters :{" "}
-          </Title>
-          <Rate defaultValue={1} />
-        </div>
 
-        <Form.Item>
-          <TextArea rows={4} onChange={() => {}} value={""} />
-        </Form.Item>
-        <Form.Item>
-          <Button htmlType="submit" onClick={() => {}} type="primary">
-            Submit
-          </Button>
-        </Form.Item>
+        {this.state.status === "submiting" ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
+                Your Opinion matters :{" "}
+              </Title>
+              <Rate defaultValue={1} />
+            </div>
+
+            <Form.Item>
+              <TextArea rows={4} onChange={() => {}} value={""} />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                onClick={() => {
+                  this.setState({ status: "submited" });
+                }}
+                type="primary"
+              >
+                Submit
+              </Button>
+            </Form.Item>
+          </>
+        ) : (
+          <Result
+            icon={<SmileOutlined />}
+            title="Thank you for your feedback."
+          />
+        )}
       </>
     );
   }
