@@ -74,7 +74,7 @@ class AppHeader extends React.Component {
         className="site-page-header-responsive"
         title={name}
         subTitle={new Date().toDateString()}
-        tags={<Tag color="blue">Running</Tag>}
+        tags={<Tag color="blue">Beta Version</Tag>}
         extra={children}
       >
         <HeaderContent>
