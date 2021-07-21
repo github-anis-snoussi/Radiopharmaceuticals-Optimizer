@@ -16,3 +16,7 @@ generate requirements file :
 
 disconnect from it :
 `deactivate`
+
+## Run a local Redis instance for testing
+
+`docker run -d -p 6379:6379 redis`
