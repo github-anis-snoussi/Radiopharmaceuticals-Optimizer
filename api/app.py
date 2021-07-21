@@ -85,6 +85,36 @@ def session_utils():
 
 
 
+@app.route('/api/sort', methods=['POST'])
+def sort_patients_list():
+
+    # We check if the session is set
+    if not session.get('mesure_time') :
+        return 'Please initialise the session.'
+
+    try:
+        rp_settings = {
+            "rp_activity" : session["rp_activity"],
+            "rp_half_life" : session["rp_half_life"],
+            "mesure_time" : session["mesure_time"],
+            "first_inj_time" : session["first_inj_time"],
+            "rp_vol" : session["rp_vol"],
+            "wasted_vol" : session["wasted_vol"],
+            "unextractable_vol" : session["unextractable_vol"]
+        }
+
+        patient_list = request.get_json()
+        print(patient_list)
+
+
+        return 'sorted.'
+    
+    except Exception as e:
+        return 'Something Went Wrong ...'
+
+
+
+
 
 if __name__ == '__main__':
     app.run( host="0.0.0.0" , port=5000 )
