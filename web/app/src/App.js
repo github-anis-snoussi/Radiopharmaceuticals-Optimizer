@@ -132,7 +132,21 @@ class App extends React.Component {
   };
 
   handleOk = () => {
-    this.setState({ isModalVisible: false });
+    const { state } = this;
+
+    const formatedRpSettings = {
+      rp_activity: state.rp_activity,
+      mesure_time: state.mesure_time.valueOf(),
+      first_inj_time: state.first_inj_time.valueOf(),
+      rp_half_life: state.rp_half_life,
+      rp_vol: state.rp_vol,
+      wasted_vol: state.wasted_vol,
+      unextractable_vol: state.unextractable_vol,
+    };
+
+    console.log(formatedRpSettings);
+
+    // this.setState({ isModalVisible: false });
   };
 
   handleCancel = () => {
