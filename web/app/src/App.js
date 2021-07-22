@@ -156,23 +156,8 @@ class App extends React.Component {
         console.log(e);
       });
 
-    console.log(formatedRpSettings);
-
-    // this.setState({ isModalVisible: false });
-  };
-
-  handleCancel = () => {
-    axios
-      .get("session")
-      .then((res) => {
-        res = res.data;
-        console.log(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-
-    // this.setState({ isModalVisible: false });
+    this.setState({ isModalVisible: false });
+    message.success("Session initialized.");
   };
 
   onAddPatient() {
@@ -283,8 +268,15 @@ class App extends React.Component {
       <Modal
         title="Welcome"
         visible={this.state.isModalVisible}
-        onOk={this.handleOk}
-        onCancel={this.handleCancel}
+        footer={[
+          <Button
+            type="primary"
+            onClick={this.handleOk}
+            disabled={!this.state.mesure_time || !this.state.first_inj_time}
+          >
+            Start
+          </Button>,
+        ]}
       >
         <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
