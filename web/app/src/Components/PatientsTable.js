@@ -69,7 +69,7 @@ const columns = [
     title: "Test Duration (min)",
     dataIndex: "duration",
     key: "duration",
-    render: (text) => <p>{text} minutes</p>,
+    render: (text) => <p>{text}</p>,
   },
   {
     title: "Injection Time",
