@@ -44,10 +44,8 @@ function confirm(record, dataSource, updateData) {
       }
     });
     updateData([...dataSource]);
-    message.success(`Patient injected`);
+    message.success("Patient injected");
   }
-
-  console.log(record);
 }
 
 function cancel() {
@@ -94,6 +92,16 @@ class PatientsTable extends React.Component {
     return <SortableItem index={index} {...restProps} />;
   };
 
+  updateRecordMeasureTime = (record, mesure_time) => {
+    const { dataSource, updateData } = this.props;
+    dataSource.forEach(function (part, index, theArray) {
+      if (theArray[index].index === record.index) {
+        theArray[index].injectionTime = mesure_time;
+      }
+    });
+    updateData([...dataSource]);
+  };
+
   tableColums = () => {
     const columns = [
       {
@@ -128,7 +136,7 @@ class PatientsTable extends React.Component {
         title: "Injection Time",
         key: "injectionTime",
         render: (text, record) => {
-          if (record.injectionTime) {
+          if (record.status === "done") {
             return (
               <TimePicker
                 size="small"
@@ -137,7 +145,14 @@ class PatientsTable extends React.Component {
               />
             );
           } else {
-            return <TimePicker size="small" />;
+            return (
+              <TimePicker
+                size="small"
+                onSelect={(mesure_time) => {
+                  this.updateRecordMeasureTime(record, mesure_time);
+                }}
+              />
+            );
           }
         },
       },
