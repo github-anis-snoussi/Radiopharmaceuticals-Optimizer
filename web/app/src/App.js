@@ -270,6 +270,7 @@ class App extends React.Component {
         visible={this.state.isModalVisible}
         footer={[
           <Button
+            key={1}
             type="primary"
             onClick={this.handleOk}
             disabled={!this.state.mesure_time || !this.state.first_inj_time}
