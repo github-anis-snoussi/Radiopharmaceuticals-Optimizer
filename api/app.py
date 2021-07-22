@@ -20,7 +20,7 @@ app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_REDIS'] = Redis(host=os.environ.get("REDIS_HOST"), port=6379)
-
+app.config['SESSION_COOKIE_SAMESITE'] = "Strict"
 
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 server_session = Session(app)

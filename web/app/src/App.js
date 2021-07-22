@@ -146,9 +146,15 @@ class App extends React.Component {
       unextractable_vol: state.unextractable_vol,
     };
 
-    axios.post("api/session", formatedRpSettings).then((res) => {
-      res = res.data;
-    });
+    axios
+      .post("session", formatedRpSettings)
+      .then((res) => {
+        res = res.data;
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     console.log(formatedRpSettings);
 
@@ -156,7 +162,17 @@ class App extends React.Component {
   };
 
   handleCancel = () => {
-    this.setState({ isModalVisible: false });
+    axios
+      .get("session")
+      .then((res) => {
+        res = res.data;
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    // this.setState({ isModalVisible: false });
   };
 
   onAddPatient() {
