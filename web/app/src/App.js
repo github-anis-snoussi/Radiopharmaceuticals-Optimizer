@@ -149,15 +149,15 @@ class App extends React.Component {
     axios
       .post("session", formatedRpSettings)
       .then((res) => {
-        res = res.data;
-        console.log(res);
+        // res = res.data;
+        // console.log(res);
+        this.setState({ isModalVisible: false });
+        message.success("Session initialized.");
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
+        message.error("Something went wrong.");
       });
-
-    this.setState({ isModalVisible: false });
-    message.success("Session initialized.");
   };
 
   onAddPatient() {
@@ -411,8 +411,33 @@ class App extends React.Component {
       };
     });
 
-    console.log(formatedPatientInfos);
-    message.success("Patient List sorted");
+    axios
+      .post("sort", { patient_list: formatedPatientInfos })
+      .then((res) => {
+        let sorted_list = res.data.sorted_list;
+        console.log(sorted_list);
+        const newFormatedPatients = sorted_list.map((e) => {
+          return {
+            // patient infos
+            dose: e.dose,
+            duration: e.scan_time,
+            injectionTime: moment(e.inj_time),
+
+            // secondary infos
+            key: e.key, // should not change (identifies patient)
+            index: e.index, // should not change (identifies patient)
+            status: e.status,
+            name: e.name,
+          };
+        });
+
+        this.setState({ dataSource: [...newFormatedPatients] });
+        message.success("Patient List sorted");
+      })
+      .catch((e) => {
+        // console.log(e);
+        message.error("Something went wrong.");
+      });
   }
 
   selectMenuItem({ key }) {
