@@ -34,107 +34,32 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
-function confirm() {
-  message.success("Click on Yes");
+function confirm(record, dataSource, updateData) {
+  if (record.injectionTime === null) {
+    message.warning("Operation aborted");
+  } else {
+    dataSource.forEach(function (part, index, theArray) {
+      if (theArray[index].index === record.index) {
+        theArray[index].status = "done";
+      }
+    });
+    updateData([...dataSource]);
+    message.success(`Patient injected`);
+  }
+
+  console.log(record);
 }
 
 function cancel() {
-  message.error("Click on No");
+  return;
 }
 
-const columns = [
-  {
-    title: "Sort",
-    dataIndex: "sort",
-    width: 30,
-    className: "drag-visible",
-    render: (a, b) => {
-      if (b.status === "waiting") {
-        return <DragHandle />;
-      }
-    },
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <Text style={{ color: "#1890ff" }}>{text}</Text>,
-  },
-  {
-    title: "Dose (MBq)",
-    dataIndex: "dose",
-    key: "dose",
-  },
-  {
-    title: "Test Duration (min)",
-    dataIndex: "duration",
-    key: "duration",
-    render: (text) => <p>{text}</p>,
-  },
-  {
-    title: "Injection Time",
-    key: "injectionTime",
-    render: (text, record) => {
-      if (record.injectionTime) {
-        return (
-          <TimePicker
-            size="small"
-            defaultValue={record.injectionTime}
-            disabled
-          />
-        );
-      } else {
-        return <TimePicker size="small" />;
-      }
-    },
-  },
-  {
-    title: "Actions",
-    key: "action",
-    render: (text, record) => (
-      <Space size="middle">
-        <Popconfirm
-          title={`Are you sure you want to Inject ${record.name}`}
-          onConfirm={confirm}
-          onCancel={cancel}
-          okText="Inject"
-          cancelText="Cancel"
-        >
-          <Button size="small">Inject {record.name}</Button>
-        </Popconfirm>
-      </Space>
-    ),
-  },
-  {
-    title: "Status",
-    key: "status",
-    dataIndex: "status",
-    render: (status) => {
-      switch (status) {
-        case "done":
-          return (
-            <CheckCircleOutlined style={{ color: "green", fontSize: "23px" }} />
-          );
-        case "test":
-          return <Spin />;
-        case "waiting":
-          return (
-            <ClockCircleOutlined
-              style={{ color: "orange", fontSize: "23px" }}
-            />
-          );
-        default:
-          return (
-            <ExclamationCircleOutlined
-              style={{ color: "red", fontSize: "23px" }}
-            />
-          );
-      }
-    },
-  },
-];
-
 class PatientsTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.tableColums = this.tableColums.bind(this);
+  }
+
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
     if (dataSource[newIndex].status !== "waiting") {
@@ -169,12 +94,114 @@ class PatientsTable extends React.Component {
     return <SortableItem index={index} {...restProps} />;
   };
 
+  tableColums = () => {
+    const columns = [
+      {
+        title: "Sort",
+        dataIndex: "sort",
+        width: 30,
+        className: "drag-visible",
+        render: (a, b) => {
+          if (b.status === "waiting") {
+            return <DragHandle />;
+          }
+        },
+      },
+      {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        render: (text) => <Text style={{ color: "#1890ff" }}>{text}</Text>,
+      },
+      {
+        title: "Dose (MBq)",
+        dataIndex: "dose",
+        key: "dose",
+      },
+      {
+        title: "Test Duration (min)",
+        dataIndex: "duration",
+        key: "duration",
+        render: (text) => <p>{text}</p>,
+      },
+      {
+        title: "Injection Time",
+        key: "injectionTime",
+        render: (text, record) => {
+          if (record.injectionTime) {
+            return (
+              <TimePicker
+                size="small"
+                defaultValue={record.injectionTime}
+                disabled
+              />
+            );
+          } else {
+            return <TimePicker size="small" />;
+          }
+        },
+      },
+      {
+        title: "Actions",
+        key: "action",
+        render: (text, record) => (
+          <Space size="middle">
+            <Popconfirm
+              title={`Are you sure you want to Inject ${record.name}`}
+              onConfirm={() =>
+                confirm(record, this.props.dataSource, this.props.updateData)
+              }
+              onCancel={cancel}
+              okText="Inject"
+              cancelText="Cancel"
+            >
+              <Button size="small" disabled={record.status !== "waiting"}>
+                Inject {record.name}
+              </Button>
+            </Popconfirm>
+          </Space>
+        ),
+      },
+      {
+        title: "Status",
+        key: "status",
+        dataIndex: "status",
+        render: (status) => {
+          switch (status) {
+            case "done":
+              return (
+                <CheckCircleOutlined
+                  style={{ color: "green", fontSize: "23px" }}
+                />
+              );
+            case "test":
+              return <Spin />;
+            case "waiting":
+              return (
+                <ClockCircleOutlined
+                  style={{ color: "orange", fontSize: "23px" }}
+                />
+              );
+            default:
+              return (
+                <ExclamationCircleOutlined
+                  style={{ color: "red", fontSize: "23px" }}
+                />
+              );
+          }
+        },
+      },
+    ];
+
+    return columns;
+  };
+
   render() {
     return (
       <Table
         pagination={false}
         dataSource={this.props.dataSource}
-        columns={columns}
+        columns={this.tableColums()}
         rowKey="index"
         components={{
           body: {
