@@ -30,7 +30,9 @@ import {
   InfoCircleOutlined,
   BankOutlined,
 } from "@ant-design/icons";
+
 import moment from "moment";
+import axios from "./utils/axios";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
@@ -143,6 +145,10 @@ class App extends React.Component {
       wasted_vol: state.wasted_vol,
       unextractable_vol: state.unextractable_vol,
     };
+
+    axios.post("api/session", formatedRpSettings).then((res) => {
+      res = res.data;
+    });
 
     console.log(formatedRpSettings);
 
