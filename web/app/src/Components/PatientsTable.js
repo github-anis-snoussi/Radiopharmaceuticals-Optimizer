@@ -170,7 +170,10 @@ class PatientsTable extends React.Component {
               okText="Inject"
               cancelText="Cancel"
             >
-              <Button size="small" disabled={record.status !== "waiting"}>
+              <Button
+                size="small"
+                disabled={record.status !== "waiting" || !record.injectionTime}
+              >
                 Inject {record.name}
               </Button>
             </Popconfirm>

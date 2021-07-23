@@ -42,25 +42,25 @@ const dummyData = [
     key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
     index: 0,
     name: "John Brown",
-    dose: 32,
-    duration: 30,
-    injectionTime: moment("12:08:23", "HH:mm:ss"),
-    status: "done",
+    dose: 183,
+    duration: 45,
+    injectionTime: null,
+    status: "waiting",
   },
   {
     key: "2",
     index: 1,
     name: "Jim Green",
-    dose: 42,
+    dose: 120,
     duration: 30,
-    injectionTime: moment("12:18:23", "HH:mm:ss"),
-    status: "done",
+    injectionTime: null,
+    status: "waiting",
   },
   {
     key: "3",
     index: 2,
     name: "Joe Black",
-    dose: 32,
+    dose: 200,
     duration: 30,
     injectionTime: null,
     status: "waiting",
@@ -69,8 +69,8 @@ const dummyData = [
     key: "4",
     index: 3,
     name: "Mark Smith",
-    dose: 60,
-    duration: 45,
+    dose: 300,
+    duration: 30,
     injectionTime: null,
     status: "waiting",
   },
@@ -78,8 +78,26 @@ const dummyData = [
     key: "5",
     index: 4,
     name: "Sami Jr",
-    dose: 64,
+    dose: 150,
     duration: 30,
+    injectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "6",
+    index: 5,
+    name: "Sami Jr 2",
+    dose: 300,
+    duration: 30,
+    injectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "7",
+    index: 6,
+    name: "Sami Jr 3",
+    dose: 300,
+    duration: 40,
     injectionTime: null,
     status: "waiting",
   },
@@ -106,6 +124,7 @@ class App extends React.Component {
 
       //patients list
       dataSource: dummyData,
+      // dataSource: [],
 
       // new patient input (stupid, I know)
       patienName: "",
@@ -395,6 +414,7 @@ class App extends React.Component {
   }
 
   sortPatients() {
+    console.log("patients list before send to sort : ", this.state.dataSource);
     const formatedPatientInfos = this.state.dataSource.map((e) => {
       return {
         // patient infos
@@ -421,7 +441,7 @@ class App extends React.Component {
             // patient infos
             dose: e.dose,
             duration: e.scan_time,
-            injectionTime: moment(e.inj_time),
+            injectionTime: e.inj_time ? moment(e.inj_time) : null,
 
             // secondary infos
             key: e.key, // should not change (identifies patient)
@@ -432,10 +452,11 @@ class App extends React.Component {
         });
 
         this.setState({ dataSource: [...newFormatedPatients] });
+        console.log("patients list after send to sort : ", newFormatedPatients);
         message.success("Patient List sorted");
       })
       .catch((e) => {
-        // console.log(e);
+        console.log(e);
         message.error("Something went wrong.");
       });
   }
