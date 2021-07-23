@@ -123,8 +123,8 @@ class App extends React.Component {
       selectedKey: 1,
 
       //patients list
-      dataSource: dummyData,
-      // dataSource: [],
+      // dataSource: dummyData,
+      dataSource: [],
 
       // new patient input (stupid, I know)
       patienName: "",
@@ -149,7 +149,9 @@ class App extends React.Component {
   };
 
   showModal = () => {
-    this.setState({ isModalVisible: true });
+    this.setState({
+      isModalVisible: true,
+    });
   };
 
   handleOk = () => {
@@ -194,9 +196,6 @@ class App extends React.Component {
 
     this.setState((state) => ({
       dataSource: [...state.dataSource, newPatient],
-      patienName: "",
-      patientScanDuration: 0,
-      patientDose: 0,
       isDrawerVisible: false,
     }));
   }
