@@ -133,50 +133,51 @@ class PatientsTable extends React.Component {
         render: (text) => <p>{text}</p>,
       },
       {
-        title: "Injection Time",
-        key: "injectionTime",
-        render: (text, record) => {
-          if (record.status === "done") {
-            return (
-              <TimePicker
-                size="small"
-                defaultValue={record.injectionTime}
-                disabled
-              />
-            );
-          } else {
-            return (
-              <TimePicker
-                size="small"
-                onSelect={(mesure_time) => {
-                  this.updateRecordMeasureTime(record, mesure_time);
-                }}
-              />
-            );
-          }
-        },
-      },
-      {
         title: "Actions",
         key: "action",
         render: (text, record) => (
           <Space size="middle">
-            <Popconfirm
-              title={`Are you sure you want to Inject ${record.name}`}
-              onConfirm={() =>
-                confirm(record, this.props.dataSource, this.props.updateData)
-              }
-              onCancel={cancel}
-              okText="Inject"
-              cancelText="Cancel"
-            >
-              <Button
-                size="small"
-                disabled={record.status !== "waiting" || !record.injectionTime}
+            {record.status === "waiting" ? (
+              <Popconfirm
+                title={
+                  <>
+                    <div>Select Injection Time for {record.name}</div>
+                    <TimePicker
+                      size="small"
+                      style={{
+                        width: "100%",
+                        marginRight: 10,
+                        marginTop: 10,
+                        marginBottom: 10,
+                      }}
+                      onSelect={(mesure_time) => {
+                        this.updateRecordMeasureTime(record, mesure_time);
+                      }}
+                    />
+                  </>
+                }
+                onConfirm={() => {
+                  if (!record.injectionTime) {
+                    message.warning("Please select Injection time first.");
+                  } else {
+                    confirm(
+                      record,
+                      this.props.dataSource,
+                      this.props.updateData
+                    );
+                  }
+                }}
+                onCancel={cancel}
+                okText="Inject"
+                cancelText="Cancel"
               >
+                <Button size="small">Inject {record.name}</Button>
+              </Popconfirm>
+            ) : (
+              <Button size="small" disabled>
                 Inject {record.name}
               </Button>
-            </Popconfirm>
+            )}
           </Space>
         ),
       },
