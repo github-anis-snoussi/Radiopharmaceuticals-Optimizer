@@ -17,7 +17,6 @@
   text-align: center;
 }
 
-
 .row-dragging {
   background: #fafafa;
   border: 1px solid #ccc;
@@ -30,4 +29,8 @@
 
 .row-dragging .drag-visible {
   visibility: visible;
+}
+
+.ant-picker-dropdown {
+  z-index: 9999 !important;
 }

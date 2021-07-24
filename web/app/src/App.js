@@ -44,7 +44,7 @@ const { Title, Text } = Typography;
 //     name: "John Brown",
 //     dose: 183,
 //     duration: 45,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -53,7 +53,7 @@ const { Title, Text } = Typography;
 //     name: "Jim Green",
 //     dose: 120,
 //     duration: 30,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -62,7 +62,7 @@ const { Title, Text } = Typography;
 //     name: "Joe Black",
 //     dose: 200,
 //     duration: 30,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -71,7 +71,7 @@ const { Title, Text } = Typography;
 //     name: "Mark Smith",
 //     dose: 300,
 //     duration: 30,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -80,7 +80,7 @@ const { Title, Text } = Typography;
 //     name: "Sami Jr",
 //     dose: 150,
 //     duration: 30,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -89,7 +89,7 @@ const { Title, Text } = Typography;
 //     name: "Sami Jr 2",
 //     dose: 300,
 //     duration: 30,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 //   {
@@ -98,7 +98,7 @@ const { Title, Text } = Typography;
 //     name: "Sami Jr 3",
 //     dose: 300,
 //     duration: 40,
-//     injectionTime: null,
+//     realInjectionTime: null,
 //     status: "waiting",
 //   },
 // ];
@@ -191,7 +191,7 @@ class App extends React.Component {
       status: "waiting",
       index: this.state.dataSource.length,
       key: (this.state.dataSource.length + 1).toString(),
-      injectionTime: null,
+      realInjectionTime: null,
     };
 
     this.setState((state) => ({
@@ -419,7 +419,7 @@ class App extends React.Component {
         // patient infos
         dose: e.dose,
         scan_time: e.duration,
-        inj_time: e.injectionTime ? e.injectionTime.valueOf() : null,
+        inj_time: e.realInjectionTime ? e.realInjectionTime.valueOf() : null,
         injected: e.status === "waiting" ? false : true,
 
         // secondary infos
@@ -440,7 +440,7 @@ class App extends React.Component {
             // patient infos
             dose: e.dose,
             duration: e.scan_time,
-            injectionTime: e.inj_time ? moment(e.inj_time) : null,
+            realInjectionTime: e.inj_time ? moment(e.inj_time) : null,
 
             // secondary infos
             key: e.key, // should not change (identifies patient)

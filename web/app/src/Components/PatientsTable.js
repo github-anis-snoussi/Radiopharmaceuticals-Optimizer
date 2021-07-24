@@ -35,7 +35,7 @@ const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
 function confirm(record, dataSource, updateData) {
-  if (record.injectionTime === null) {
+  if (record.realInjectionTime === null) {
     message.warning("Operation aborted");
   } else {
     dataSource.forEach(function (part, index, theArray) {
@@ -96,7 +96,7 @@ class PatientsTable extends React.Component {
     const { dataSource, updateData } = this.props;
     dataSource.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
-        theArray[index].injectionTime = mesure_time;
+        theArray[index].realInjectionTime = mesure_time;
       }
     });
     updateData([...dataSource]);
@@ -157,7 +157,7 @@ class PatientsTable extends React.Component {
                   </>
                 }
                 onConfirm={() => {
-                  if (!record.injectionTime) {
+                  if (!record.realInjectionTime) {
                     message.warning("Please select Injection time first.");
                   } else {
                     confirm(
