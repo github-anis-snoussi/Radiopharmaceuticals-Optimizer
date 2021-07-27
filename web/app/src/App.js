@@ -35,7 +35,7 @@ import moment from "moment";
 import axios from "./utils/axios";
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 // const dummyData = [
 //   {
@@ -490,6 +490,7 @@ class App extends React.Component {
               <img
                 src={"logo-filled-white.png"}
                 style={{ height: 60, aspectRatio: 1 }}
+                alt="app-logo"
               />
 
               <div
