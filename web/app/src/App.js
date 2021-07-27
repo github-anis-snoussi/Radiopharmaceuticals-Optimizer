@@ -25,7 +25,7 @@ import {
 } from "antd";
 
 import {
-  PlusOutlined,
+  UserAddOutlined,
   ScheduleOutlined,
   InfoCircleOutlined,
   BankOutlined,
@@ -486,7 +486,7 @@ class App extends React.Component {
               onSelect={this.selectMenuItem}
             >
               <Menu.Item key="1" icon={<ScheduleOutlined />}>
-                Rp Optimizer
+                Patients List
               </Menu.Item>
               <Menu.Item key="2" icon={<InfoCircleOutlined />}>
                 Infos
@@ -517,7 +517,7 @@ class App extends React.Component {
                         Sort
                       </Button>
                       <Button key="2" type="primary" onClick={this.showDrawer}>
-                        <PlusOutlined /> New Patient
+                        <UserAddOutlined /> New Patient
                       </Button>
                     </AppHeader>
 
