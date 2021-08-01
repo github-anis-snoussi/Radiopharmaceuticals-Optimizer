@@ -31,8 +31,8 @@ import {
   BankOutlined,
 } from "@ant-design/icons";
 
-import moment from "moment";
 import axios from "./utils/axios";
+import { formatFront2Back, formatBack2Front } from "./utils/utils";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -414,41 +414,14 @@ class App extends React.Component {
 
   sortPatients() {
     console.log("patients list before send to sort : ", this.state.dataSource);
-    const formatedPatientInfos = this.state.dataSource.map((e) => {
-      return {
-        // patient infos
-        dose: e.dose,
-        scan_time: e.duration,
-        inj_time: e.realInjectionTime ? e.realInjectionTime.valueOf() : null,
-        injected: e.status === "waiting" ? false : true,
-
-        // secondary infos
-        key: e.key, // should not change (identifies patient)
-        index: e.index, // should not change (identifies patient)
-        status: e.status,
-        name: e.name,
-      };
-    });
+    const formatedPatientInfos = formatFront2Back(this.state.dataSource);
 
     axios
       .post("sort", { patient_list: formatedPatientInfos })
       .then((res) => {
         let sorted_list = res.data.sorted_list;
         console.log(sorted_list);
-        const newFormatedPatients = sorted_list.map((e) => {
-          return {
-            // patient infos
-            dose: e.dose,
-            duration: e.scan_time,
-            realInjectionTime: e.inj_time ? moment(e.inj_time) : null,
-
-            // secondary infos
-            key: e.key, // should not change (identifies patient)
-            index: e.index, // should not change (identifies patient)
-            status: e.status,
-            name: e.name,
-          };
-        });
+        const newFormatedPatients = formatBack2Front(sorted_list);
 
         this.setState({ dataSource: [...newFormatedPatients] });
         console.log("patients list after send to sort : ", newFormatedPatients);
