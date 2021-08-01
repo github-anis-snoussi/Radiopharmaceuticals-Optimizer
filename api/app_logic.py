@@ -68,6 +68,8 @@ def calcul_final_expected_activity (patient_list, rp_settings):
     expected["usable_remaining_activity"] = usable_remaining_activity
     expected["usable_remaining_vol"] = remaining_vol_list[-1] - rp_settings["unextractable_vol"]
     expected["patient_inj_time_list"] = patient_inj_time_list
+    expected["patient_inj_vol_list"] = patient_inj_vol_list
+    expected["remaining_activity_time"] = patient_inj_time_list[-1]
     return(expected)
 
 def first_sorting (patient_list):
@@ -105,11 +107,18 @@ def sorting_after_every_injection (patient_list):
 
 # traja3 activity tawika 
 def activity_now (patient_list, rp_settings):
+    now_dict = {}
     k = 0
     for i in range(len(patient_list)):
         if patient_list[i]["injected"]:
             k += 1
-    if k > 0 :
+    if k == 0:
+        now_dict["total_vol_now"] = rp_settings["rp_vol"] - rp_settings["wasted_vol"]
+        now_dict["usable_vol_now"] = now_dict["total_vol_now"] - rp_settings["unextractable_vol"]
+        now_dict["total_activity_now_before_prime"] = decay (rp_settings["rp_activity"], rp_settings["rp_half_life"], diff_time (datetime.datetime.now(), rp_settings["mesure_time"]))
+        now_dict["total_activity_now"] = now_dict["total_activity_now_before_prime"] * now_dict["total_vol_now"] / rp_settings["rp_vol"]
+        now_dict["usable_activity_now"] = usable_activity (now_dict["total_activity_now"], now_dict["total_vol_now"], rp_settings["unextractable_vol"])
+    else :
         patient_dose_list = [patient_list[i]["dose"] for i in range(k)]
         patient_inj_time_list = [patient_list[i]["inj_time"] for i in range(k)]
         inj_time_activity_list = [0 for i in range(k)]
@@ -127,15 +136,22 @@ def activity_now (patient_list, rp_settings):
                 remaining_activity_list[i] = inj_time_activity_list[i] - patient_dose_list[i]
                 patient_inj_vol_list[i] = patient_dose_list[i] * remaining_vol_list[i-1] / inj_time_activity_list[i]
                 remaining_vol_list[i] = remaining_vol_list[i-1] - patient_inj_vol_list[i]
-        now_dict = {}
         now_dict["total_vol_now"] = remaining_vol_list[k-1]
         now_dict["usable_vol_now"] = remaining_vol_list[k-1] - rp_settings["unextractable_vol"]
         now_dict["total_activity_now"] = decay (remaining_activity_list[k-1], rp_settings["rp_half_life"], diff_time (datetime.datetime.now(), patient_inj_time_list[k-1]))
         now_dict["usable_activity_now"] = usable_activity (now_dict["total_activity_now"], remaining_vol_list[k-1], rp_settings["unextractable_vol"])
-        return(now_dict)
+    return(now_dict)
 
+##################################################################################################################################
+##################################################################################################################################
+# ALL THE MAIN FUNCTIONS THAT WILL BE EXPOSED :
+##################################################################################################################################
+##################################################################################################################################
 
-
+def sort_patient_list (patient_list, rp_settings):
+    sorting_after_every_injection(patient_list)
+    first_sorting(patient_list)
+    second_sorting (patient_list, rp_settings)
 
 
 ##################################################################################################################################

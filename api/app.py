@@ -4,7 +4,7 @@ from flask import Flask, render_template_string, request, session, redirect, url
 from flask_session import Session
 
 # THIS IS THE LOGIC BEHIN THIS APP:
-from app_logic import sorting_after_every_injection, first_sorting, second_sorting
+from app_logic import sort_patient_list
 
 # Create the Flask application
 app = Flask(__name__)
@@ -117,9 +117,14 @@ def sort_patients_list():
             "unextractable_vol" : session["unextractable_vol"]
         }
 
-        sorting_after_every_injection(patient_list)
-        first_sorting(patient_list)
-        second_sorting (patient_list, rp_settings)
+        # #####################################
+        # ####### MAIN PART OF ENDPOINT #######
+        # #####################################
+        sort_patient_list (patient_list, rp_settings)
+        # #####################################
+        # #####################################
+        # #####################################
+
 
         reforamed_patient_list = []
 
