@@ -1,6 +1,5 @@
 import os
 import datetime
-from redis import Redis
 from flask import Flask, render_template_string, request, session, redirect, url_for
 from flask_session import Session
 
@@ -15,11 +14,10 @@ app = Flask(__name__)
 #       the session identifier.
 app.secret_key = os.environ.get("SECRET_KEY")
 
-# Configure Redis for storing the session data on the server-side
-app.config['SESSION_TYPE'] = 'redis'
+# Configure Session
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_REDIS'] = Redis(host=os.environ.get("REDIS_HOST"), port=6379)
 app.config['SESSION_COOKIE_SAMESITE'] = "Strict"
 
 # Create and initialize the Flask-Session object AFTER `app` has been configured

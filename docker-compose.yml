@@ -12,12 +12,6 @@ services:
     networks:
       - net
 
-  redis:
-    container_name: optimizer-session
-    image: redis:alpine
-    networks:
-      - net
-
   web:
     container_name: optimizer-web
     build: ./web
