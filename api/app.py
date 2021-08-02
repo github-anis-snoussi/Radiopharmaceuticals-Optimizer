@@ -4,7 +4,7 @@ from flask import Flask, render_template_string, request, session, redirect, url
 from flask_session import Session
 
 # THIS IS THE LOGIC BEHIN THIS APP:
-from app_logic import sort_patient_list
+from app_logic import sort_patient_list, sorting_after_every_injection
 
 # Create the Flask application
 app = Flask(__name__)
@@ -140,6 +140,45 @@ def sort_patients_list():
         return {'error' : str(e)}
 
 
+
+@app.route('/api/clean', methods=['POST'])
+def clean_patients_list():
+
+
+    try:
+        # This the patients list the way we received it
+        received_patient_list = request.get_json()['patient_list']
+        # this will hold the formated patients list
+        patient_list = []
+
+        # we format the received patients list the way we want it
+        for p in received_patient_list:
+            if p['injected']:
+                    patient_list.append({ **p, 'inj_time' : datetime.datetime.fromtimestamp(p['inj_time'] / 1e3)})
+            else:
+                    patient_list.append({ **p, 'inj_time' : datetime.datetime.max})
+
+        # #####################################
+        # ####### MAIN PART OF ENDPOINT #######
+        # #####################################
+        sorting_after_every_injection (patient_list)
+        # #####################################
+        # #####################################
+        # #####################################
+
+
+        reforamed_patient_list = []
+
+        for patient in patient_list:
+            if (patient['inj_time'].year == 9999):
+                reforamed_patient_list.append({**patient, 'inj_time' : None})
+            else:
+                reforamed_patient_list.append({**patient, 'inj_time' : int(patient['inj_time'].strftime("%s")) * 1000  })
+
+        return { 'cleaned_list': reforamed_patient_list }
+    
+    except Exception as e:
+        return {'error' : str(e)}
 
 
 

@@ -25,6 +25,9 @@ import {
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
 
+import { formatFront2Back, formatBack2Front } from "../utils/utils";
+import axios from "../utils/axios";
+
 const { Text } = Typography;
 
 const DragHandle = sortableHandle(() => (
@@ -34,21 +37,37 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
-function confirm(record, dataSource, updateData) {
+function confirmInjection(record, dataSource, updateData) {
   if (record.realInjectionTime === null) {
     message.warning("Operation aborted");
   } else {
+    // we change the status to injected
     dataSource.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
         theArray[index].status = "done";
       }
     });
-    updateData([...dataSource]);
-    message.success("Patient injected");
+    // we clean the list
+    const formatedPatientInfos = formatFront2Back(dataSource);
+
+    axios
+      .post("clean", { patient_list: formatedPatientInfos })
+      .then((res) => {
+        let cleaned_list = res.data.cleaned_list;
+        const newFormatedPatients = formatBack2Front(cleaned_list);
+
+        // we update the list and show a message
+        updateData([...newFormatedPatients]);
+        message.success("Patient injected");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Something went wrong.");
+      });
   }
 }
 
-function cancel() {
+function cancelInjection() {
   return;
 }
 
@@ -160,14 +179,14 @@ class PatientsTable extends React.Component {
                   if (!record.realInjectionTime) {
                     message.warning("Please select Injection time first.");
                   } else {
-                    confirm(
+                    confirmInjection(
                       record,
                       this.props.dataSource,
                       this.props.updateData
                     );
                   }
                 }}
-                onCancel={cancel}
+                onCancel={cancelInjection}
                 okText="Inject"
                 cancelText="Cancel"
               >
