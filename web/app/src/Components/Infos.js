@@ -79,7 +79,7 @@ class Infos extends React.Component {
           </Paragraph>
         </Typography>
 
-        <Divider />
+        {/* <Divider />
 
         {this.state.status === "submiting" ? (
           <>
@@ -131,7 +131,7 @@ class Infos extends React.Component {
             icon={<SmileOutlined />}
             title="Thank you for your feedback."
           />
-        )}
+        )} */}
       </>
     );
   }
