@@ -33,49 +33,30 @@ class Infos extends React.Component {
     return (
       <>
         <Typography>
-          <Title>Introduction</Title>
+          <Title>Radiopharmaceuticals Optimizer</Title>
           <Paragraph>
-            In the process of internal desktop applications development, many
-            different design specs and implementations would be involved, which
-            might cause designers and developers difficulties and duplication
-            and reduce the efficiency of development.
-          </Paragraph>
-          <Paragraph>
-            After massive project practice and summaries, Ant Design, a design
-            language for background applications, is refined by Ant UED Team,
-            which aims to
+          Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans.
+          This app was designed and built with one goal in mind :
             <Text strong>
-              uniform the user interface specs for internal background projects,
-              lower the unnecessary cost of design differences and
-              implementation and liberate the resources of design and front-end
-              development
+              use IT to make an impact and give back to the community as much as possible
             </Text>
             .
           </Paragraph>
-          <Title level={2}>Guidelines and Resources</Title>
+          <Title level={2}>Case Study</Title>
           <Paragraph>
-            We supply a series of design principles, practical patterns and high
-            quality design resources (<Text code>Sketch</Text> and{" "}
-            <Text code>Axure</Text>), to help people create their product
-            prototypes beautifully and efficiently.
+            The Sahloul University Hospital ,being the first Hospital to make use of this app, had a great deal of impact on the development process. In fact this app was built solely for Sahloul University Hospital but then I decided to open source it.
           </Paragraph>
-
           <Paragraph>
-            <ul>
-              <li>
-                <Link href="/docs/spec/proximity">Principles</Link>
-              </li>
-              <li>
-                <Link href="/docs/spec/overview">Patterns</Link>
-              </li>
-              <li>
-                <Link href="/docs/resources">Resource Download</Link>
-              </li>
-            </ul>
+            At said hospital, the PET (Positron emission tomography) unit used fluor 18 marked fluorodeoxyglucose who's radioactivity allowed the PET camera to visualise the cancerous cells during the scan.
           </Paragraph>
-
           <Paragraph>
-            Press <Text keyboard>Esc</Text> to exit...
+            This pharmaceutical is both expensive and his radioactivity decrease rapidly (half life of 110 min).
+          </Paragraph>
+          <Paragraph>
+            On the scan day, the PET unit receives the pharmaceutical and it has to decide on how to decide on an optimal way to divide it between several patients (each with different needs in term of : scan time and required radioactivity needed for the scan).
+          </Paragraph>
+          <Paragraph>
+            In comes our app whose purpose is to effectively and efficiently order patients during a PET scan given an initial state, and also to show usefull statistics and predictions that are crucial for the PET machine operator.
           </Paragraph>
         </Typography>
 
