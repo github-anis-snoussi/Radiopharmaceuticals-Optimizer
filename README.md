@@ -23,6 +23,10 @@ In comes our app whose purpose is to effectively and efficiently order patients 
 
 ![Screenshot](./docs/Screenshot_Beta.png)
 
+## Run the whole application
+
+As easy as running : `docker-compose up`
+
 ## Test the python API only
 
 1. Run a local Redis instance for testing
