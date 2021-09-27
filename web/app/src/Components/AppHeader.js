@@ -23,9 +23,9 @@ const HeaderContent = ({ children, extra }) => (
 
 const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
   <Row>
-    <Statistic title="Activité mesurée" suffix="MBq" value={rp_activity} />
+    <Statistic title="RP Activity" suffix="MBq" value={rp_activity} />
     <Statistic
-      title="Heure de mesure"
+      title="Measure Time"
       value={new Date(mesure_time).toLocaleTimeString(navigator.language, {
         hour: "2-digit",
         minute: "2-digit",
@@ -34,9 +34,9 @@ const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
         margin: "0 32px",
       }}
     />
-    <Statistic title="Volume reçu" suffix="ml" value={rp_vol} />
+    <Statistic title="RP Volume" suffix="ml" value={rp_vol} />
     <Statistic
-      title="Demi-vie reçue"
+      title="RP Half Life"
       suffix="min"
       value={rp_half_life}
       style={{

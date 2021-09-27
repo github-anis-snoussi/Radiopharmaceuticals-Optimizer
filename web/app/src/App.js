@@ -343,7 +343,7 @@ class App extends React.Component {
 
         <Row gutter={16} style={{ marginBottom: 10 }}>
           <Col className="gutter-row" span={10}>
-            <Text type="secondary">First Injection Time Time</Text>
+            <Text type="secondary">First Injection Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
             <TimePicker
@@ -561,7 +561,7 @@ class App extends React.Component {
             </Content>
 
             <Footer style={{ textAlign: "center" }}>
-              MBq optimizer 2021 Created by Anis Snoussi
+              RP optimizer 2021 Created by Anis Snoussi & Walid Snoussi
             </Footer>
           </Layout>
         </Layout>
