@@ -123,15 +123,17 @@ class App extends React.Component {
       sideMenuKey: 1,
 
       //patients list
-      dataSource: dummyData,
-      // dataSource: [],
+      // dataSource: dummyData, // DEV
+      dataSource: [], // PROD
 
       // new patient input (stupid, I know)
+      isModifyingPatient: false,
+      modifiedPatientIndex: 0,
       patienName: "",
       patientScanDuration: 0,
       patientDose: 0,
-      // currentPatientIndex: 0,
-      currentPatientIndex: dummyData.length,
+      currentPatientIndex: 0, // PROD
+      // currentPatientIndex: dummyData.length, // DEV
     };
     this.onAddPatient = this.onAddPatient.bind(this);
     this.sortPatients = this.sortPatients.bind(this);
@@ -140,7 +142,10 @@ class App extends React.Component {
     this.modifyPatient = this.modifyPatient.bind(this);
   }
 
+  formRef = React.createRef();
+
   showDrawer = () => {
+    console.log(this.state);
     this.setState({
       isDrawerVisible: true,
     });
@@ -149,6 +154,7 @@ class App extends React.Component {
   onCloseDrawer = () => {
     this.setState({
       isDrawerVisible: false,
+      isModifyingPatient: false,
     });
   };
 
@@ -186,26 +192,51 @@ class App extends React.Component {
   };
 
   onAddPatient() {
-    const { patienName, patientScanDuration, patientDose } = this.state;
+    const { patienName, patientScanDuration, patientDose, isModifyingPatient } =
+      this.state;
+    if (isModifyingPatient) {
+      const newPatient = {
+        name: patienName,
+        dose: patientDose,
+        duration: patientScanDuration,
+        status: "waiting",
+        index: this.state.modifiedPatientIndex,
+        key: (this.state.modifiedPatientIndex + 1).toString(),
+        realInjectionTime: null,
+      };
 
-    const newPatient = {
-      name: patienName,
-      dose: patientDose,
-      duration: patientScanDuration,
-      status: "waiting",
-      index: this.state.currentPatientIndex,
-      key: (this.state.currentPatientIndex + 1).toString(),
-      realInjectionTime: null,
-    };
+      this.setState((state) => ({
+        dataSource: [
+          ...state.dataSource.map((p) =>
+            p.index === this.state.modifiedPatientIndex ? { ...newPatient } : p
+          ),
+        ],
+        isDrawerVisible: false,
+        currentPatientIndex: state.currentPatientIndex + 1,
+        isModifyingPatient: false,
+      }));
+    } else {
+      const newPatient = {
+        name: patienName,
+        dose: patientDose,
+        duration: patientScanDuration,
+        status: "waiting",
+        index: this.state.currentPatientIndex,
+        key: (this.state.currentPatientIndex + 1).toString(),
+        realInjectionTime: null,
+      };
 
-    this.setState((state) => ({
-      dataSource: [...state.dataSource, newPatient],
-      isDrawerVisible: false,
-      currentPatientIndex: state.currentPatientIndex + 1,
-    }));
+      this.setState((state) => ({
+        dataSource: [...state.dataSource, newPatient],
+        isDrawerVisible: false,
+        currentPatientIndex: state.currentPatientIndex + 1,
+      }));
+    }
   }
 
   renderDrawer() {
+    let { patienName, patientDose, patientScanDuration } = this.state;
+    console.log(patienName);
     return (
       <Drawer
         title="Create a new account"
@@ -228,7 +259,7 @@ class App extends React.Component {
           </div>
         }
       >
-        <Form layout="vertical">
+        <Form layout="vertical" ref={this.formRef}>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
@@ -450,7 +481,22 @@ class App extends React.Component {
   }
 
   modifyPatient(record) {
-    console.log(record);
+    this.setState(
+      {
+        isModifyingPatient: true,
+        modifiedPatientIndex: record.index,
+        patienName: record.name,
+        patientScanDuration: record.duration,
+        patientDose: record.dose,
+      },
+      () => this.showDrawer()
+    );
+
+    this.formRef.current.setFieldsValue({
+      name: record.name,
+      dose: record.dose,
+      duration: record.duration,
+    });
   }
 
   render() {
