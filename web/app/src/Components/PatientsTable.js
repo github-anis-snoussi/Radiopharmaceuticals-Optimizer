@@ -24,6 +24,7 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { formatFront2Back, formatBack2Front } from "../utils/utils";
 import axios from "../utils/axios";
@@ -67,7 +68,7 @@ function confirmInjection(record, dataSource, updateData) {
   }
 }
 
-function cancelInjection() {
+function cancelOp() {
   return;
 }
 
@@ -155,7 +156,46 @@ class PatientsTable extends React.Component {
         title: "Actions",
         key: "action",
         render: (text, record) => (
-          <Space size="middle">
+          <Space>
+            <Button
+              size="small"
+              type="primary"
+              ghost
+              disabled={record.status !== "waiting"}
+              onClick={() => {
+                this.props.modifyPatient(record);
+              }}
+            >
+              <EditOutlined />
+              Modify
+            </Button>
+
+            {record.status === "waiting" ? (
+              <Popconfirm
+                title={"Proceed to delete ?"}
+                icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+                onConfirm={() => {
+                  this.props.deletePatient(record);
+                }}
+                onCancel={cancelOp}
+                okText="Delete Patient"
+                okButtonProps={{
+                  danger: true,
+                }}
+                cancelText="Cancel"
+              >
+                <Button danger size="small">
+                  <DeleteOutlined />
+                  Delete
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Button danger size="small" disabled>
+                <DeleteOutlined />
+                Delete
+              </Button>
+            )}
+
             {record.status === "waiting" ? (
               <Popconfirm
                 title={
@@ -186,15 +226,15 @@ class PatientsTable extends React.Component {
                     );
                   }
                 }}
-                onCancel={cancelInjection}
+                onCancel={cancelOp}
                 okText="Inject"
                 cancelText="Cancel"
               >
-                <Button size="small">Inject {record.name}</Button>
+                <Button size="small"> 💉 Inject {record.name}</Button>
               </Popconfirm>
             ) : (
               <Button size="small" disabled>
-                Inject {record.name}
+                💉 Inject {record.name}
               </Button>
             )}
           </Space>

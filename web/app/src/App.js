@@ -37,71 +37,71 @@ import { formatFront2Back, formatBack2Front } from "./utils/utils";
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
 
-// const dummyData = [
-//   {
-//     key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
-//     index: 0,
-//     name: "John Brown",
-//     dose: 183,
-//     duration: 45,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "2",
-//     index: 1,
-//     name: "Jim Green",
-//     dose: 120,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "3",
-//     index: 2,
-//     name: "Joe Black",
-//     dose: 200,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "4",
-//     index: 3,
-//     name: "Mark Smith",
-//     dose: 300,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "5",
-//     index: 4,
-//     name: "Sami Jr",
-//     dose: 150,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "6",
-//     index: 5,
-//     name: "Sami Jr 2",
-//     dose: 300,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "7",
-//     index: 6,
-//     name: "Sami Jr 3",
-//     dose: 300,
-//     duration: 40,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-// ];
+const dummyData = [
+  {
+    key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
+    index: 0,
+    name: "John Brown",
+    dose: 183,
+    duration: 45,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "2",
+    index: 1,
+    name: "Jim Green",
+    dose: 120,
+    duration: 30,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "3",
+    index: 2,
+    name: "Joe Black",
+    dose: 200,
+    duration: 30,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "4",
+    index: 3,
+    name: "Mark Smith",
+    dose: 300,
+    duration: 30,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "5",
+    index: 4,
+    name: "Sami Jr",
+    dose: 150,
+    duration: 30,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "6",
+    index: 5,
+    name: "Sami Jr 2",
+    dose: 300,
+    duration: 30,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+  {
+    key: "7",
+    index: 6,
+    name: "Sami Jr 3",
+    dose: 300,
+    duration: 40,
+    realInjectionTime: null,
+    status: "waiting",
+  },
+];
 
 class App extends React.Component {
   constructor(props) {
@@ -120,20 +120,24 @@ class App extends React.Component {
       // app status
       isDrawerVisible: false,
       isModalVisible: true,
-      selectedKey: 1,
+      sideMenuKey: 1,
 
       //patients list
-      // dataSource: dummyData,
-      dataSource: [],
+      dataSource: dummyData,
+      // dataSource: [],
 
       // new patient input (stupid, I know)
       patienName: "",
       patientScanDuration: 0,
       patientDose: 0,
+      // currentPatientIndex: 0,
+      currentPatientIndex: dummyData.length,
     };
     this.onAddPatient = this.onAddPatient.bind(this);
     this.sortPatients = this.sortPatients.bind(this);
     this.selectMenuItem = this.selectMenuItem.bind(this);
+    this.deletePatient = this.deletePatient.bind(this);
+    this.modifyPatient = this.modifyPatient.bind(this);
   }
 
   showDrawer = () => {
@@ -189,14 +193,15 @@ class App extends React.Component {
       dose: patientDose,
       duration: patientScanDuration,
       status: "waiting",
-      index: this.state.dataSource.length,
-      key: (this.state.dataSource.length + 1).toString(),
+      index: this.state.currentPatientIndex,
+      key: (this.state.currentPatientIndex + 1).toString(),
       realInjectionTime: null,
     };
 
     this.setState((state) => ({
       dataSource: [...state.dataSource, newPatient],
       isDrawerVisible: false,
+      currentPatientIndex: state.currentPatientIndex + 1,
     }));
   }
 
@@ -434,7 +439,18 @@ class App extends React.Component {
   }
 
   selectMenuItem({ key }) {
-    this.setState({ selectedKey: parseInt(key, 10) });
+    this.setState({ sideMenuKey: parseInt(key, 10) });
+  }
+
+  deletePatient(record) {
+    let newPatierntsData = this.state.dataSource.filter(
+      (p) => p.index !== record.index
+    );
+    this.setState({ dataSource: [...newPatierntsData] });
+  }
+
+  modifyPatient(record) {
+    console.log(record);
   }
 
   render() {
@@ -530,7 +546,7 @@ class App extends React.Component {
                 className="site-layout-background"
                 style={{ padding: 24, minHeight: 360 }}
               >
-                {this.state.selectedKey === 1 ? (
+                {this.state.sideMenuKey === 1 ? (
                   <>
                     <AppHeader
                       rp_activity={this.state.rp_activity}
@@ -552,11 +568,13 @@ class App extends React.Component {
                       updateData={(newData) =>
                         this.setState({ dataSource: newData })
                       }
+                      deletePatient={this.deletePatient}
+                      modifyPatient={this.modifyPatient}
                     />
                   </>
                 ) : null}
 
-                {this.state.selectedKey === 2 ? <Infos /> : null}
+                {this.state.sideMenuKey === 2 ? <Infos /> : null}
               </div>
             </Content>
 
