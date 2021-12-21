@@ -4,33 +4,38 @@ import "antd/dist/antd.css";
 import {
   Typography,
 } from "antd";
+
+
+import {
+  Divider,
+  Form,
+  Button,
+  Rate,
+  Result,
+  Input,
+  Row,
+  Col,
+} from "antd";
+import { SmileOutlined } from "@ant-design/icons";
+const { TextArea } = Input;
+
+
 const { Title, Paragraph, Text } = Typography;
 
-// import {
-//   Divider,
-//   Form,
-//   Button,
-//   Rate,
-//   Result,
-//   Input,
-//   Row,
-//   Col,
-// } from "antd";
-// import { SmileOutlined } from "@ant-design/icons";
-// const { Link } = Typography;
-// const { TextArea } = Input;
 class Infos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: "submiting", // or can be submited
+      hasSubmitted: false, // or can be submited
+      stars: 1
     };
     this.onFinish = this.onFinish.bind(this);
   }
 
   onFinish(values) {
-    console.log(values);
-    this.setState({ status: "submited" });
+    let feedback = {...values, stars : this.state.stars};
+    console.log(feedback);
+    this.setState({ hasSubmitted: true });
   }
 
   render() {
@@ -40,7 +45,7 @@ class Infos extends React.Component {
           <Title>Radiopharmaceuticals Optimizer</Title>
           <Paragraph>
           Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans.
-          This app was designed and built with one goal in mind :
+          This app was designed and built with one goal in mind : {" "}
             <Text strong>
               use IT to make an impact and give back to the community as much as possible
             </Text>
@@ -64,43 +69,43 @@ class Infos extends React.Component {
           </Paragraph>
         </Typography>
 
-        {/* <Divider />
+        <Divider />
 
-        {this.state.status === "submiting" ? (
+        {!this.state.hasSubmitted ? (
           <>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
-                Your Opinion matters :{" "}
-              </Title>
-              <Rate defaultValue={1} />
-            </div>
             <Form onFinish={this.onFinish}>
               <Row gutter={16}>
+
                 <Col span={12}>
-                  <Form.Item
-                    name={["name"]}
-                    label="Name"
-                    rules={[{ required: true }]}
-                  >
-                    <Input />
-                  </Form.Item>
+                  <div style={{marginTop : 10}} >
+                    <Form.Item
+                      name={["name"]}
+                      label="Name"
+                      rules={[{ required: true }]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </div>
                 </Col>
+
                 <Col span={12}>
-                  <Form.Item
-                    name={["email"]}
-                    label="Email"
-                    rules={[{ type: "email", required: true }]}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent : 'center',
+                    }}
                   >
-                    <Input />
-                  </Form.Item>
+                    <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
+                      Your Opinion matters :
+                    </Title>
+                    <Rate defaultValue={this.state.stars} onChange={(stars) => this.setState({stars})} />
+                  </div>
                 </Col>
+
               </Row>
+
               <Form.Item name={["description"]} rules={[{ required: true }]}>
                 <TextArea rows={4} onChange={() => {}} value={""} />
               </Form.Item>
@@ -116,7 +121,7 @@ class Infos extends React.Component {
             icon={<SmileOutlined />}
             title="Thank you for your feedback."
           />
-        )} */}
+        )}
       </>
     );
   }
