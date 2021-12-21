@@ -1,6 +1,6 @@
 import React from "react";
 import { Statistic, Row, Col, Typography } from 'antd';
-import { BranchesOutlined, ExperimentOutlined, LoadingOutlined } from '@ant-design/icons';
+import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
