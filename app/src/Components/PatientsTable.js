@@ -27,7 +27,7 @@ import arrayMove from "array-move";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 import { formatFront2Back, formatBack2Front } from "../utils/utils";
-import axios from "../utils/axios";
+import {sorting_after_every_injection} from "../utils/sort_patient_list"
 
 const { Text } = Typography;
 
@@ -48,23 +48,13 @@ function confirmInjection(record, dataSource, updateData) {
         theArray[index].status = "done";
       }
     });
+
     // we clean the list
     const formatedPatientInfos = formatFront2Back(dataSource);
-
-    axios
-      .post("clean", { patient_list: formatedPatientInfos })
-      .then((res) => {
-        let cleaned_list = res.data.cleaned_list;
-        const newFormatedPatients = formatBack2Front(cleaned_list);
-
-        // we update the list and show a message
-        updateData([...newFormatedPatients]);
-        message.success("Patient injected");
-      })
-      .catch((e) => {
-        console.log(e);
-        message.error("Something went wrong.");
-      });
+    sorting_after_every_injection(formatedPatientInfos)
+    const newFormatedPatients = formatBack2Front(formatedPatientInfos);
+    updateData([...newFormatedPatients]);
+    message.success("Patient injected");
   }
 }
 

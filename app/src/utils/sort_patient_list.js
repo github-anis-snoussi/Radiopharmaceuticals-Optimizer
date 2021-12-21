@@ -131,14 +131,6 @@ const second_sorting = (patient_list, rp_settings) => {
 }
 
 
-
-const sorting_after_every_injection = (patient_list) => {
-    patient_list.sort((a, b) => {
-        return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
-    });
-}
-
-
 const sort_patient_list = (patient_list_og, rp_settings) => {
     let patient_list = [...patient_list_og]
     sorting_after_every_injection(patient_list)
@@ -197,6 +189,11 @@ export const activity_now = (patient_list, rp_settings) => {
     return now_dict
 }
 
+export const sorting_after_every_injection = (patient_list) => {
+    patient_list.sort((a, b) => {
+        return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
+    });
+}
 
 
 

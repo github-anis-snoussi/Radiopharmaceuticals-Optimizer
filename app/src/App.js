@@ -31,7 +31,6 @@ import {
   BankOutlined,
 } from "@ant-design/icons";
 
-import axios from "./utils/axios";
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
 
@@ -124,8 +123,8 @@ class App extends React.Component {
       sideMenuKey: 1,
 
       //patients list
-      // dataSource: dummyData, // DEV
-      dataSource: [], // PROD
+      dataSource: dummyData, // DEV
+      // dataSource: [], // PROD
 
       // new patient input (stupid, I know)
       isModifyingPatient: false,
@@ -162,7 +161,6 @@ class App extends React.Component {
   }
 
   showDrawer = () => {
-    console.log(this.state);
     this.setState({
       isDrawerVisible: true,
     });
@@ -237,7 +235,6 @@ class App extends React.Component {
 
   renderDrawer() {
     let { patienName, patientDose, patientScanDuration } = this.state;
-    console.log(patienName);
     return (
       <Drawer
         title="Create a new account"
@@ -450,32 +447,14 @@ class App extends React.Component {
   }
 
   sortPatients() {
-    console.log("patients list before send to sort : ", this.state.dataSource);
     const formatedPatientInfos = formatFront2Back(this.state.dataSource);
-
     const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
     const newFormatedPatients = formatBack2Front(sorted_list);
+
     this.setState({ dataSource: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted")
     });
 
-
-
-    // axios
-    //   .post("sort", { patient_list: formatedPatientInfos })
-    //   .then((res) => {
-    //     let sorted_list = res.data.sorted_list;
-    //     console.log(sorted_list);
-    //     const newFormatedPatients = formatBack2Front(sorted_list);
-
-    //     this.setState({ dataSource: [...newFormatedPatients] });
-    //     console.log("patients list after send to sort : ", newFormatedPatients);
-    //     message.success("Patient List sorted");
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     message.error("Something went wrong.");
-    //   });
   }
 
   selectMenuItem({ key }) {
@@ -515,12 +494,6 @@ class App extends React.Component {
           <Sider
             breakpoint="lg"
             collapsedWidth="0"
-            onBreakpoint={(broken) => {
-              console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-              console.log(collapsed, type);
-            }}
           >
             <div
               style={{
