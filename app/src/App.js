@@ -108,7 +108,7 @@ class App extends React.Component {
       let newPatientsList = [...this.state.dataSource].map((x,i) => {
         return {
           ...x,
-          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString(),
+          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString().replace(/(.*)\D\d+/, '$1'),
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
@@ -197,7 +197,8 @@ class App extends React.Component {
 
     this.setState({ dataSource: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted")
-    }, () => this.generateExpectations());
+      this.generateExpectations()
+    });
 
   }
 
@@ -311,8 +312,6 @@ class App extends React.Component {
       </Drawer>
     );
   }
-
-
 
   renderModal() {
     return (
@@ -553,7 +552,7 @@ class App extends React.Component {
                     <PatientsTable
                       dataSource={this.state.dataSource}
                       updateData={(newData) =>
-                        this.setState({ dataSource: newData })
+                        this.setState({ dataSource: newData }, () => this.generateExpectations())
                       }
                       deletePatient={this.deletePatient}
                       modifyPatient={this.modifyPatient}

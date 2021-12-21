@@ -130,7 +130,7 @@ class PatientsTable extends React.Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        render: (text) => <Text style={{ color: "#1890ff" }}>{text}</Text>,
+        render: (text) => <Text strong >{text}</Text>,
       },
       {
         title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection time</div>},
