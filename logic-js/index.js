@@ -115,7 +115,7 @@ const second_sorting = (patient_list, rp_settings) => {
     let sorting_condition = true
     while(sorting_condition){
         sorting_condition = false
-        for (var i = 0; i < patient_list.length; i++) {
+        for (var i = 0; i < patient_list.length - 1 ; i++) {
             if(patient_list[i].injected === false){
                 let before = calcul_final_expected_activity(patient_list, rp_settings).usable_remaining_activity
                 patient_list[i] = [patient_list[i+1],patient_list[i+1]=patient_list[i]][0]
@@ -187,8 +187,8 @@ const activity_now = (patient_list, rp_settings) => {
 
 const sort_patient_list = (patient_list, rp_settings) => {
     sorting_after_every_injection(patient_list)
-    // first_sorting(patient_list)
-    // second_sorting(patient_list, rp_settings)
+    first_sorting(patient_list)
+    second_sorting(patient_list, rp_settings)
 }
 
 // ++++++++++++++++++++++++++++
@@ -222,4 +222,5 @@ const patient_list = [
 // 3. testcase execution
 console.log( "before sorting : ", patient_list.map(x => x.name))
 sort_patient_list(patient_list, rp_settings)
-console.log( "before sorting : ", patient_list.map(x => x.name))
+console.log( "after sorting : ", patient_list.map(x => x.name))
+
