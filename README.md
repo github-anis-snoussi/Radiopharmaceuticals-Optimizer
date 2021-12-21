@@ -22,30 +22,3 @@ In comes our app whose purpose is to effectively and efficiently order patients 
 ## Screenshot
 
 ![Screenshot](./docs/Screenshot_Beta.png)
-
-## Run the whole application
-
-As easy as running : `docker-compose up`
-
-## Test the python API only
-
-1. Create a virtualenv and install dependencies
-2. Start the flask app (run in subshell)
-   `(source '.env' && python app.py)`
-
-## Working in a virtualenv
-
-make one :
-`virtualenv venv`
-
-connect to it :
-`source venv/bin/activate`
-
-install from requirements file :
-`pip install -r requirements.txt`
-
-generate requirements file :
-`pip freeze —local > requirements.txt`
-
-disconnect from it :
-`deactivate`
