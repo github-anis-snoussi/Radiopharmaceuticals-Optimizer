@@ -24,27 +24,27 @@ const usable_activity = (total_rp_activity, total_rp_vol, unextractable_rp_vol) 
 }
 
 
-const generate_patient_inj_time_list = (patient_list_og, patient_scan_time_list_og, rp_settings) => {
+const generate_patient_inj_time_list = (patient_list, patient_scan_time_list, rp_settings) => {
 
-    let patient_scan_time_list = [...patient_scan_time_list_og]
     patient_scan_time_list.push(0)
-
-    let patient_list = [...patient_list_og]
+    let patient_inj_time_list = Array(patient_scan_time_list.length).fill(0)
     patient_list.push({
         injected: false
     })
 
-    let patient_inj_time_list = Array(patient_list.length).fill(0)
-
-    patient_inj_time_list.forEach((x, i) => {
+    patient_list.forEach((x, i) => {
         if (x.injected) {
             patient_inj_time_list[i] = x.inj_time
         } else if (i === 0) {
             patient_inj_time_list[i] = rp_settings.first_inj_time
         } else {
+            // patient_inj_time_list[i] = patient_inj_time_list[i-1] + datetime.timedelta(minutes = patient_scan_time_list[i-1])
             patient_inj_time_list[i] = new Date(patient_inj_time_list[i - 1]).setMinutes(new Date(patient_inj_time_list[i - 1]).getMinutes() + patient_scan_time_list[i - 1])
         }
     })
+
+    patient_scan_time_list.pop()
+    patient_list.pop()
 
     return patient_inj_time_list
 }
@@ -180,6 +180,7 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
     })
 
     const usable_remaining_activity = usable_activity(remaining_activity_list.slice(-1)[0], remaining_vol_list.slice(-1)[0], rp_settings.unextractable_vol)
+    patient_inj_vol_list.pop()
     const expected = {
         
         total_remaining_activity: remaining_activity_list.slice(-1)[0].toFixed(2),
@@ -190,7 +191,7 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
         remaining_activity_time: patient_inj_time_list.slice(-1)[0].toFixed(2),
 
-        patient_inj_time_list: patient_inj_time_list, // a new column
+        patient_inj_time_list: patient_inj_time_list.slice(0, -1).map(x => new Date(x)), // a new column
         patient_inj_vol_list: patient_inj_vol_list, // a new column
     }
 
