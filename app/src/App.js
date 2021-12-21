@@ -62,7 +62,7 @@ class App extends React.Component {
 
       // app status
       isDrawerVisible: false,
-      isModalVisible: false,
+      isModalVisible: true,
       sideMenuKey: 1,
 
       //patients list
