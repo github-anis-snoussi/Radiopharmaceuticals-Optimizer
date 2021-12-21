@@ -50,48 +50,6 @@ const generate_patient_inj_time_list = (patient_list_og, patient_scan_time_list_
 }
 
 
-const calcul_final_expected_activity = (patient_list, rp_settings) => {
-    let patient_dose_list = patient_list.map(x => x.dose)
-    let patient_scan_time_list = patient_list.map(x => x.scan_time)
-    let patient_inj_time_list = generate_patient_inj_time_list(patient_list, patient_scan_time_list, rp_settings)
-
-    patient_dose_list.push(0)
-
-    let inj_time_activity_list = Array(patient_dose_list.length).fill(0)
-    let remaining_activity_list = [...inj_time_activity_list]
-    let patient_inj_vol_list = [...inj_time_activity_list]
-    let remaining_vol_list = [...inj_time_activity_list]
-
-    patient_dose_list.forEach((x, i) => {
-        if (i === 0) {
-            inj_time_activity_list[i] = activity_at_first_inj(patient_inj_time_list, rp_settings)
-            remaining_activity_list[i] = inj_time_activity_list[i] - patient_dose_list[i]
-            patient_inj_vol_list[i] = patient_dose_list[i] * (rp_settings.rp_vol - rp_settings.wasted_vol) / inj_time_activity_list[i]
-            remaining_vol_list[i] = rp_settings.rp_vol - rp_settings.wasted_vol - patient_inj_vol_list[i]
-        } else {
-            inj_time_activity_list[i] = decay(remaining_activity_list[i - 1], rp_settings.rp_half_life, diff_time(patient_inj_time_list[i], patient_inj_time_list[i - 1]))
-            remaining_activity_list[i] = inj_time_activity_list[i] - patient_dose_list[i]
-            patient_inj_vol_list[i] = patient_dose_list[i] * remaining_vol_list[i - 1] / inj_time_activity_list[i]
-            remaining_vol_list[i] = remaining_vol_list[i - 1] - patient_inj_vol_list[i]
-        }
-    })
-
-    const usable_remaining_activity = usable_activity(remaining_activity_list.slice(-1)[0], remaining_vol_list.slice(-1)[0], rp_settings.unextractable_vol)
-    const expected = {
-        total_remaining_activity: remaining_activity_list.slice(-1)[0],
-        total_remaining_vol: remaining_vol_list.slice(-1)[0],
-        usable_remaining_activity: usable_remaining_activity,
-        usable_remaining_vol: remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol,
-        patient_inj_time_list: patient_inj_time_list,
-        patient_inj_vol_list: patient_inj_vol_list,
-        remaining_activity_time: patient_inj_time_list.slice(-1)[0],
-    }
-
-    return expected
-
-}
-
-
 const first_sorting = (patient_list) => {
     patient_list = patient_list.map(x => {
         return {
@@ -193,6 +151,51 @@ export const sorting_after_every_injection = (patient_list) => {
     patient_list.sort((a, b) => {
         return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
     });
+}
+
+export const calcul_final_expected_activity = (patient_list, rp_settings) => {
+    let patient_dose_list = patient_list.map(x => x.dose)
+    let patient_scan_time_list = patient_list.map(x => x.scan_time)
+    let patient_inj_time_list = generate_patient_inj_time_list(patient_list, patient_scan_time_list, rp_settings)
+
+    patient_dose_list.push(0)
+
+    let inj_time_activity_list = Array(patient_dose_list.length).fill(0)
+    let remaining_activity_list = [...inj_time_activity_list]
+    let patient_inj_vol_list = [...inj_time_activity_list]
+    let remaining_vol_list = [...inj_time_activity_list]
+
+    patient_dose_list.forEach((x, i) => {
+        if (i === 0) {
+            inj_time_activity_list[i] = activity_at_first_inj(patient_inj_time_list, rp_settings)
+            remaining_activity_list[i] = inj_time_activity_list[i] - patient_dose_list[i]
+            patient_inj_vol_list[i] = patient_dose_list[i] * (rp_settings.rp_vol - rp_settings.wasted_vol) / inj_time_activity_list[i]
+            remaining_vol_list[i] = rp_settings.rp_vol - rp_settings.wasted_vol - patient_inj_vol_list[i]
+        } else {
+            inj_time_activity_list[i] = decay(remaining_activity_list[i - 1], rp_settings.rp_half_life, diff_time(patient_inj_time_list[i], patient_inj_time_list[i - 1]))
+            remaining_activity_list[i] = inj_time_activity_list[i] - patient_dose_list[i]
+            patient_inj_vol_list[i] = patient_dose_list[i] * remaining_vol_list[i - 1] / inj_time_activity_list[i]
+            remaining_vol_list[i] = remaining_vol_list[i - 1] - patient_inj_vol_list[i]
+        }
+    })
+
+    const usable_remaining_activity = usable_activity(remaining_activity_list.slice(-1)[0], remaining_vol_list.slice(-1)[0], rp_settings.unextractable_vol)
+    const expected = {
+        
+        total_remaining_activity: remaining_activity_list.slice(-1)[0],
+        usable_remaining_activity: usable_remaining_activity,
+
+        total_remaining_vol: remaining_vol_list.slice(-1)[0],
+        usable_remaining_vol: remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol,
+        
+        remaining_activity_time: patient_inj_time_list.slice(-1)[0],
+
+        patient_inj_time_list: patient_inj_time_list, // a new column
+        patient_inj_vol_list: patient_inj_vol_list, // a new column
+    }
+
+    return expected
+
 }
 
 

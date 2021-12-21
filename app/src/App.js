@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import AppHeader from "./Components/AppHeader";
 import PatientsTable from "./Components/PatientsTable";
 import Infos from "./Components/Infos";
+import Expectations from "./Components/Expectations";
 
 import {
   Layout,
@@ -53,7 +54,7 @@ class App extends React.Component {
 
       // app status
       isDrawerVisible: false,
-      isModalVisible: true,
+      isModalVisible: false,
       sideMenuKey: 1,
 
       //patients list
@@ -532,6 +533,9 @@ class App extends React.Component {
                       deletePatient={this.deletePatient}
                       modifyPatient={this.modifyPatient}
                     />
+
+                    <Expectations/>
+
                   </>
                 ) : null}
 
