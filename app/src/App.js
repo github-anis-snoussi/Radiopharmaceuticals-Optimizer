@@ -168,7 +168,6 @@ class App extends React.Component {
   }
 
   renderDrawer() {
-    let { patienName, patientDose, patientScanDuration } = this.state;
     return (
       <Drawer
         title="Create a new account"

@@ -1,4 +1,3 @@
-import moment from "moment";
 
 export const formatFront2Back = (formatedPatientInfos) => {
   return formatedPatientInfos.map((e) => {

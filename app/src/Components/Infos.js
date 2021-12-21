@@ -3,18 +3,22 @@ import "../App.css";
 import "antd/dist/antd.css";
 import {
   Typography,
-  Divider,
-  Form,
-  Button,
-  Input,
-  Rate,
-  Result,
-  Row,
-  Col,
 } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
-const { Title, Paragraph, Text, Link } = Typography;
-const { TextArea } = Input;
+const { Title, Paragraph, Text } = Typography;
+
+// import {
+//   Divider,
+//   Form,
+//   Button,
+//   Rate,
+//   Result,
+//   Input,
+//   Row,
+//   Col,
+// } from "antd";
+// import { SmileOutlined } from "@ant-design/icons";
+// const { Link } = Typography;
+// const { TextArea } = Input;
 class Infos extends React.Component {
   constructor(props) {
     super(props);
