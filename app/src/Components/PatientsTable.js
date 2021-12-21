@@ -24,7 +24,7 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, ExperimentOutlined } from "@ant-design/icons";
 
 import { formatFront2Back, formatBack2Front } from "../utils/utils";
 import {sorting_after_every_injection} from "../utils/sort_patient_list"
@@ -141,6 +141,32 @@ class PatientsTable extends React.Component {
         dataIndex: "duration",
         key: "duration",
         render: (text) => <p>{text}</p>,
+      },
+      {
+        title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection time</div>},
+        dataIndex: "expected_injection_time",
+        key: "expected_injection_time",
+        render(text) {
+          return {
+            props: {
+              style: { background: "#fffbe6" }
+            },
+            children: <p>{text || '?'}</p>
+          };
+        }
+      },
+      {
+        title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection volume</div>},
+        dataIndex: "expected_injection_volume",
+        key: "expected_injection_volume",
+        render(text) {
+          return {
+            props: {
+              style: { background: "#fffbe6" }
+            },
+            children: <p>{text || '?'}</p>
+          };
+        }
       },
       {
         title: "Actions",

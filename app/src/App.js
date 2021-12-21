@@ -105,7 +105,16 @@ class App extends React.Component {
 
   generateExpectations = () => {
     const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({expected})
+    let newPatientsList = [...this.state.dataSource].map((x,i) => {
+      return {
+        ...x,
+        expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString(),
+        expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
+      }
+    })
+    this.setState({expected, dataSource: [...newPatientsList] }, () => {
+      message.success("Generated Expectations.")
+    });
   }
 
   showDrawer = () => {
