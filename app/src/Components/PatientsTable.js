@@ -81,6 +81,7 @@ class PatientsTable extends React.Component {
       // console.log('Sorted items: ', newData);
       this.props.updateData(newData);
     }
+    this.props.generateExpectations()
   };
 
   DraggableContainer = (props) => (
@@ -129,18 +130,7 @@ class PatientsTable extends React.Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        render: (text) => <Text style={{ color: "#1890ff" }}>{text}</Text>,
-      },
-      {
-        title: "Dose (MBq)",
-        dataIndex: "dose",
-        key: "dose",
-      },
-      {
-        title: "Test Duration (min)",
-        dataIndex: "duration",
-        key: "duration",
-        render: (text) => <p>{text}</p>,
+        render: (text) => <Text strong >{text}</Text>,
       },
       {
         title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection time</div>},
@@ -156,7 +146,7 @@ class PatientsTable extends React.Component {
         }
       },
       {
-        title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection volume</div>},
+        title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection volume (ml) </div>},
         dataIndex: "expected_injection_volume",
         key: "expected_injection_volume",
         render(text) {
@@ -167,6 +157,17 @@ class PatientsTable extends React.Component {
             children: <p>{text || '?'}</p>
           };
         }
+      },
+      {
+        title: "Dose (MBq)",
+        dataIndex: "dose",
+        key: "dose",
+      },
+      {
+        title: "Test Duration (min)",
+        dataIndex: "duration",
+        key: "duration",
+        render: (text) => <p>{text}</p>,
       },
       {
         title: "Actions",
