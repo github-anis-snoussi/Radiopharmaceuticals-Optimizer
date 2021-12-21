@@ -37,72 +37,6 @@ import sort_patient_list from "./utils/sort_patient_list"
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
 
-const dummyData = [
-  {
-    key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
-    index: 0,
-    name: "John Brown",
-    dose: 183,
-    duration: 45,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "2",
-    index: 1,
-    name: "Jim Green",
-    dose: 120,
-    duration: 30,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "3",
-    index: 2,
-    name: "Joe Black",
-    dose: 200,
-    duration: 30,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "4",
-    index: 3,
-    name: "Mark Smith",
-    dose: 300,
-    duration: 30,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "5",
-    index: 4,
-    name: "Sami Jr",
-    dose: 150,
-    duration: 30,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "6",
-    index: 5,
-    name: "Sami Jr 2",
-    dose: 300,
-    duration: 30,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-  {
-    key: "7",
-    index: 6,
-    name: "Sami Jr 3",
-    dose: 300,
-    duration: 40,
-    realInjectionTime: null,
-    status: "waiting",
-  },
-];
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -123,8 +57,7 @@ class App extends React.Component {
       sideMenuKey: 1,
 
       //patients list
-      dataSource: dummyData, // DEV
-      // dataSource: [], // PROD
+      dataSource: [],
 
       // new patient input (stupid, I know)
       isModifyingPatient: false,
@@ -135,6 +68,8 @@ class App extends React.Component {
       currentPatientIndex: 0, // PROD
       // currentPatientIndex: dummyData.length, // DEV
     };
+  
+    this.formRef = React.createRef();
     this.onAddPatient = this.onAddPatient.bind(this);
     this.sortPatients = this.sortPatients.bind(this);
     this.selectMenuItem = this.selectMenuItem.bind(this);
@@ -143,7 +78,6 @@ class App extends React.Component {
     this.getRpSetting = this.getRpSetting.bind(this);
   }
 
-  formRef = React.createRef();
 
 
   // helper function 
