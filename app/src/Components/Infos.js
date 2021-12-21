@@ -6,6 +6,7 @@ import {
 } from "antd";
 
 
+import { send } from 'emailjs-com';
 import {
   Divider,
   Form,
@@ -35,6 +36,25 @@ class Infos extends React.Component {
   onFinish(values) {
     let feedback = {...values, stars : this.state.stars};
     console.log(feedback);
+
+    const templateParams = {
+      to_name: "Anis",
+      from_name: feedback.name,
+      message: feedback.description,
+      stars: feedback.stars
+    }
+
+    // the api keys are restricted to rpo-ansnoussi.vercel.app (not that it makes it any more secure)
+    // and it's also limited to 100 emails/month
+    // plus, this is an opensource project to help cancer patients the way I could
+    // that's why I wont bother securing the api key.
+    send(
+      'service_uu2w7kd',
+      'template_59e1sxx',
+      {...templateParams}
+    )
+
+
     this.setState({ hasSubmitted: true });
   }
 

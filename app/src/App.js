@@ -37,6 +37,10 @@ import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
 import {calcul_final_expected_activity} from "./utils/sort_patient_list"
 
+// I simply dont care.
+import{ init } from 'emailjs-com';
+init("user_mqEkaxaA1sCx1ewmYUdYh");
+
 
 
 const { Header, Content, Footer, Sider } = Layout;
