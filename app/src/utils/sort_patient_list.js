@@ -139,8 +139,19 @@ const sorting_after_every_injection = (patient_list) => {
 }
 
 
+const sort_patient_list = (patient_list, rp_settings) => {
+    sorting_after_every_injection(patient_list)
+    first_sorting(patient_list)
+    second_sorting(patient_list, rp_settings)
+}
 
-const activity_now = (patient_list, rp_settings) => {
+
+
+// WE EXPORT THE MAIN FUNCTION HERE : sort_patient_list
+export default sort_patient_list;
+
+// WE EXPORT SOME HELPER FUNCTIONS
+export const activity_now = (patient_list, rp_settings) => {
     let now_dict = {}
 
     let injected_patients_list = patient_list.filter(x => x.injected)
@@ -185,22 +196,16 @@ const activity_now = (patient_list, rp_settings) => {
 }
 
 
-const sort_patient_list = (patient_list, rp_settings) => {
-    sorting_after_every_injection(patient_list)
-    first_sorting(patient_list)
-    second_sorting(patient_list, rp_settings)
-}
 
 
 
-// WE EXPORT THE MAIN FUNCTION HERE : sort_patient_list
-export default sort_patient_list;
 
 
-
-// // ++++++++++++++++++++++++++++
-// //       SOME TEST DATA
-// // ++++++++++++++++++++++++++++
+// // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// //                   SOME TEST DATA
+// // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 // // 1. testcase settings
