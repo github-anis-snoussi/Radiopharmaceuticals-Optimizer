@@ -182,13 +182,13 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
     const usable_remaining_activity = usable_activity(remaining_activity_list.slice(-1)[0], remaining_vol_list.slice(-1)[0], rp_settings.unextractable_vol)
     const expected = {
         
-        total_remaining_activity: remaining_activity_list.slice(-1)[0],
-        usable_remaining_activity: usable_remaining_activity,
+        total_remaining_activity: remaining_activity_list.slice(-1)[0].toFixed(2),
+        usable_remaining_activity: usable_remaining_activity.toFixed(2),
 
-        total_remaining_vol: remaining_vol_list.slice(-1)[0],
-        usable_remaining_vol: remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol,
-        
-        remaining_activity_time: patient_inj_time_list.slice(-1)[0],
+        total_remaining_vol: remaining_vol_list.slice(-1)[0].toFixed(2),
+        usable_remaining_vol: (remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol).toFixed(2),
+
+        remaining_activity_time: patient_inj_time_list.slice(-1)[0].toFixed(2),
 
         patient_inj_time_list: patient_inj_time_list, // a new column
         patient_inj_vol_list: patient_inj_vol_list, // a new column
