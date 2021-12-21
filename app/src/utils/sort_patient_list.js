@@ -191,36 +191,43 @@ const sort_patient_list = (patient_list, rp_settings) => {
     second_sorting(patient_list, rp_settings)
 }
 
-// ++++++++++++++++++++++++++++
-//       SOME TEST DATA
-// ++++++++++++++++++++++++++++
 
 
-// 1. testcase settings
-const rp_settings = {
-    rp_activity : 3825,
-    rp_half_life : 109.8, 
-    mesure_time : new Date(2021,5,10,8,0), 
-    first_inj_time : new Date(2021,5,10,7,45), 
-    rp_vol : 8.5, 
-    wasted_vol : 0.5, 
-    unextractable_vol : 0.64
-}
-
-// 2. testcase patients
-const patient_list = [
-    {name:"rami", dose:183, scan_time:45, injected:false, inj_time:null},
-    {name:"wael", dose:120, scan_time:30, injected:false, inj_time:null},
-    {name:"hama", dose:200, scan_time:30, injected:false, inj_time:null},
-    {name:"hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
-    {name:"hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
-    {name:"kiki", dose:300, scan_time:30, injected:false, inj_time:null},
-    {name:"saki", dose:300, scan_time:40, injected:false, inj_time:null}
-]
+// WE EXPORT THE MAIN FUNCTION HERE : sort_patient_list
+export default sort_patient_list;
 
 
-// 3. testcase execution
-console.log( "before sorting : ", patient_list.map(x => x.name))
-sort_patient_list(patient_list, rp_settings)
-console.log( "after sorting : ", patient_list.map(x => x.name))
+
+// // ++++++++++++++++++++++++++++
+// //       SOME TEST DATA
+// // ++++++++++++++++++++++++++++
+
+
+// // 1. testcase settings
+// const rp_settings = {
+//     rp_activity : 3825,
+//     rp_half_life : 109.8, 
+//     mesure_time : new Date(2021,5,10,8,0), 
+//     first_inj_time : new Date(2021,5,10,7,45), 
+//     rp_vol : 8.5, 
+//     wasted_vol : 0.5, 
+//     unextractable_vol : 0.64
+// }
+
+// // 2. testcase patients
+// const patient_list = [
+//     {name:"rami", dose:183, scan_time:45, injected:false, inj_time:null},
+//     {name:"wael", dose:120, scan_time:30, injected:false, inj_time:null},
+//     {name:"hama", dose:200, scan_time:30, injected:false, inj_time:null},
+//     {name:"hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
+//     {name:"hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
+//     {name:"kiki", dose:300, scan_time:30, injected:false, inj_time:null},
+//     {name:"saki", dose:300, scan_time:40, injected:false, inj_time:null}
+// ]
+
+
+// // 3. testcase execution
+// console.log( "before sorting : ", patient_list.map(x => x.name))
+// sort_patient_list(patient_list, rp_settings)
+// console.log( "after sorting : ", patient_list.map(x => x.name))
 

@@ -16,10 +16,10 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "/app/node_modules/react-scripts/bin/react-scripts.js start",
-    "build": "/app/node_modules/react-scripts/bin/react-scripts.js build",
-    "test": "/app/node_modules/react-scripts/bin/react-scripts.js test",
-    "eject": "/app/node_modules/react-scripts/bin/react-scripts.js eject"
+    "start": "react-scripts.js start",
+    "build": "react-scripts.js build",
+    "test": "react-scripts.js test",
+    "eject": "react-scripts.js eject"
   },
   "eslintConfig": {
     "extends": [
