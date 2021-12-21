@@ -30,7 +30,6 @@ import {
   ScheduleOutlined,
   InfoCircleOutlined,
   BankOutlined,
-  ExperimentOutlined,
   FileSearchOutlined,
 } from "@ant-design/icons";
 
@@ -104,17 +103,17 @@ class App extends React.Component {
   }
 
   generateExpectations = () => {
-    const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    let newPatientsList = [...this.state.dataSource].map((x,i) => {
-      return {
-        ...x,
-        expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString(),
-        expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
-      }
-    })
-    this.setState({expected, dataSource: [...newPatientsList] }, () => {
-      message.success("Generated Expectations.")
-    });
+    if (this.state.dataSource?.length > 0){
+      const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+      let newPatientsList = [...this.state.dataSource].map((x,i) => {
+        return {
+          ...x,
+          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString(),
+          expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
+        }
+      })
+      this.setState({expected, dataSource: [...newPatientsList] });
+    }
   }
 
   showDrawer = () => {
@@ -170,7 +169,7 @@ class App extends React.Component {
         isDrawerVisible: false,
         currentPatientIndex: state.currentPatientIndex + 1,
         isModifyingPatient: false,
-      }));
+      }), () => this.generateExpectations());
     } else {
       const newPatient = {
         name: patienName,
@@ -186,8 +185,50 @@ class App extends React.Component {
         dataSource: [...state.dataSource, newPatient],
         isDrawerVisible: false,
         currentPatientIndex: state.currentPatientIndex + 1,
-      }));
+      }), () => this.generateExpectations());
     }
+  }
+
+
+  sortPatients() {
+    const formatedPatientInfos = formatFront2Back(this.state.dataSource);
+    const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
+    const newFormatedPatients = formatBack2Front(sorted_list);
+
+    this.setState({ dataSource: [...newFormatedPatients] }, () => {
+      message.success("Patient List sorted")
+    }, () => this.generateExpectations());
+
+  }
+
+  selectMenuItem({ key }) {
+    this.setState({ sideMenuKey: parseInt(key, 10) });
+  }
+
+  deletePatient(record) {
+    let newPatierntsData = this.state.dataSource.filter(
+      (p) => p.index !== record.index
+    );
+    this.setState({ dataSource: [...newPatierntsData] }, () => this.generateExpectations());
+  }
+
+  modifyPatient(record) {
+    this.setState(
+      {
+        isModifyingPatient: true,
+        modifiedPatientIndex: record.index,
+        patienName: record.name,
+        patientScanDuration: record.duration,
+        patientDose: record.dose,
+      },
+      () => this.showDrawer()
+    );
+
+    this.formRef.current.setFieldsValue({
+      name: record.name,
+      dose: record.dose,
+      duration: record.duration,
+    });
   }
 
   renderDrawer() {
@@ -270,6 +311,8 @@ class App extends React.Component {
       </Drawer>
     );
   }
+
+
 
   renderModal() {
     return (
@@ -402,46 +445,6 @@ class App extends React.Component {
     );
   }
 
-  sortPatients() {
-    const formatedPatientInfos = formatFront2Back(this.state.dataSource);
-    const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
-    const newFormatedPatients = formatBack2Front(sorted_list);
-
-    this.setState({ dataSource: [...newFormatedPatients] }, () => {
-      message.success("Patient List sorted")
-    });
-
-  }
-
-  selectMenuItem({ key }) {
-    this.setState({ sideMenuKey: parseInt(key, 10) });
-  }
-
-  deletePatient(record) {
-    let newPatierntsData = this.state.dataSource.filter(
-      (p) => p.index !== record.index
-    );
-    this.setState({ dataSource: [...newPatierntsData] });
-  }
-
-  modifyPatient(record) {
-    this.setState(
-      {
-        isModifyingPatient: true,
-        modifiedPatientIndex: record.index,
-        patienName: record.name,
-        patientScanDuration: record.duration,
-        patientDose: record.dose,
-      },
-      () => this.showDrawer()
-    );
-
-    this.formRef.current.setFieldsValue({
-      name: record.name,
-      dose: record.dose,
-      duration: record.duration,
-    });
-  }
 
   render() {
     return (
@@ -542,9 +545,6 @@ class App extends React.Component {
                       <Button key="1" onClick={this.sortPatients}>
                       <FileSearchOutlined /> Sort
                       </Button>
-                      <Button key="3" onClick={this.generateExpectations}>
-                        <ExperimentOutlined/> Expectations
-                      </Button>
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
                       </Button>
@@ -557,6 +557,7 @@ class App extends React.Component {
                       }
                       deletePatient={this.deletePatient}
                       modifyPatient={this.modifyPatient}
+                      generateExpectations={this.generateExpectations}
                     />
 
                     <Expectations {...this.state.expected} />

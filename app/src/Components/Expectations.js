@@ -47,7 +47,7 @@ class Expectations extends React.Component {
                     <Col span={16} />
                     <Col span={8} >
                         <div style={{display : 'flex', justifyContent : 'center', marginTop : 20, backgroundColor : '#ececec', textAlign : 'center' }} >
-                            <Statistic title="Remaining Activity Time" value={remaining_activity_time || '?'} suffix="min" />
+                            <Statistic title="Remaining Activity Time" value={remaining_activity_time || '?'}  />
                         </div>
                     </Col>
                 </Row>
