@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import AppHeader from "./Components/AppHeader";
 import PatientsTable from "./Components/PatientsTable";
 import Infos from "./Components/Infos";
+import Expectations from "./Components/Expectations";
 
 import {
   Layout,
@@ -29,10 +30,15 @@ import {
   ScheduleOutlined,
   InfoCircleOutlined,
   BankOutlined,
+  ExperimentOutlined,
+  FileSearchOutlined,
 } from "@ant-design/icons";
 
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
+import {calcul_final_expected_activity} from "./utils/sort_patient_list"
+
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -66,7 +72,9 @@ class App extends React.Component {
       patientScanDuration: 0,
       patientDose: 0,
       currentPatientIndex: 0, // PROD
-      // currentPatientIndex: dummyData.length, // DEV
+      
+      // expectations values
+      expected : {}
     };
   
     this.formRef = React.createRef();
@@ -76,6 +84,7 @@ class App extends React.Component {
     this.deletePatient = this.deletePatient.bind(this);
     this.modifyPatient = this.modifyPatient.bind(this);
     this.getRpSetting = this.getRpSetting.bind(this);
+    this.generateExpectations = this.generateExpectations.bind(this);
   }
 
 
@@ -92,6 +101,20 @@ class App extends React.Component {
       wasted_vol: state.wasted_vol,
       unextractable_vol: state.unextractable_vol,
     }
+  }
+
+  generateExpectations = () => {
+    const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+    let newPatientsList = [...this.state.dataSource].map((x,i) => {
+      return {
+        ...x,
+        expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString(),
+        expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
+      }
+    })
+    this.setState({expected, dataSource: [...newPatientsList] }, () => {
+      message.success("Generated Expectations.")
+    });
   }
 
   showDrawer = () => {
@@ -517,7 +540,10 @@ class App extends React.Component {
                       name={this.state.name}
                     >
                       <Button key="1" onClick={this.sortPatients}>
-                        Sort
+                      <FileSearchOutlined /> Sort
+                      </Button>
+                      <Button key="3" onClick={this.generateExpectations}>
+                        <ExperimentOutlined/> Expectations
                       </Button>
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
@@ -532,6 +558,9 @@ class App extends React.Component {
                       deletePatient={this.deletePatient}
                       modifyPatient={this.modifyPatient}
                     />
+
+                    <Expectations {...this.state.expected} />
+
                   </>
                 ) : null}
 
