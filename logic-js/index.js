@@ -42,7 +42,7 @@ const generate_patient_inj_time_list = (patient_list_og, patient_scan_time_list_
         } else if (i === 0) {
             patient_inj_time_list[i] = rp_settings.first_inj_time
         } else {
-            patient_inj_time_list[i] = patient_inj_time_list[i - 1].setMinutes(patient_inj_time_list[i - 1].getMinutes() + patient_scan_time_list[i - 1])
+            patient_inj_time_list[i] = new Date(patient_inj_time_list[i - 1]).setMinutes(new Date(patient_inj_time_list[i - 1]).getMinutes() + patient_scan_time_list[i - 1])
         }
     })
 
@@ -118,10 +118,10 @@ const second_sorting = (patient_list, rp_settings) => {
         for (var i = 0; i < patient_list.length; i++) {
             if(patient_list[i].injected === false){
                 let before = calcul_final_expected_activity(patient_list, rp_settings).usable_remaining_activity
-                patient_list[i] = [list[i+1],list[i+1]=list[i]][0]
+                patient_list[i] = [patient_list[i+1],patient_list[i+1]=patient_list[i]][0]
                 let after = calcul_final_expected_activity(patient_list, rp_settings).usable_remaining_activity
                 if(before >= after) {
-                    patient_list[i] = [list[i+1],list[i+1]=list[i]][0]
+                    patient_list[i] = [patient_list[i+1],patient_list[i+1]=patient_list[i]][0]
                 }else {
                     sorting_condition = true
                 }
@@ -134,7 +134,7 @@ const second_sorting = (patient_list, rp_settings) => {
 
 const sorting_after_every_injection = (patient_list) => {
     patient_list.sort((a, b) => {
-        return (a===null)-(b===null) || +(a>b)||-(a<b);
+        return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
     });
 }
 
@@ -187,8 +187,8 @@ const activity_now = (patient_list, rp_settings) => {
 
 const sort_patient_list = (patient_list, rp_settings) => {
     sorting_after_every_injection(patient_list)
-    first_sorting(patient_list)
-    second_sorting(patient_list, rp_settings)
+    // first_sorting(patient_list)
+    // second_sorting(patient_list, rp_settings)
 }
 
 // ++++++++++++++++++++++++++++
@@ -222,4 +222,4 @@ const patient_list = [
 // 3. testcase execution
 console.log( "before sorting : ", patient_list.map(x => x.name))
 sort_patient_list(patient_list, rp_settings)
-console.log( "after sorting : ", patient_list.map(x => x.name))
+console.log( "before sorting : ", patient_list.map(x => x.name))
