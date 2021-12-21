@@ -33,6 +33,7 @@ import {
 
 import axios from "./utils/axios";
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
+import sort_patient_list from "./utils/sort_patient_list"
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -140,9 +141,25 @@ class App extends React.Component {
     this.selectMenuItem = this.selectMenuItem.bind(this);
     this.deletePatient = this.deletePatient.bind(this);
     this.modifyPatient = this.modifyPatient.bind(this);
+    this.getRpSetting = this.getRpSetting.bind(this);
   }
 
   formRef = React.createRef();
+
+
+  // helper function 
+  getRpSetting = () => {
+    const {state} = this;
+    return {
+      rp_activity: state.rp_activity,
+      mesure_time: new Date(state.mesure_time),
+      first_inj_time: new Date(state.first_inj_time),
+      rp_half_life: state.rp_half_life,
+      rp_vol: state.rp_vol,
+      wasted_vol: state.wasted_vol,
+      unextractable_vol: state.unextractable_vol,
+    }
+  }
 
   showDrawer = () => {
     console.log(this.state);
@@ -165,30 +182,14 @@ class App extends React.Component {
   };
 
   handleOk = () => {
-    const { state } = this;
+    this.setState((prevState) => ({
+      mesure_time: new Date(prevState.mesure_time),
+      first_inj_time: new Date(prevState.first_inj_time),
+      isModalVisible: false
+    }), () => {
+      message.success("Session initialized.");
+    })
 
-    const formatedRpSettings = {
-      rp_activity: state.rp_activity,
-      mesure_time: state.mesure_time.valueOf(),
-      first_inj_time: state.first_inj_time.valueOf(),
-      rp_half_life: state.rp_half_life,
-      rp_vol: state.rp_vol,
-      wasted_vol: state.wasted_vol,
-      unextractable_vol: state.unextractable_vol,
-    };
-
-    axios
-      .post("session", formatedRpSettings)
-      .then((res) => {
-        // res = res.data;
-        // console.log(res);
-        this.setState({ isModalVisible: false });
-        message.success("Session initialized.");
-      })
-      .catch((e) => {
-        // console.log(e);
-        message.error("Something went wrong.");
-      });
   };
 
   onAddPatient() {
@@ -452,21 +453,29 @@ class App extends React.Component {
     console.log("patients list before send to sort : ", this.state.dataSource);
     const formatedPatientInfos = formatFront2Back(this.state.dataSource);
 
-    axios
-      .post("sort", { patient_list: formatedPatientInfos })
-      .then((res) => {
-        let sorted_list = res.data.sorted_list;
-        console.log(sorted_list);
-        const newFormatedPatients = formatBack2Front(sorted_list);
+    const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
+    const newFormatedPatients = formatBack2Front(sorted_list);
+    this.setState({ dataSource: [...newFormatedPatients] }, () => {
+      message.success("Patient List sorted")
+    });
 
-        this.setState({ dataSource: [...newFormatedPatients] });
-        console.log("patients list after send to sort : ", newFormatedPatients);
-        message.success("Patient List sorted");
-      })
-      .catch((e) => {
-        console.log(e);
-        message.error("Something went wrong.");
-      });
+
+
+    // axios
+    //   .post("sort", { patient_list: formatedPatientInfos })
+    //   .then((res) => {
+    //     let sorted_list = res.data.sorted_list;
+    //     console.log(sorted_list);
+    //     const newFormatedPatients = formatBack2Front(sorted_list);
+
+    //     this.setState({ dataSource: [...newFormatedPatients] });
+    //     console.log("patients list after send to sort : ", newFormatedPatients);
+    //     message.success("Patient List sorted");
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     message.error("Something went wrong.");
+    //   });
   }
 
   selectMenuItem({ key }) {

@@ -6,7 +6,7 @@ export const formatFront2Back = (formatedPatientInfos) => {
       // patient infos
       dose: e.dose,
       scan_time: e.duration,
-      inj_time: e.realInjectionTime ? e.realInjectionTime.valueOf() : null,
+      inj_time: e.realInjectionTime,
       injected: e.status === "waiting" ? false : true,
 
       // secondary infos
@@ -24,7 +24,7 @@ export const formatBack2Front = (PatientInfos) => {
       // patient infos
       dose: e.dose,
       duration: e.scan_time,
-      realInjectionTime: e.inj_time ? moment(e.inj_time) : null,
+      realInjectionTime: e.inj_time,
 
       // secondary infos
       key: e.key, // should not change (identifies patient)

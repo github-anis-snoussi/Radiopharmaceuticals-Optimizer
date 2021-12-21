@@ -139,10 +139,12 @@ const sorting_after_every_injection = (patient_list) => {
 }
 
 
-const sort_patient_list = (patient_list, rp_settings) => {
+const sort_patient_list = (patient_list_og, rp_settings) => {
+    let patient_list = [...patient_list_og]
     sorting_after_every_injection(patient_list)
     first_sorting(patient_list)
     second_sorting(patient_list, rp_settings)
+    return patient_list;
 }
 
 
@@ -161,7 +163,7 @@ export const activity_now = (patient_list, rp_settings) => {
         now_dict.total_vol_now = rp_settings.rp_vol - rp_settings.wasted_vol
         now_dict.usable_vol_now = now_dict.total_vol_now - rp_settings.unextractable_vol
         now_dict.total_activity_now_before_prime = decay(rp_settings.rp_activity, rp_settings.rp_half_life, diff_time(new Date(), rp_settings.mesure_time))
-        now_dict.total_activity_now = now_dict.total_activity_now_before_prime * now_dic.total_vol_now / rp_settings.rp_vol
+        now_dict.total_activity_now = now_dict.total_activity_now_before_prime * now_dict.total_vol_now / rp_settings.rp_vol
         now_dict.usable_activity_now = usable_activity (now_dict.total_activity_now, now_dict.total_vol_now, rp_settings.unextractable_vol)
     } else {
         let patient_dose_list = injected_patients_list.map(x => x.dose)
