@@ -109,10 +109,14 @@ export default sort_patient_list;
 
 // WE EXPORT SOME HELPER FUNCTIONS
 export const activity_now = (patient_list, rp_settings) => {
+
     let now_dict = {}
 
     let injected_patients_list = patient_list.filter(x => x.injected)
     let k = injected_patients_list.length
+
+    injected_patients_list = injected_patients_list.map(x => ({...x , inj_time : x.inj_time? new Date(x.inj_time) : null}))
+    rp_settings = {...rp_settings , mesure_time : new Date(rp_settings.mesure_time) , first_inj_time : new Date(rp_settings.first_inj_time)}
 
     if(k === 0) {
         now_dict.total_vol_now = rp_settings.rp_vol - rp_settings.wasted_vol
@@ -148,7 +152,6 @@ export const activity_now = (patient_list, rp_settings) => {
         now_dict.usable_activity_now = usable_activity(now_dict.total_activity_now, remaining_vol_list[k-1], rp_settings.unextractable_vol)
     }
 
-
     return now_dict
 }
 
@@ -159,6 +162,10 @@ export const sorting_after_every_injection = (patient_list) => {
 }
 
 export const calcul_final_expected_activity = (patient_list, rp_settings) => {
+
+    patient_list = patient_list.map(x => ({...x , inj_time : x.inj_time? new Date(x.inj_time) : null}))
+    rp_settings = {...rp_settings , mesure_time : new Date(rp_settings.mesure_time) , first_inj_time : new Date(rp_settings.first_inj_time)}
+
     let patient_dose_list = patient_list.map(x => x.dose)
     let patient_scan_time_list = patient_list.map(x => x.scan_time)
     let patient_inj_time_list = generate_patient_inj_time_list(patient_list, patient_scan_time_list, rp_settings)

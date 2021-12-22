@@ -23,6 +23,7 @@ import {
   TimePicker,
   Divider,
   message,
+  Popconfirm,
 } from "antd";
 
 import {
@@ -31,8 +32,11 @@ import {
   InfoCircleOutlined,
   BankOutlined,
   FileSearchOutlined,
+  SettingOutlined,
+  UsergroupDeleteOutlined,
+  ExclamationCircleOutlined
 } from "@ant-design/icons";
-
+import moment from 'moment';
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
 import {calcul_final_expected_activity, activity_now} from "./utils/sort_patient_list"
@@ -123,42 +127,55 @@ const { Text } = Typography;
 //   },
 // ];
 
+
+
+const initialState = {
+  // rp_settings
+  rp_activity: 0,
+  mesure_time: null,
+  first_inj_time: null,
+  rp_half_life: 0,
+  rp_vol: 0,
+  wasted_vol: 0,
+  unextractable_vol: 0,
+  name: "Rp Optimizer",
+
+  // app status
+  isDrawerVisible: false,
+  isModalVisible: true,
+  sideMenuKey: 1,
+
+  //patients list
+  dataSource: [],
+  // dataSource: dummyData, // DEV
+
+  // new patient input (stupid, I know)
+  isModifyingPatient: false,
+  modifiedPatientIndex: 0,
+  patienName: "",
+  patientScanDuration: 0,
+  patientDose: 0,
+  currentPatientIndex: 0,
+  // currentPatientIndex: dummyData.length, // DEV
+  
+  // expectations values
+  expected : {},
+  now : {},
+  // interval for updating the now object
+  intervalId : null
+}
+
+
+function cancelOp() {
+  return;
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // rp_settings
-      rp_activity: 0,
-      mesure_time: null,
-      first_inj_time: null,
-      rp_half_life: 0,
-      rp_vol: 0,
-      wasted_vol: 0,
-      unextractable_vol: 0,
-      name: "Rp Optimizer",
-
-      // app status
-      isDrawerVisible: false,
-      isModalVisible: true,
-      sideMenuKey: 1,
-
-      //patients list
-      dataSource: [],
-      // dataSource: dummyData, // DEV
-
-      // new patient input (stupid, I know)
-      isModifyingPatient: false,
-      modifiedPatientIndex: 0,
-      patienName: "",
-      patientScanDuration: 0,
-      patientDose: 0,
-      currentPatientIndex: 0,
-      // currentPatientIndex: dummyData.length, // DEV
-      
-      // expectations values
-      expected : {},
-      now : {}
-    };
+    this.state = JSON.parse(localStorage.getItem('state'))
+    ? JSON.parse(localStorage.getItem('state'))
+    : initialState
   
     this.formRef = React.createRef();
     this.onAddPatient = this.onAddPatient.bind(this);
@@ -169,8 +186,33 @@ class App extends React.Component {
     this.getRpSetting = this.getRpSetting.bind(this);
     this.generateExpectations = this.generateExpectations.bind(this);
     this.generateNowStats = this.generateNowStats.bind(this);
+    this.deletAllPatients = this.deletAllPatients.bind(this);
   }
 
+  componentDidMount() {
+    var intervalId = setInterval(this.generateNowStats, 60000);
+    this.setState({intervalId: intervalId});
+
+    
+    // override this.setState to automatically save state after each update
+    const orginial = this.setState;     
+    this.setState = function() {
+      let arguments0 = arguments[0];
+      let arguments1 = () => {localStorage.setItem('state', JSON.stringify({...this.state})); if(arguments[1]){arguments[1]()} };
+      orginial.bind(this)(arguments0, arguments1);
+    };
+
+
+    // in case this is after refresh
+    this.generateNowStats()
+    this.generateExpectations()
+
+
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
 
 
   // helper function 
@@ -188,11 +230,26 @@ class App extends React.Component {
   }
 
 
-  generateNowStats = () => {
-    const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({ now });
-    console.log('generate new now data')
+  deletAllPatients = () => {
+    this.setState({
+      dataSource: [],
+      isModifyingPatient: false,
+      modifiedPatientIndex: 0,
+      patienName: "",
+      patientScanDuration: 0,
+      patientDose: 0,
+      currentPatientIndex: 0,
+      expected : {},
+      now : {},
+    })
+  }
 
+
+  generateNowStats = () => {
+    if (this.state.dataSource?.length > 0){
+    const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+    this.setState({ now : {...now}});
+    }
   }
 
   generateExpectations = () => {
@@ -205,7 +262,7 @@ class App extends React.Component {
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
-      this.setState({expected, dataSource: [...newPatientsList] }, () => {this.generateNowStats()});
+      this.setState({expected : {...expected}, dataSource: [...newPatientsList] }, () => {this.generateNowStats()});
     }
   }
 
@@ -315,16 +372,20 @@ class App extends React.Component {
         patienName: record.name,
         patientScanDuration: record.duration,
         patientDose: record.dose,
+        isDrawerVisible: true
       },
-      () => this.showDrawer()
+      () => {
+        this.formRef.current.setFieldsValue({
+          name: record.name,
+          dose: record.dose,
+          duration: record.duration,
+        });
+      }
     );
 
-    this.formRef.current.setFieldsValue({
-      name: record.name,
-      dose: record.dose,
-      duration: record.duration,
-    });
+
   }
+
 
   renderDrawer() {
     return (
@@ -412,6 +473,7 @@ class App extends React.Component {
       <Modal
         title="Welcome"
         visible={this.state.isModalVisible}
+        onCancel={() => this.setState({isModalVisible : false})}
         footer={[
           <Button
             key={1}
@@ -419,7 +481,7 @@ class App extends React.Component {
             onClick={this.handleOk}
             disabled={!this.state.mesure_time || !this.state.first_inj_time}
           >
-            Start
+            Confirm
           </Button>,
         ]}
       >
@@ -430,7 +492,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_half_life}
               onChange={(rp_half_life) => {
                 this.setState({ rp_half_life: rp_half_life });
               }}
@@ -445,7 +507,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_activity}
               onChange={(rp_activity) => {
                 this.setState({ rp_activity: rp_activity });
               }}
@@ -460,6 +522,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
+              value={this.state.mesure_time ? moment(this.state.mesure_time) : null}
               onChange={(mesure_time) => {
                 this.setState({ mesure_time: mesure_time });
               }}
@@ -474,6 +537,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
+              value={this.state.first_inj_time ? moment(this.state.first_inj_time) : null}
               onChange={(first_inj_time) => {
                 this.setState({ first_inj_time: first_inj_time });
               }}
@@ -488,7 +552,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_vol}
               onChange={(rp_vol) => {
                 this.setState({ rp_vol: rp_vol });
               }}
@@ -503,7 +567,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.wasted_vol}
               onChange={(wasted_vol) => {
                 this.setState({ wasted_vol: wasted_vol });
               }}
@@ -518,7 +582,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.unextractable_vol}
               onChange={(unextractable_vol) => {
                 this.setState({ unextractable_vol: unextractable_vol });
               }}
@@ -530,6 +594,7 @@ class App extends React.Component {
         <Input
           placeholder="Lab name"
           prefix={<BankOutlined />}
+          value={this.state.name}
           onChange={(name) => {
             this.setState({ name: name.target.value });
           }}
@@ -642,6 +707,28 @@ class App extends React.Component {
                       <Button key="1" onClick={this.sortPatients}>
                       <FileSearchOutlined /> Sort
                       </Button>
+
+                      <Button key="3"  onClick={() => this.setState({isModalVisible : true})}>
+                        <SettingOutlined /> RP Settings
+                      </Button>
+
+                      <Popconfirm
+                        key="4"
+                        title={"Delete All ?"}
+                        icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+                        onConfirm={this.deletAllPatients}
+                        onCancel={cancelOp}
+                        okText="Delete All Patients"
+                        okButtonProps={{
+                          danger: true,
+                        }}
+                        cancelText="Cancel"
+                      >
+                        <Button  type="primary" danger>
+                          <UsergroupDeleteOutlined /> Delete All
+                        </Button>
+                      </Popconfirm>
+
 
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
