@@ -348,16 +348,20 @@ class App extends React.Component {
         patienName: record.name,
         patientScanDuration: record.duration,
         patientDose: record.dose,
+        isDrawerVisible: true
       },
-      () => this.showDrawer()
+      () => {
+        this.formRef.current.setFieldsValue({
+          name: record.name,
+          dose: record.dose,
+          duration: record.duration,
+        });
+      }
     );
 
-    this.formRef.current.setFieldsValue({
-      name: record.name,
-      dose: record.dose,
-      duration: record.duration,
-    });
+
   }
+
 
   renderDrawer() {
     return (
