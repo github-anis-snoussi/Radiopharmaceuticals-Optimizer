@@ -189,10 +189,10 @@ class App extends React.Component {
 
 
   generateNowStats = () => {
+    if (this.state.dataSource?.length > 0){
     const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
     this.setState({ now });
-    console.log('generate new now data')
-
+    }
   }
 
   generateExpectations = () => {

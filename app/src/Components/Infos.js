@@ -62,16 +62,30 @@ class Infos extends React.Component {
     return (
       <>
         <Typography>
-          <Title>Radiopharmaceuticals Optimizer</Title>
-          <Paragraph>
-          Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans.
-          This app was designed and built with one goal in mind : {" "}
-            <Text strong>
-              use IT to make an impact and give back to the community as much as possible
-            </Text>
-            .
-          </Paragraph>
-          <Title level={2}>Case Study</Title>
+
+          <div style={{display : 'flex' , flexDirection : 'row'}} >
+            <div>
+              <Title>Radiopharmaceuticals Optimizer</Title>
+              <Paragraph>
+              Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans.
+              This app was designed and built with one goal in mind : {" "}
+                <Text strong>
+                  use IT to make an impact and give back to the community as much as possible
+                </Text>
+                .
+              </Paragraph>
+            </div>
+
+
+            <img
+              src={"logo-filled-black.png"}
+              style={{ height: 150, aspectRatio: 1 }}
+              alt="app-logo"
+            />
+          </div>
+
+
+          <Title level={2}  >Case Study</Title>
           <Paragraph>
             The Sahloul University Hospital ,being the first Hospital to make use of this app, had a great deal of impact on the development process. In fact this app was built solely for Sahloul University Hospital but then I decided to open source it.
           </Paragraph>
@@ -90,6 +104,8 @@ class Infos extends React.Component {
         </Typography>
 
         <Divider />
+        <Title level={2}>Send Feedback</Title>
+
 
         {!this.state.hasSubmitted ? (
           <>
