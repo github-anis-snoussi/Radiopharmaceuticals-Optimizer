@@ -218,8 +218,8 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
 // // 1. testcase settings
 // const rp_settings = {
-//     rp_activity : 3825,
 //     rp_half_life : 109.8, 
+//     rp_activity : 3825,
 //     mesure_time : new Date(2021,5,10,8,0), 
 //     first_inj_time : new Date(2021,5,10,7,45), 
 //     rp_vol : 8.5, 
