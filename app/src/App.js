@@ -33,7 +33,7 @@ import {
   FileSearchOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-
+import moment from 'moment';
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
 import {calcul_final_expected_activity, activity_now} from "./utils/sort_patient_list"
@@ -162,7 +162,6 @@ const initialState = {
   intervalId : null
 }
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -190,7 +189,7 @@ class App extends React.Component {
     const orginial = this.setState;     
     this.setState = function() {
       let arguments0 = arguments[0];
-      let arguments1 = () => (arguments[1], localStorage.setItem('state', JSON.stringify(this.state)));
+      let arguments1 = () => (arguments[1], localStorage.setItem('state', JSON.stringify({...this.state})));
       orginial.bind(this)(arguments0, arguments1);
     };
 
@@ -448,7 +447,7 @@ class App extends React.Component {
             onClick={this.handleOk}
             disabled={!this.state.mesure_time || !this.state.first_inj_time}
           >
-            Start
+            Confirm
           </Button>,
         ]}
       >
@@ -459,7 +458,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_half_life}
               onChange={(rp_half_life) => {
                 this.setState({ rp_half_life: rp_half_life });
               }}
@@ -474,7 +473,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_activity}
               onChange={(rp_activity) => {
                 this.setState({ rp_activity: rp_activity });
               }}
@@ -489,6 +488,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
+              value={moment(this.state.mesure_time)}
               onChange={(mesure_time) => {
                 this.setState({ mesure_time: mesure_time });
               }}
@@ -503,6 +503,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
+              value={moment(this.state.first_inj_time)}
               onChange={(first_inj_time) => {
                 this.setState({ first_inj_time: first_inj_time });
               }}
@@ -517,7 +518,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.rp_vol}
               onChange={(rp_vol) => {
                 this.setState({ rp_vol: rp_vol });
               }}
@@ -532,7 +533,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.wasted_vol}
               onChange={(wasted_vol) => {
                 this.setState({ wasted_vol: wasted_vol });
               }}
@@ -547,7 +548,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <InputNumber
               style={{ width: "100%" }}
-              defaultValue={0}
+              value={this.state.unextractable_vol}
               onChange={(unextractable_vol) => {
                 this.setState({ unextractable_vol: unextractable_vol });
               }}
@@ -559,6 +560,7 @@ class App extends React.Component {
         <Input
           placeholder="Lab name"
           prefix={<BankOutlined />}
+          value={this.state.name}
           onChange={(name) => {
             this.setState({ name: name.target.value });
           }}
