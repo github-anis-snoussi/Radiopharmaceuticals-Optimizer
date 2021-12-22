@@ -224,7 +224,7 @@ class App extends React.Component {
   generateNowStats = () => {
     if (this.state.dataSource?.length > 0){
     const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({ now });
+    this.setState({ now : {...now}}, () => console.log(this.state.now));
     }
   }
 
@@ -238,7 +238,7 @@ class App extends React.Component {
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
-      this.setState({expected, dataSource: [...newPatientsList] }, () => {this.generateNowStats()});
+      this.setState({expected : {...expected}, dataSource: [...newPatientsList] }, () => {this.generateNowStats()});
     }
   }
 
@@ -498,7 +498,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
-              value={moment(this.state.mesure_time)}
+              value={this.state.mesure_time ? moment(this.state.mesure_time) : null}
               onChange={(mesure_time) => {
                 this.setState({ mesure_time: mesure_time });
               }}
@@ -513,7 +513,7 @@ class App extends React.Component {
           <Col className="gutter-row" span={14}>
             <TimePicker
               style={{ width: "100%" }}
-              value={moment(this.state.first_inj_time)}
+              value={this.state.first_inj_time ? moment(this.state.first_inj_time) : null}
               onChange={(first_inj_time) => {
                 this.setState({ first_inj_time: first_inj_time });
               }}
