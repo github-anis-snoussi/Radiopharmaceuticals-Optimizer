@@ -193,6 +193,12 @@ class App extends React.Component {
       orginial.bind(this)(arguments0, arguments1);
     };
 
+
+    // in case this is after refresh
+    this.generateNowStats()
+    this.generateExpectations()
+
+
   }
   
   componentWillUnmount() {
