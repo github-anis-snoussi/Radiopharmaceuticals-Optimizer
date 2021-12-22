@@ -5,9 +5,7 @@ import "antd/dist/antd.css";
 import { Tag, Row, PageHeader, Statistic } from "antd";
 
 
-
 import { Progress } from "antd";
-const { Countdown } = Statistic;
 
 
 
@@ -18,7 +16,7 @@ const HeaderContent = ({ children, extra }) => (
   </div>
 );
 
-const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total) => (
+const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life, now, total) => (
   <Row>
     <Statistic title="RP Activity" suffix="MBq" value={rp_activity} />
     <Statistic
@@ -41,15 +39,6 @@ const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life, deadline,
       }}
     />
 
-
-
-    {deadline ? 
-      <Countdown
-        valueStyle={{ color: "#1890ff" }}
-        title="Time Remaining"
-        value={deadline}
-      />
-    : null}
 
       {now && Object.keys(now).length !== 0 ? 
         <Progress
@@ -76,7 +65,7 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const { name, children, rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total } =
+    const { name, children, rp_activity, mesure_time, rp_vol, rp_half_life, now, total } =
       this.props;
 
     return (
@@ -88,7 +77,7 @@ class AppHeader extends React.Component {
         extra={children}
       >
         <HeaderContent>
-          {renderContent(rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total)}
+          {renderContent(rp_activity, mesure_time, rp_vol, rp_half_life, now, total)}
         </HeaderContent>
       </PageHeader>
     );

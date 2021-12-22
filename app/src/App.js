@@ -699,7 +699,6 @@ class App extends React.Component {
                       rp_vol={this.state.rp_vol}
                       rp_half_life={this.state.rp_half_life}
                       name={this.state.name}
-                      deadline={this.state.expected.remaining_activity_time}
                       now={this.state.now}
                       total={this.state.rp_activity}
                     >
