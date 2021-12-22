@@ -4,15 +4,12 @@ import "antd/dist/antd.css";
 
 import { Tag, Row, PageHeader, Statistic } from "antd";
 
-// import { Progress } from "antd";
 
-// const { Countdown } = Statistic;
 
-// const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2; // deadline in 2 days (in ms)
+import { Progress } from "antd";
+const { Countdown } = Statistic;
 
-// function onFinish() {
-//   console.log("finished!");
-// }
+
 
 const HeaderContent = ({ children, extra }) => (
   <div className="content">
@@ -21,7 +18,7 @@ const HeaderContent = ({ children, extra }) => (
   </div>
 );
 
-const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
+const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total) => (
   <Row>
     <Statistic title="RP Activity" suffix="MBq" value={rp_activity} />
     <Statistic
@@ -43,20 +40,32 @@ const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life) => (
         margin: "0 32px",
       }}
     />
-    {/* <Countdown
-      valueStyle={{ color: "#1890ff" }}
-      title="Time Remaining"
-      value={deadline}
-      onFinish={onFinish}
-    /> */}
-    {/* <Progress
-      strokeColor={{
-        "0%": "red",
-        "100%": "green",
-      }}
-      percent={80}
-      format={(percent) => `${percent * 10} MBq`}
-    /> */}
+
+
+
+    {deadline ? 
+      <Countdown
+        valueStyle={{ color: "#1890ff" }}
+        title="Time Remaining"
+        value={deadline}
+      />
+    : null}
+
+      {now && Object.keys(now).length !== 0 ? 
+        <Progress
+          style={{paddingRight : 20}}
+          strokeColor={{
+            "0%": "red",
+            "100%": "green",
+          }}
+          percent={now.total_activity_now/total * 100}
+          format={(percent) => `${(percent * total / 100).toFixed(0)} MBq`}
+        />
+      : null}
+
+
+
+    
   </Row>
 );
 
@@ -67,8 +76,9 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const { name, children, rp_activity, mesure_time, rp_vol, rp_half_life } =
+    const { name, children, rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total } =
       this.props;
+
     return (
       <PageHeader
         className="site-page-header-responsive"
@@ -78,7 +88,7 @@ class AppHeader extends React.Component {
         extra={children}
       >
         <HeaderContent>
-          {renderContent(rp_activity, mesure_time, rp_vol, rp_half_life)}
+          {renderContent(rp_activity, mesure_time, rp_vol, rp_half_life, deadline, now, total)}
         </HeaderContent>
       </PageHeader>
     );

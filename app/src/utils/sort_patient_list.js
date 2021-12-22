@@ -194,7 +194,7 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
         total_remaining_vol: remaining_vol_list.slice(-1)[0].toFixed(2),
         usable_remaining_vol: (remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol).toFixed(2),
 
-        remaining_activity_time: new Date(patient_inj_time_list.slice(-1)[0]).toLocaleTimeString().replace(/(.*)\D\d+/, '$1'),
+        remaining_activity_time: new Date(patient_inj_time_list.slice(-1)[0]),
 
         patient_inj_time_list: patient_inj_time_list.slice(0, -1).map(x => new Date(x)), // a new column
         patient_inj_vol_list: patient_inj_vol_list, // a new column
