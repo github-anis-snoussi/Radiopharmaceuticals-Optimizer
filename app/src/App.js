@@ -35,7 +35,9 @@ import {
 
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
 import sort_patient_list from "./utils/sort_patient_list"
-import {calcul_final_expected_activity} from "./utils/sort_patient_list"
+import {calcul_final_expected_activity, activity_now} from "./utils/sort_patient_list"
+
+
 
 // I simply dont care.
 import{ init } from 'emailjs-com';
@@ -154,7 +156,8 @@ class App extends React.Component {
       // currentPatientIndex: dummyData.length, // DEV
       
       // expectations values
-      expected : {}
+      expected : {},
+      now : {}
     };
   
     this.formRef = React.createRef();
@@ -165,6 +168,7 @@ class App extends React.Component {
     this.modifyPatient = this.modifyPatient.bind(this);
     this.getRpSetting = this.getRpSetting.bind(this);
     this.generateExpectations = this.generateExpectations.bind(this);
+    this.generateNowStats = this.generateNowStats.bind(this);
   }
 
 
@@ -183,6 +187,14 @@ class App extends React.Component {
     }
   }
 
+
+  generateNowStats = () => {
+    const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+    this.setState({ now });
+    console.log('generate new now data')
+
+  }
+
   generateExpectations = () => {
     if (this.state.dataSource?.length > 0){
       const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
@@ -193,9 +205,10 @@ class App extends React.Component {
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
-      this.setState({expected, dataSource: [...newPatientsList] });
+      this.setState({expected, dataSource: [...newPatientsList] }, () => {this.generateNowStats()});
     }
   }
+
 
   showDrawer = () => {
     this.setState({
@@ -621,13 +634,19 @@ class App extends React.Component {
                       rp_vol={this.state.rp_vol}
                       rp_half_life={this.state.rp_half_life}
                       name={this.state.name}
+                      deadline={this.state.expected.remaining_activity_time}
+                      now={this.state.now}
+                      total={this.state.rp_activity}
                     >
+
                       <Button key="1" onClick={this.sortPatients}>
                       <FileSearchOutlined /> Sort
                       </Button>
+
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
                       </Button>
+
                     </AppHeader>
 
                     <PatientsTable

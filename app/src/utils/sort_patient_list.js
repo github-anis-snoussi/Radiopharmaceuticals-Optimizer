@@ -194,7 +194,7 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
         total_remaining_vol: remaining_vol_list.slice(-1)[0].toFixed(2),
         usable_remaining_vol: (remaining_vol_list.slice(-1)[0] - rp_settings.unextractable_vol).toFixed(2),
 
-        remaining_activity_time: new Date(patient_inj_time_list.slice(-1)[0]).toLocaleTimeString().replace(/(.*)\D\d+/, '$1'),
+        remaining_activity_time: new Date(patient_inj_time_list.slice(-1)[0]),
 
         patient_inj_time_list: patient_inj_time_list.slice(0, -1).map(x => new Date(x)), // a new column
         patient_inj_vol_list: patient_inj_vol_list, // a new column
@@ -218,8 +218,8 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
 // // 1. testcase settings
 // const rp_settings = {
-//     rp_activity : 3825,
 //     rp_half_life : 109.8, 
+//     rp_activity : 3825,
 //     mesure_time : new Date(2021,5,10,8,0), 
 //     first_inj_time : new Date(2021,5,10,7,45), 
 //     rp_vol : 8.5, 
@@ -229,13 +229,13 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
 // // 2. testcase patients
 // const patient_list = [
-//     {name:"rami", dose:183, scan_time:45, injected:false, inj_time:null},
-//     {name:"wael", dose:120, scan_time:30, injected:false, inj_time:null},
-//     {name:"hama", dose:200, scan_time:30, injected:false, inj_time:null},
-//     {name:"hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
-//     {name:"hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
-//     {name:"kiki", dose:300, scan_time:30, injected:false, inj_time:null},
-//     {name:"saki", dose:300, scan_time:40, injected:false, inj_time:null}
+//     {name:"Rami", dose:183, scan_time:45, injected:false, inj_time:null},
+//     {name:"Wael", dose:120, scan_time:30, injected:false, inj_time:null},
+//     {name:"Hama", dose:200, scan_time:30, injected:false, inj_time:null},
+//     {name:"Hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
+//     {name:"Hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
+//     {name:"Kiki", dose:300, scan_time:30, injected:false, inj_time:null},
+//     {name:"Saki", dose:300, scan_time:40, injected:false, inj_time:null}
 // ]
 
 

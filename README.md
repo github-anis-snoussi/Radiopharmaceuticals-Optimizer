@@ -21,4 +21,4 @@ In comes our app whose purpose is to effectively and efficiently order patients 
 
 ## Screenshot
 
-![Screenshot](./docs/screenshot_v2.png)
+![Screenshot](./docs/screenshot_v2.1.png)
