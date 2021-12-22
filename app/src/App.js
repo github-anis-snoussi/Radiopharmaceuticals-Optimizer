@@ -31,6 +31,7 @@ import {
   InfoCircleOutlined,
   BankOutlined,
   FileSearchOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
@@ -412,6 +413,7 @@ class App extends React.Component {
       <Modal
         title="Welcome"
         visible={this.state.isModalVisible}
+        onCancel={() => this.setState({isModalVisible : false})}
         footer={[
           <Button
             key={1}
@@ -641,6 +643,10 @@ class App extends React.Component {
 
                       <Button key="1" onClick={this.sortPatients}>
                       <FileSearchOutlined /> Sort
+                      </Button>
+
+                      <Button key="3"  onClick={() => this.setState({isModalVisible : true})}>
+                        <SettingOutlined /> RP Settings
                       </Button>
 
                       <Button key="2" type="primary" onClick={this.showDrawer}>
