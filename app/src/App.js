@@ -158,7 +158,9 @@ class App extends React.Component {
       
       // expectations values
       expected : {},
-      now : {}
+      now : {},
+      // interval for updating the now object
+      intervalId : null
     };
   
     this.formRef = React.createRef();
@@ -172,6 +174,15 @@ class App extends React.Component {
     this.generateNowStats = this.generateNowStats.bind(this);
   }
 
+  
+  componentDidMount() {
+    var intervalId = setInterval(this.generateNowStats, 60000);
+    this.setState({intervalId: intervalId});
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
 
 
   // helper function 
