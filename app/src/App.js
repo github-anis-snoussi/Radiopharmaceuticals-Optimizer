@@ -189,7 +189,7 @@ class App extends React.Component {
     const orginial = this.setState;     
     this.setState = function() {
       let arguments0 = arguments[0];
-      let arguments1 = () => (arguments[1], localStorage.setItem('state', JSON.stringify({...this.state})));
+      let arguments1 = () => {localStorage.setItem('state', JSON.stringify({...this.state})); if(arguments[1]){arguments[1]()} };
       orginial.bind(this)(arguments0, arguments1);
     };
 
