@@ -50,7 +50,10 @@ const generate_patient_inj_time_list = (patient_list, patient_scan_time_list, rp
 }
 
 
-const first_sorting = (patient_list) => {
+const first_sorting = (patient_list_og) => {
+
+    let patient_list = [...patient_list_og]
+
     patient_list = patient_list.map(x => {
         return {
             ...x,
@@ -66,6 +69,8 @@ const first_sorting = (patient_list) => {
         delete x.ratio;
         return x
     })
+
+    return patient_list
 }
 
 
@@ -92,9 +97,9 @@ const second_sorting = (patient_list, rp_settings) => {
 const sort_patient_list = (patient_list_og, rp_settings) => {
     let patient_list = [...patient_list_og]
     sorting_after_every_injection(patient_list)
-    first_sorting(patient_list)
-    second_sorting(patient_list, rp_settings)
-    return patient_list;
+    let sorted_list = first_sorting(patient_list)
+    second_sorting(sorted_list, rp_settings)
+    return sorted_list;
 }
 
 
