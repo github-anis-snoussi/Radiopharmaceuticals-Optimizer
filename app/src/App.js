@@ -23,6 +23,7 @@ import {
   TimePicker,
   Divider,
   message,
+  Popconfirm,
 } from "antd";
 
 import {
@@ -32,6 +33,8 @@ import {
   BankOutlined,
   FileSearchOutlined,
   SettingOutlined,
+  UsergroupDeleteOutlined,
+  ExclamationCircleOutlined
 } from "@ant-design/icons";
 import moment from 'moment';
 import { formatFront2Back, formatBack2Front } from "./utils/utils";
@@ -162,6 +165,11 @@ const initialState = {
   intervalId : null
 }
 
+
+function cancelOp() {
+  return;
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -178,6 +186,7 @@ class App extends React.Component {
     this.getRpSetting = this.getRpSetting.bind(this);
     this.generateExpectations = this.generateExpectations.bind(this);
     this.generateNowStats = this.generateNowStats.bind(this);
+    this.deletAllPatients = this.deletAllPatients.bind(this);
   }
 
   componentDidMount() {
@@ -218,6 +227,21 @@ class App extends React.Component {
       wasted_vol: state.wasted_vol,
       unextractable_vol: state.unextractable_vol,
     }
+  }
+
+
+  deletAllPatients = () => {
+    this.setState({
+      dataSource: [],
+      isModifyingPatient: false,
+      modifiedPatientIndex: 0,
+      patienName: "",
+      patientScanDuration: 0,
+      patientDose: 0,
+      currentPatientIndex: 0,
+      expected : {},
+      now : {},
+    })
   }
 
 
@@ -687,6 +711,24 @@ class App extends React.Component {
                       <Button key="3"  onClick={() => this.setState({isModalVisible : true})}>
                         <SettingOutlined /> RP Settings
                       </Button>
+
+                      <Popconfirm
+                        key="4"
+                        title={"Delete All ?"}
+                        icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+                        onConfirm={this.deletAllPatients}
+                        onCancel={cancelOp}
+                        okText="Delete All Patients"
+                        okButtonProps={{
+                          danger: true,
+                        }}
+                        cancelText="Cancel"
+                      >
+                        <Button  type="primary" danger>
+                          <UsergroupDeleteOutlined /> Delete All
+                        </Button>
+                      </Popconfirm>
+
 
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
