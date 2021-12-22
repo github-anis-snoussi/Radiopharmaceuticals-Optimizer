@@ -187,10 +187,6 @@ class App extends React.Component {
     }
   }
 
-  debug = () => {
-    let nowDect = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    console.log(nowDect)
-  }
 
   generateNowStats = () => {
     const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
@@ -649,10 +645,6 @@ class App extends React.Component {
 
                       <Button key="2" type="primary" onClick={this.showDrawer}>
                         <UserAddOutlined /> New Patient
-                      </Button>
-
-                      <Button key="3" danger onClick={this.debug}>
-                        Debug
                       </Button>
 
                     </AppHeader>

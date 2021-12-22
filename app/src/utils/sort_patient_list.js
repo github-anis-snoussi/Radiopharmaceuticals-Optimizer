@@ -229,13 +229,13 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
 // // 2. testcase patients
 // const patient_list = [
-//     {name:"rami", dose:183, scan_time:45, injected:false, inj_time:null},
-//     {name:"wael", dose:120, scan_time:30, injected:false, inj_time:null},
-//     {name:"hama", dose:200, scan_time:30, injected:false, inj_time:null},
-//     {name:"hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
-//     {name:"hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
-//     {name:"kiki", dose:300, scan_time:30, injected:false, inj_time:null},
-//     {name:"saki", dose:300, scan_time:40, injected:false, inj_time:null}
+//     {name:"Rami", dose:183, scan_time:45, injected:false, inj_time:null},
+//     {name:"Wael", dose:120, scan_time:30, injected:false, inj_time:null},
+//     {name:"Hama", dose:200, scan_time:30, injected:false, inj_time:null},
+//     {name:"Hihi", dose:300, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,20)},
+//     {name:"Hous", dose:150, scan_time:30, injected:true,  inj_time: new Date(2021,5,10,9,0)},
+//     {name:"Kiki", dose:300, scan_time:30, injected:false, inj_time:null},
+//     {name:"Saki", dose:300, scan_time:40, injected:false, inj_time:null}
 // ]
 
 
