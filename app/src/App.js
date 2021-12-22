@@ -224,7 +224,7 @@ class App extends React.Component {
   generateNowStats = () => {
     if (this.state.dataSource?.length > 0){
     const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({ now : {...now}}, () => console.log(this.state.now));
+    this.setState({ now : {...now}});
     }
   }
 

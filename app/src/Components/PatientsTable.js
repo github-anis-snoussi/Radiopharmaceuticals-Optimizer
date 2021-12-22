@@ -107,7 +107,7 @@ class PatientsTable extends React.Component {
     const { dataSource, updateData } = this.props;
     dataSource.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
-        theArray[index].realInjectionTime = mesure_time;
+        theArray[index].realInjectionTime = new Date(mesure_time);
       }
     });
     updateData([...dataSource]);
