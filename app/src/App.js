@@ -124,44 +124,51 @@ const { Text } = Typography;
 //   },
 // ];
 
+
+
+const initialState = {
+  // rp_settings
+  rp_activity: 0,
+  mesure_time: null,
+  first_inj_time: null,
+  rp_half_life: 0,
+  rp_vol: 0,
+  wasted_vol: 0,
+  unextractable_vol: 0,
+  name: "Rp Optimizer",
+
+  // app status
+  isDrawerVisible: false,
+  isModalVisible: true,
+  sideMenuKey: 1,
+
+  //patients list
+  dataSource: [],
+  // dataSource: dummyData, // DEV
+
+  // new patient input (stupid, I know)
+  isModifyingPatient: false,
+  modifiedPatientIndex: 0,
+  patienName: "",
+  patientScanDuration: 0,
+  patientDose: 0,
+  currentPatientIndex: 0,
+  // currentPatientIndex: dummyData.length, // DEV
+  
+  // expectations values
+  expected : {},
+  now : {},
+  // interval for updating the now object
+  intervalId : null
+}
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // rp_settings
-      rp_activity: 0,
-      mesure_time: null,
-      first_inj_time: null,
-      rp_half_life: 0,
-      rp_vol: 0,
-      wasted_vol: 0,
-      unextractable_vol: 0,
-      name: "Rp Optimizer",
-
-      // app status
-      isDrawerVisible: false,
-      isModalVisible: true,
-      sideMenuKey: 1,
-
-      //patients list
-      dataSource: [],
-      // dataSource: dummyData, // DEV
-
-      // new patient input (stupid, I know)
-      isModifyingPatient: false,
-      modifiedPatientIndex: 0,
-      patienName: "",
-      patientScanDuration: 0,
-      patientDose: 0,
-      currentPatientIndex: 0,
-      // currentPatientIndex: dummyData.length, // DEV
-      
-      // expectations values
-      expected : {},
-      now : {},
-      // interval for updating the now object
-      intervalId : null
-    };
+    this.state = JSON.parse(localStorage.getItem('state'))
+    ? JSON.parse(localStorage.getItem('state'))
+    : initialState
   
     this.formRef = React.createRef();
     this.onAddPatient = this.onAddPatient.bind(this);
@@ -174,10 +181,19 @@ class App extends React.Component {
     this.generateNowStats = this.generateNowStats.bind(this);
   }
 
-  
   componentDidMount() {
     var intervalId = setInterval(this.generateNowStats, 60000);
     this.setState({intervalId: intervalId});
+
+    
+    // override this.setState to automatically save state after each update
+    const orginial = this.setState;     
+    this.setState = function() {
+      let arguments0 = arguments[0];
+      let arguments1 = () => (arguments[1], localStorage.setItem('state', JSON.stringify(this.state)));
+      orginial.bind(this)(arguments0, arguments1);
+    };
+
   }
   
   componentWillUnmount() {
