@@ -65,10 +65,10 @@ const first_sorting = (patient_list_og) => {
         return a.ratio - b.ratio;
     });
 
-    patient_list = patient_list.map(x => {
-        delete x.ratio;
-        return x
-    })
+    // patient_list = patient_list.map(x => {
+    //     delete x.ratio;
+    //     return x
+    // })
 
     return patient_list
 }
@@ -80,12 +80,39 @@ const second_sorting = (patient_list, rp_settings) => {
         sorting_condition = false
         for (var i = 0; i < patient_list.length - 1 ; i++) {
             if(patient_list[i].injected === false){
+
+                // some logging
+                console.log("=============================")
+                console.log(`+++ Swapping [${i}] & [${i+1}] +++`)
+                console.log("=============================")
+
                 let before = calcul_final_expected_activity(patient_list, rp_settings).usable_remaining_activity
-                patient_list[i] = [patient_list[i+1],patient_list[i+1]=patient_list[i]][0]
+
+                // final activity before swapping
+                console.log(`==> BEFORE : ${before}`)
+
+                // looks like fancy shit didnt work, back to the old ways
+                let aux1 = patient_list[i]
+                patient_list[i] = patient_list[i+1]
+                patient_list[i+1] = aux1
+
                 let after = calcul_final_expected_activity(patient_list, rp_settings).usable_remaining_activity
-                if(before >= after) {
-                    patient_list[i] = [patient_list[i+1],patient_list[i+1]=patient_list[i]][0]
+
+                // final activity after swapping
+                console.log(`==> AFTER : ${after}`)
+
+                if(parseInt(before,10) >= parseInt(after,10)) {
+
+                    console.log("<|-|-|-| FINISHED |-|-|-|>")
+
+                    let aux2 = patient_list[i]
+                    patient_list[i] = patient_list[i+1]
+                    patient_list[i+1] = aux2
+
                 }else {
+
+                    console.log("<|-|-|-| CONTINUE |-|-|-|>")
+
                     sorting_condition = true
                 }
             }
@@ -96,9 +123,12 @@ const second_sorting = (patient_list, rp_settings) => {
 
 const sort_patient_list = (patient_list_og, rp_settings) => {
     let patient_list = [...patient_list_og]
+    console.log("list before 1st sort: ", patient_list.map(x => ({name : x.name, injected : x.injected , ratio : x.ratio })))
     sorting_after_every_injection(patient_list)
     let sorted_list = first_sorting(patient_list)
+    console.log("list after 1st sort: ", sorted_list.map(x => ({name : x.name, injected : x.injected , ratio : x.ratio })))
     second_sorting(sorted_list, rp_settings)
+    console.log("list after 2nd sort: ", sorted_list.map(x => ({name : x.name, injected : x.injected })))
     return sorted_list;
 }
 
