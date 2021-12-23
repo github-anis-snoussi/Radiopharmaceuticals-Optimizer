@@ -21,7 +21,7 @@ const renderContent = (rp_activity, mesure_time, rp_vol, rp_half_life, now, tota
     <Statistic title="RP Activity" suffix="MBq" value={rp_activity} />
     <Statistic
       title="Measure Time"
-      value={new Date(mesure_time).toLocaleTimeString(navigator.language, {
+      value={new Date(mesure_time).toLocaleTimeString('en-GB', {
         hour: "2-digit",
         minute: "2-digit",
       })}

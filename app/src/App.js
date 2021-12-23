@@ -258,7 +258,10 @@ class App extends React.Component {
       let newPatientsList = [...this.state.dataSource].map((x,i) => {
         return {
           ...x,
-          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString().replace(/(.*)\D\d+/, '$1'),
+          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString('en-GB', {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
