@@ -20,7 +20,7 @@ import {
   Input,
   Modal,
   InputNumber,
-  TimePicker,
+  DatePicker,
   Divider,
   message,
   Popconfirm,
@@ -523,7 +523,8 @@ class App extends React.Component {
             <Text type="secondary">Measure Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker
+            <DatePicker 
+              showTime
               style={{ width: "100%" }}
               value={this.state.mesure_time ? moment(this.state.mesure_time) : null}
               onChange={(mesure_time) => {
@@ -538,7 +539,8 @@ class App extends React.Component {
             <Text type="secondary">First Injection Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker
+            <DatePicker 
+              showTime
               style={{ width: "100%" }}
               value={this.state.first_inj_time ? moment(this.state.first_inj_time) : null}
               onChange={(first_inj_time) => {

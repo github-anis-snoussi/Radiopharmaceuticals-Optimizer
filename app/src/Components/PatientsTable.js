@@ -10,7 +10,7 @@ import {
   message,
   Spin,
   Typography,
-  TimePicker,
+  DatePicker,
 } from "antd";
 import {
   MenuOutlined,
@@ -218,7 +218,8 @@ class PatientsTable extends React.Component {
                 title={
                   <>
                     <div>Select Injection Time for {record.name}</div>
-                    <TimePicker
+                    <DatePicker
+                      showTime
                       size="small"
                       style={{
                         width: "100%",
