@@ -20,7 +20,7 @@ import {
   Input,
   Modal,
   InputNumber,
-  TimePicker,
+  DatePicker,
   Divider,
   message,
   Popconfirm,
@@ -258,7 +258,10 @@ class App extends React.Component {
       let newPatientsList = [...this.state.dataSource].map((x,i) => {
         return {
           ...x,
-          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString().replace(/(.*)\D\d+/, '$1'),
+          expected_injection_time : new Date(expected.patient_inj_time_list[i]).toLocaleTimeString('en-GB', {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           expected_injection_volume : expected.patient_inj_vol_list[i].toFixed(2)
         }
       })
@@ -520,7 +523,8 @@ class App extends React.Component {
             <Text type="secondary">Measure Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker
+            <DatePicker 
+              showTime
               style={{ width: "100%" }}
               value={this.state.mesure_time ? moment(this.state.mesure_time) : null}
               onChange={(mesure_time) => {
@@ -535,7 +539,8 @@ class App extends React.Component {
             <Text type="secondary">First Injection Time</Text>
           </Col>
           <Col className="gutter-row" span={14}>
-            <TimePicker
+            <DatePicker 
+              showTime
               style={{ width: "100%" }}
               value={this.state.first_inj_time ? moment(this.state.first_inj_time) : null}
               onChange={(first_inj_time) => {
