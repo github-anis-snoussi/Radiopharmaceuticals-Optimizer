@@ -678,7 +678,7 @@ class App extends React.Component {
 
             <Footer style={{ textAlign: "center" }}>
               RP optimizer {new Date().getFullYear()} Created by Anis Snoussi & Walid Snoussi < br/>
-              Version Ref : {process.env.VERCEL_GIT_COMMIT_SHA}
+              Version Ref : {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)}
             </Footer>
           </Layout>
         </Layout>

@@ -33,11 +33,6 @@ class Infos extends React.Component {
     this.onFinish = this.onFinish.bind(this);
   }
 
-
-  componentDidMount() {
-    console.log(process.env)
-  }
-
   onFinish(values) {
     let feedback = {...values, stars : this.state.stars};
 
@@ -45,7 +40,8 @@ class Infos extends React.Component {
       to_name: "Anis",
       from_name: feedback.name,
       message: feedback.description,
-      stars: feedback.stars
+      stars: feedback.stars,
+      version_ref: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA
     }
 
     // the api keys are restricted to rpo-ansnoussi.vercel.app (not that it makes it any more secure)
