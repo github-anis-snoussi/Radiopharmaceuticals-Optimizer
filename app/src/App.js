@@ -30,7 +30,7 @@ import {
 
 import {
   UserAddOutlined,
-  ScheduleOutlined,
+  ExperimentOutlined,
   InfoCircleOutlined,
   BankOutlined,
   FileSearchOutlined,
@@ -596,14 +596,16 @@ class App extends React.Component {
               defaultSelectedKeys={["1"]}
               onSelect={this.selectMenuItem}
             >
-              <Menu.Item key="1" icon={<ScheduleOutlined />}>
-                Patients List
+              <Menu.Item key="1" icon={<ExperimentOutlined />}>
+                RP Optimizer
               </Menu.Item>
               <Menu.Item key="2" icon={<InfoCircleOutlined />}>
                 Infos
               </Menu.Item>
             </Menu>
           </Sider>
+
+
           <Layout>
             <Header
               className="site-layout-sub-header-background"
