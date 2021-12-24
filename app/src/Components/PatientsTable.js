@@ -1,7 +1,4 @@
 import React from "react";
-import "../App.css";
-import "antd/dist/antd.css";
-
 import {
   Table,
   Space,
@@ -17,6 +14,9 @@ import {
   ClockCircleOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  ExperimentOutlined
 } from "@ant-design/icons";
 import {
   sortableContainer,
@@ -24,40 +24,17 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import { DeleteOutlined, EditOutlined, ExperimentOutlined } from "@ant-design/icons";
+import { confirmInjection } from "../utils/utils"
 
 
-import { clean } from "../utils/sort_patient_list"
 
 const { Text } = Typography;
-
+const SortableItem = sortableElement((props) => <tr {...props} />);
+const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 const DragHandle = sortableHandle(() => (
   <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
 ));
 
-const SortableItem = sortableElement((props) => <tr {...props} />);
-const SortableContainer = sortableContainer((props) => <tbody {...props} />);
-
-function confirmInjection(record, dataSource, updateData) {
-  if (record.realInjectionTime === null) {
-    message.warning("Operation aborted");
-  } else {
-    // we change the status to injected
-    dataSource.forEach(function (part, index, theArray) {
-      if (theArray[index].index === record.index) {
-        theArray[index].status = "done";
-      }
-    });
-
-    const newFormatedPatients = clean(dataSource)
-    updateData([...newFormatedPatients]);
-    message.success("Patient injected");
-  }
-}
-
-function cancelOp() {
-  return;
-}
 
 class PatientsTable extends React.Component {
   constructor(props) {
@@ -127,7 +104,7 @@ class PatientsTable extends React.Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        render: (text) => <Text strong >{text}</Text>,
+        render: (text) =><Text strong >{text}</Text>,
       },
       {
         title: () => {return <div style={{textAlign : 'center'}} > <ExperimentOutlined/> Injection time</div>},
@@ -138,7 +115,7 @@ class PatientsTable extends React.Component {
             props: {
               style: { background: "#fffbe6" }
             },
-            children: <p>{text || '?'}</p>
+            children: <Text>{text || '?'}</Text>
           };
         }
       },
@@ -151,7 +128,7 @@ class PatientsTable extends React.Component {
             props: {
               style: { background: "#fffbe6" }
             },
-            children: <p>{text || '?'}</p>
+            children: <Text>{text || '?'}</Text>
           };
         }
       },
@@ -164,7 +141,7 @@ class PatientsTable extends React.Component {
         title: "Test Duration (min)",
         dataIndex: "duration",
         key: "duration",
-        render: (text) => <p>{text}</p>,
+        render: (text) => <Text>{text}</Text>,
       },
       {
         title: "Actions",
@@ -191,7 +168,6 @@ class PatientsTable extends React.Component {
                 onConfirm={() => {
                   this.props.deletePatient(record);
                 }}
-                onCancel={cancelOp}
                 okText="Delete Patient"
                 okButtonProps={{
                   danger: true,
@@ -241,7 +217,6 @@ class PatientsTable extends React.Component {
                     );
                   }
                 }}
-                onCancel={cancelOp}
                 okText="Inject"
                 cancelText="Cancel"
               >

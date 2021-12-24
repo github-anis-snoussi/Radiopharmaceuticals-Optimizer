@@ -86,11 +86,6 @@ const initialState = {
   intervalId : null
 }
 
-
-function cancelOp() {
-  return;
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -642,7 +637,6 @@ class App extends React.Component {
                         title={"Delete All ?"}
                         icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
                         onConfirm={this.deletAllPatients}
-                        onCancel={cancelOp}
                         okText="Delete All Patients"
                         okButtonProps={{
                           danger: true,

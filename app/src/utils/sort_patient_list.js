@@ -1,7 +1,3 @@
-import { formatFront2Back, formatBack2Front} from "./utils"
-
-
-
 const diff_time = (date1, date2) => {
     const diffMs = Math.abs(date1 - date2);
     const diff_in_minutes = Math.round(diffMs / 60000);
@@ -235,6 +231,49 @@ const calcul_final_expected_activity = (patient_list, rp_settings) => {
     return expected
 
 }
+
+
+// ++++++++++++++++++++++++++++++++++++++++
+// +++++++++ HELPER FUNCTIONS  ++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++
+
+
+
+const formatFront2Back = (formatedPatientInfos) => {
+    return formatedPatientInfos.map((e) => {
+      return {
+        // patient infos
+        dose: e.dose,
+        scan_time: e.duration,
+        inj_time: e.realInjectionTime,
+        injected: e.status === "waiting" ? false : true,
+  
+        // secondary infos
+        key: e.key, // should not change (identifies patient)
+        index: e.index, // should not change (identifies patient)
+        status: e.status,
+        name: e.name,
+      };
+    });
+};
+  
+const formatBack2Front = (PatientInfos) => {
+    return PatientInfos.map((e) => {
+        return {
+        // patient infos
+        dose: e.dose,
+        duration: e.scan_time,
+        realInjectionTime: e.inj_time,
+
+        // secondary infos
+        key: e.key, // should not change (identifies patient)
+        index: e.index, // should not change (identifies patient)
+        status: e.status,
+        name: e.name,
+        };
+    });
+};
+  
 
 
 
