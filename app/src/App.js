@@ -226,7 +226,6 @@ class App extends React.Component {
         duration: patientScanDuration,
         status: "waiting",
         index: this.state.modifiedPatientIndex,
-        key: (this.state.modifiedPatientIndex + 1).toString(),
         realInjectionTime: null,
       };
 
@@ -247,7 +246,6 @@ class App extends React.Component {
         duration: patientScanDuration,
         status: "waiting",
         index: this.state.currentPatientIndex,
-        key: (this.state.currentPatientIndex + 1).toString(),
         realInjectionTime: null,
       };
 

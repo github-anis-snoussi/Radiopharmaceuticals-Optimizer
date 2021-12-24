@@ -8,9 +8,6 @@ const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
 class PatientsTable extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
@@ -59,12 +56,12 @@ class PatientsTable extends React.Component {
 
 
   render() {
-    const { modifyPatient, deletePatient, updateRecordMeasureTime, dataSource, updateData } = this.props;
+    const { modifyPatient, deletePatient, dataSource, updateData } = this.props;
     return (
       <Table
         pagination={false}
         dataSource={dataSource}
-        columns={TableColums(modifyPatient, deletePatient, updateRecordMeasureTime, dataSource, updateData)}
+        columns={TableColums(modifyPatient, deletePatient, this.updateRecordMeasureTime, dataSource, updateData)}
         rowKey="index"
         components={{
           body: {

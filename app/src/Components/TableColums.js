@@ -27,7 +27,8 @@ const DragHandle = sortableHandle(() => (
 <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
 ));
 
-const TableColums = ({ modifyPatient, deletePatient, updateRecordMeasureTime, dataSource, updateData }) => (
+const TableColums = ( modifyPatient, deletePatient, updateRecordMeasureTime, dataSource, updateData ) => {
+return (
     [
         {
           title: "",
@@ -200,6 +201,6 @@ const TableColums = ({ modifyPatient, deletePatient, updateRecordMeasureTime, da
           },
         },
     ]
-)
+)}
 
 export default TableColums;
