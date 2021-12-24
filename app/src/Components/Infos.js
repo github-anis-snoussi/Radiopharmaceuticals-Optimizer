@@ -35,7 +35,6 @@ class Infos extends React.Component {
 
   onFinish(values) {
     let feedback = {...values, stars : this.state.stars};
-    console.log(feedback);
 
     const templateParams = {
       to_name: "Anis",

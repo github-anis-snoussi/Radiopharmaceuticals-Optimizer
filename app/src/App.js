@@ -40,90 +40,13 @@ import moment from 'moment';
 import { sort, now, expect} from "./utils/sort_patient_list"
 
 
-
 // I simply dont care.
 import{ init } from 'emailjs-com';
 init("user_mqEkaxaA1sCx1ewmYUdYh");
 
 
-
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
-
-// const dummyData = [
-//   {
-//     key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
-//     index: 0,
-//     name: "a",
-//     dose: 150,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "2",
-//     index: 1,
-//     name: "b",
-//     dose: 100,
-//     duration: 45,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "3",
-//     index: 2,
-//     name: "c",
-//     dose: 100,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "4",
-//     index: 3,
-//     name: "d",
-//     dose: 100,
-//     duration: 35,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "5",
-//     index: 4,
-//     name: "e",
-//     dose: 200,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "6",
-//     index: 5,
-//     name: "f",
-//     dose: 300,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "7",
-//     index: 6,
-//     name: "g",
-//     dose: 300,
-//     duration: 60,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "8",
-//     index: 7,
-//     name: "h",
-//     dose: 250,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-// ];
 
 
 
@@ -145,7 +68,6 @@ const initialState = {
 
   //patients list
   dataSource: [],
-  // dataSource: dummyData, // DEV
 
   // new patient input (stupid, I know)
   isModifyingPatient: false,
@@ -154,7 +76,6 @@ const initialState = {
   patientScanDuration: 0,
   patientDose: 0,
   currentPatientIndex: 0,
-  // currentPatientIndex: dummyData.length, // DEV
   
   // expectations values
   expected : {},
