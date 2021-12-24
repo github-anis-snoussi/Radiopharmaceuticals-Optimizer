@@ -1,3 +1,7 @@
+import { formatFront2Back, formatBack2Front} from "./utils"
+
+
+
 const diff_time = (date1, date2) => {
     const diffMs = Math.abs(date1 - date2);
     const diff_in_minutes = Math.round(diffMs / 60000);
@@ -65,10 +69,10 @@ const first_sorting = (patient_list_og) => {
         return a.ratio - b.ratio;
     });
 
-    // patient_list = patient_list.map(x => {
-    //     delete x.ratio;
-    //     return x
-    // })
+    patient_list = patient_list.map(x => {
+        delete x.ratio;
+        return x
+    })
 
     return patient_list
 }
@@ -129,13 +133,7 @@ const sort_patient_list = (patient_list_og, rp_settings) => {
     return sorted_list;
 }
 
-
-
-// WE EXPORT THE MAIN FUNCTION HERE : sort_patient_list
-export default sort_patient_list;
-
-// WE EXPORT SOME HELPER FUNCTIONS
-export const activity_now = (patient_list, rp_settings) => {
+const activity_now = (patient_list, rp_settings) => {
 
     let now_dict = {}
 
@@ -182,13 +180,13 @@ export const activity_now = (patient_list, rp_settings) => {
     return now_dict
 }
 
-export const sorting_after_every_injection = (patient_list) => {
+const sorting_after_every_injection = (patient_list) => {
     patient_list.sort((a, b) => {
         return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
     });
 }
 
-export const calcul_final_expected_activity = (patient_list, rp_settings) => {
+const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
     patient_list = patient_list.map(x => ({...x , inj_time : x.inj_time? new Date(x.inj_time) : null}))
     rp_settings = {...rp_settings , mesure_time : new Date(rp_settings.mesure_time) , first_inj_time : new Date(rp_settings.first_inj_time)}
@@ -240,8 +238,35 @@ export const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
 
 
+// ++++++++++++++++++++++++++++++++++++++++
+// +++++++++ EXPOSED INTERFACE ++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++
 
 
+
+export const sort = (patient_list_og, rp_settings) => {
+    let patient_list = formatFront2Back(patient_list_og)
+    const sorted_patient_list = sort_patient_list(patient_list, rp_settings)
+    return formatBack2Front(sorted_patient_list)
+}
+
+export const clean  = (patient_list_og) => {
+    let patient_list = formatFront2Back(patient_list_og)
+    sorting_after_every_injection(patient_list)
+    return formatBack2Front(patient_list)
+}
+
+export const expect = (patient_list_og, rp_settings) => {
+    let patient_list = formatFront2Back(patient_list_og)
+    const now_dict = calcul_final_expected_activity(patient_list, rp_settings)
+    return now_dict
+}
+
+export const now = (patient_list_og, rp_settings) => {
+    let patient_list = formatFront2Back(patient_list_og)
+    const predict_dict = activity_now(patient_list, rp_settings)
+    return predict_dict
+}
 
 // // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++

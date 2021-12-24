@@ -37,9 +37,7 @@ import {
   ExclamationCircleOutlined
 } from "@ant-design/icons";
 import moment from 'moment';
-import { formatFront2Back, formatBack2Front } from "./utils/utils";
-import sort_patient_list from "./utils/sort_patient_list"
-import {calcul_final_expected_activity, activity_now} from "./utils/sort_patient_list"
+import { sort, now, expect} from "./utils/sort_patient_list"
 
 
 
@@ -247,14 +245,14 @@ class App extends React.Component {
 
   generateNowStats = () => {
     if (this.state.dataSource?.length > 0){
-    const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({ now : {...now}});
+      const now_dict = now(this.state.dataSource , this.getRpSetting())
+      this.setState({ now : {...now_dict}});
     }
   }
 
   generateExpectations = () => {
     if (this.state.dataSource?.length > 0){
-      const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+      const expected = expect(this.state.dataSource, this.getRpSetting())
       let newPatientsList = [...this.state.dataSource].map((x,i) => {
         return {
           ...x,
@@ -345,9 +343,7 @@ class App extends React.Component {
 
 
   sortPatients() {
-    const formatedPatientInfos = formatFront2Back(this.state.dataSource);
-    const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
-    const newFormatedPatients = formatBack2Front(sorted_list);
+    const newFormatedPatients = sort(this.state.dataSource, this.getRpSetting())
 
     this.setState({ dataSource: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted")
