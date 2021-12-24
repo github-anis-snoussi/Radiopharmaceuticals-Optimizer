@@ -113,7 +113,7 @@ class PatientsTable extends React.Component {
   tableColums = () => {
     const columns = [
       {
-        title: "Sort",
+        title: "",
         dataIndex: "sort",
         width: 30,
         className: "drag-visible",
