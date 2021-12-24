@@ -42,7 +42,7 @@ import { sort, now, expect} from "./utils/sort_patient_list"
 
 // I simply dont care.
 import{ init } from 'emailjs-com';
-init("user_mqEkaxaA1sCx1ewmYUdYh");
+init(process.env.REACT_APP_EMAILSJS_USER);
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -677,7 +677,8 @@ class App extends React.Component {
             </Content>
 
             <Footer style={{ textAlign: "center" }}>
-              RP optimizer 2021 Created by Anis Snoussi & Walid Snoussi
+              RP optimizer {new Date().getFullYear()} Created by Anis Snoussi & Walid Snoussi < br/>
+              Version Ref : {process.env.VERCEL_GIT_COMMIT_SHA || 'local'}
             </Footer>
           </Layout>
         </Layout>
