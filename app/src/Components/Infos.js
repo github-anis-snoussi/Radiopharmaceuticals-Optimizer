@@ -33,6 +33,11 @@ class Infos extends React.Component {
     this.onFinish = this.onFinish.bind(this);
   }
 
+
+  componentDidMount() {
+    console.log(process.env)
+  }
+
   onFinish(values) {
     let feedback = {...values, stars : this.state.stars};
 
