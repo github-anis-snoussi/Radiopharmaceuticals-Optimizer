@@ -37,95 +37,16 @@ import {
   ExclamationCircleOutlined
 } from "@ant-design/icons";
 import moment from 'moment';
-import { formatFront2Back, formatBack2Front } from "./utils/utils";
-import sort_patient_list from "./utils/sort_patient_list"
-import {calcul_final_expected_activity, activity_now} from "./utils/sort_patient_list"
-
+import { sort, now, expect} from "./utils/sort_patient_list"
 
 
 // I simply dont care.
 import{ init } from 'emailjs-com';
-init("user_mqEkaxaA1sCx1ewmYUdYh");
-
+init(process.env.REACT_APP_EMAILSJS_USER);
 
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
-
-// const dummyData = [
-//   {
-//     key: "1", // for some ******* reason I have to do this, otherwise the sortable table acts up !!!
-//     index: 0,
-//     name: "a",
-//     dose: 150,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "2",
-//     index: 1,
-//     name: "b",
-//     dose: 100,
-//     duration: 45,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "3",
-//     index: 2,
-//     name: "c",
-//     dose: 100,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "4",
-//     index: 3,
-//     name: "d",
-//     dose: 100,
-//     duration: 35,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "5",
-//     index: 4,
-//     name: "e",
-//     dose: 200,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "6",
-//     index: 5,
-//     name: "f",
-//     dose: 300,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "7",
-//     index: 6,
-//     name: "g",
-//     dose: 300,
-//     duration: 60,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-//   {
-//     key: "8",
-//     index: 7,
-//     name: "h",
-//     dose: 250,
-//     duration: 30,
-//     realInjectionTime: null,
-//     status: "waiting",
-//   },
-// ];
 
 
 
@@ -147,7 +68,6 @@ const initialState = {
 
   //patients list
   dataSource: [],
-  // dataSource: dummyData, // DEV
 
   // new patient input (stupid, I know)
   isModifyingPatient: false,
@@ -156,7 +76,6 @@ const initialState = {
   patientScanDuration: 0,
   patientDose: 0,
   currentPatientIndex: 0,
-  // currentPatientIndex: dummyData.length, // DEV
   
   // expectations values
   expected : {},
@@ -247,14 +166,14 @@ class App extends React.Component {
 
   generateNowStats = () => {
     if (this.state.dataSource?.length > 0){
-    const now = activity_now( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
-    this.setState({ now : {...now}});
+      const now_dict = now(this.state.dataSource , this.getRpSetting())
+      this.setState({ now : {...now_dict}});
     }
   }
 
   generateExpectations = () => {
     if (this.state.dataSource?.length > 0){
-      const expected = calcul_final_expected_activity( [...formatFront2Back(this.state.dataSource)], this.getRpSetting() )
+      const expected = expect(this.state.dataSource, this.getRpSetting())
       let newPatientsList = [...this.state.dataSource].map((x,i) => {
         return {
           ...x,
@@ -345,9 +264,7 @@ class App extends React.Component {
 
 
   sortPatients() {
-    const formatedPatientInfos = formatFront2Back(this.state.dataSource);
-    const sorted_list = sort_patient_list(formatedPatientInfos,this.getRpSetting())
-    const newFormatedPatients = formatBack2Front(sorted_list);
+    const newFormatedPatients = sort(this.state.dataSource, this.getRpSetting())
 
     this.setState({ dataSource: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted")
@@ -760,7 +677,8 @@ class App extends React.Component {
             </Content>
 
             <Footer style={{ textAlign: "center" }}>
-              RP optimizer 2021 Created by Anis Snoussi & Walid Snoussi
+              RP optimizer {new Date().getFullYear()} Created by Anis Snoussi & Walid Snoussi < br/>
+              Version Ref : {process.env.VERCEL_GIT_COMMIT_SHA || 'local'}
             </Footer>
           </Layout>
         </Layout>

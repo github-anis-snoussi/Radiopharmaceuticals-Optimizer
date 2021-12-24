@@ -26,8 +26,8 @@ import {
 import arrayMove from "array-move";
 import { DeleteOutlined, EditOutlined, ExperimentOutlined } from "@ant-design/icons";
 
-import { formatFront2Back, formatBack2Front } from "../utils/utils";
-import {sorting_after_every_injection} from "../utils/sort_patient_list"
+
+import { clean } from "../utils/sort_patient_list"
 
 const { Text } = Typography;
 
@@ -49,10 +49,7 @@ function confirmInjection(record, dataSource, updateData) {
       }
     });
 
-    // we clean the list
-    const formatedPatientInfos = formatFront2Back(dataSource);
-    sorting_after_every_injection(formatedPatientInfos)
-    const newFormatedPatients = formatBack2Front(formatedPatientInfos);
+    const newFormatedPatients = clean(dataSource)
     updateData([...newFormatedPatients]);
     message.success("Patient injected");
   }
@@ -116,7 +113,7 @@ class PatientsTable extends React.Component {
   tableColums = () => {
     const columns = [
       {
-        title: "Sort",
+        title: "",
         dataIndex: "sort",
         width: 30,
         className: "drag-visible",

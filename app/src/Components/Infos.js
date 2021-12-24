@@ -35,7 +35,6 @@ class Infos extends React.Component {
 
   onFinish(values) {
     let feedback = {...values, stars : this.state.stars};
-    console.log(feedback);
 
     const templateParams = {
       to_name: "Anis",
@@ -49,8 +48,8 @@ class Infos extends React.Component {
     // plus, this is an opensource project to help cancer patients the way I could
     // that's why I wont bother securing the api key.
     send(
-      'service_uu2w7kd',
-      'template_59e1sxx',
+      process.env.REACT_APP_EMAILJS_SERVICE,
+      process.env.REACT_APP_EMAILJS_TEMPLATE,
       {...templateParams}
     )
 
