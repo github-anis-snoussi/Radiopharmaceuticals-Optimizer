@@ -1,35 +1,20 @@
+import { message } from "antd";
+import { clean } from "./sort_patient_list"
 
-export const formatFront2Back = (formatedPatientInfos) => {
-  return formatedPatientInfos.map((e) => {
-    return {
-      // patient infos
-      dose: e.dose,
-      scan_time: e.duration,
-      inj_time: e.realInjectionTime,
-      injected: e.status === "waiting" ? false : true,
 
-      // secondary infos
-      key: e.key, // should not change (identifies patient)
-      index: e.index, // should not change (identifies patient)
-      status: e.status,
-      name: e.name,
-    };
-  });
-};
+export function confirmInjection(record, dataSource, updateData) {
+  if (record.realInjectionTime === null) {
+    message.warning("Operation aborted");
+  } else {
+    // we change the status to injected
+    dataSource.forEach(function (part, index, theArray) {
+      if (theArray[index].index === record.index) {
+        theArray[index].status = "done";
+      }
+    });
 
-export const formatBack2Front = (PatientInfos) => {
-  return PatientInfos.map((e) => {
-    return {
-      // patient infos
-      dose: e.dose,
-      duration: e.scan_time,
-      realInjectionTime: e.inj_time,
-
-      // secondary infos
-      key: e.key, // should not change (identifies patient)
-      index: e.index, // should not change (identifies patient)
-      status: e.status,
-      name: e.name,
-    };
-  });
-};
+    const newFormatedPatients = clean(dataSource)
+    updateData([...newFormatedPatients]);
+    message.success("Patient injected");
+  }
+}

@@ -1,7 +1,3 @@
-import { formatFront2Back, formatBack2Front} from "./utils"
-
-
-
 const diff_time = (date1, date2) => {
     const diffMs = Math.abs(date1 - date2);
     const diff_in_minutes = Math.round(diffMs / 60000);
@@ -133,6 +129,7 @@ const sort_patient_list = (patient_list_og, rp_settings) => {
     return sorted_list;
 }
 
+
 const activity_now = (patient_list, rp_settings) => {
 
     let now_dict = {}
@@ -180,11 +177,13 @@ const activity_now = (patient_list, rp_settings) => {
     return now_dict
 }
 
+
 const sorting_after_every_injection = (patient_list) => {
     patient_list.sort((a, b) => {
         return (a.inj_time===null)-(b.inj_time===null) || +(a.inj_time>b.inj_time)||-(a.inj_time<b.inj_time);
     });
 }
+
 
 const calcul_final_expected_activity = (patient_list, rp_settings) => {
 
@@ -235,6 +234,47 @@ const calcul_final_expected_activity = (patient_list, rp_settings) => {
     return expected
 
 }
+
+
+// ++++++++++++++++++++++++++++++++++++++++
+// +++++++++ HELPER FUNCTIONS  ++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++
+
+
+
+const formatFront2Back = (formatedPatientInfos) => {
+    return formatedPatientInfos.map((e) => {
+      return {
+        // patient infos
+        dose: e.dose,
+        scan_time: e.duration,
+        inj_time: e.realInjectionTime,
+        injected: e.status === "waiting" ? false : true,
+  
+        // secondary infos
+        index: e.index, // should not change (identifies patient)
+        status: e.status,
+        name: e.name,
+      };
+    });
+};
+  
+const formatBack2Front = (PatientInfos) => {
+    return PatientInfos.map((e) => {
+        return {
+        // patient infos
+        dose: e.dose,
+        duration: e.scan_time,
+        realInjectionTime: e.inj_time,
+
+        // secondary infos
+        index: e.index, // should not change (identifies patient)
+        status: e.status,
+        name: e.name,
+        };
+    });
+};
+  
 
 
 

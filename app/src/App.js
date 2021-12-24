@@ -3,9 +3,11 @@ import React from "react";
 import "./App.css";
 import "antd/dist/antd.css";
 
+import Infos from "./Pages/Infos";
+
+
 import AppHeader from "./Components/AppHeader";
 import PatientsTable from "./Components/PatientsTable";
-import Infos from "./Components/Infos";
 import Expectations from "./Components/Expectations";
 
 import {
@@ -28,7 +30,7 @@ import {
 
 import {
   UserAddOutlined,
-  ScheduleOutlined,
+  ExperimentOutlined,
   InfoCircleOutlined,
   BankOutlined,
   FileSearchOutlined,
@@ -82,11 +84,6 @@ const initialState = {
   now : {},
   // interval for updating the now object
   intervalId : null
-}
-
-
-function cancelOp() {
-  return;
 }
 
 class App extends React.Component {
@@ -229,7 +226,6 @@ class App extends React.Component {
         duration: patientScanDuration,
         status: "waiting",
         index: this.state.modifiedPatientIndex,
-        key: (this.state.modifiedPatientIndex + 1).toString(),
         realInjectionTime: null,
       };
 
@@ -250,7 +246,6 @@ class App extends React.Component {
         duration: patientScanDuration,
         status: "waiting",
         index: this.state.currentPatientIndex,
-        key: (this.state.currentPatientIndex + 1).toString(),
         realInjectionTime: null,
       };
 
@@ -594,14 +589,16 @@ class App extends React.Component {
               defaultSelectedKeys={["1"]}
               onSelect={this.selectMenuItem}
             >
-              <Menu.Item key="1" icon={<ScheduleOutlined />}>
-                Patients List
+              <Menu.Item key="1" icon={<ExperimentOutlined />}>
+                RP Optimizer
               </Menu.Item>
               <Menu.Item key="2" icon={<InfoCircleOutlined />}>
                 Infos
               </Menu.Item>
             </Menu>
           </Sider>
+
+
           <Layout>
             <Header
               className="site-layout-sub-header-background"
@@ -638,7 +635,6 @@ class App extends React.Component {
                         title={"Delete All ?"}
                         icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
                         onConfirm={this.deletAllPatients}
-                        onCancel={cancelOp}
                         okText="Delete All Patients"
                         okButtonProps={{
                           danger: true,
@@ -678,7 +674,7 @@ class App extends React.Component {
 
             <Footer style={{ textAlign: "center" }}>
               RP optimizer {new Date().getFullYear()} Created by Anis Snoussi & Walid Snoussi < br/>
-              Version Ref : {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)}
+              Version Ref : {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA ? process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8) : 'no-ref'}
             </Footer>
           </Layout>
         </Layout>
