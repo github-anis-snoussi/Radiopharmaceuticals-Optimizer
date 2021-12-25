@@ -2,7 +2,7 @@
 
 echo "VERCEL_ENV: $VERCEL_ENV"
 
-if [[ "$VERCEL_GIT_COMMIT_REF" == "master" ]] ; then
+if [[ "$REACT_APP_VERCEL_GIT_COMMIT_REF" == "master" ]] ; then
   # Proceed with the build
   echo "✅ - Build can proceed"
   exit 1;
