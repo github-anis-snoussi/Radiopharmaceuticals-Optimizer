@@ -1,0 +1,17 @@
+name: e2e
+# event dispateched by vercel when deployment starts and ends.
+on: [deployment_status]
+jobs:
+  e2e:
+    # only runs this job on successful deploy
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Run Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./app
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
