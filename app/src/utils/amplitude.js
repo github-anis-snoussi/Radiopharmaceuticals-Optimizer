@@ -17,7 +17,10 @@ export const setAmplitudeUserProperties = properties => {
 };
 
 export const sendAmplitudeData = (eventType, eventProperties) => {
-  amplitude.getInstance().logEvent(eventType, eventProperties);
+    // only in prod
+    if(process.env.REACT_APP_VERCEL_ENV === "production"){
+        amplitude.getInstance().logEvent(eventType, eventProperties);
+    }
 };
 
 
