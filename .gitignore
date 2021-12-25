@@ -127,3 +127,6 @@ dist
 .pnp.*
 
 .DS_Store
+
+app/cypress/videos
+app/cypress/screenshots
