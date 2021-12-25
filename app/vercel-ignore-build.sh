@@ -4,7 +4,7 @@ echo "VERCEL_ENV: $VERCEL_ENV"
 echo "VERCEL_GIT_COMMIT_REF: $VERCEL_GIT_COMMIT_REF"
 
 # VERIFY IF VERCEL HAS PYTHON :
-echo "hello from python" | python -c "import sys; print sys.stdin")
+echo "hello from python" | python -c "import sys; print sys.stdin"
 
 if [[ "$VERCEL_GIT_COMMIT_REF" == "master" ]] ; then
   # Proceed with the build
