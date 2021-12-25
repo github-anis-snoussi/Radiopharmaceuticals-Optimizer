@@ -40,12 +40,10 @@ import {
   ExclamationCircleOutlined
 } from "@ant-design/icons";
 import moment from 'moment';
-import { sort, now, expect} from "./utils/sort_patient_list"
+import { sort, now, expect } from "./utils/sort_patient_list"
+import { setAmplitudeUserId, sendAmplitudeData, amplitudeLogsTypes } from "./utils/amplitude"
+import { v4 as uuidv4 } from 'uuid';
 
-
-// I simply dont care.
-import{ init } from 'emailjs-com';
-init(process.env.REACT_APP_EMAILSJS_USER);
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -84,7 +82,10 @@ const initialState = {
   expected : {},
   now : {},
   // interval for updating the now object
-  intervalId : null
+  intervalId : null,
+
+  // the user unique id for amplitude
+  uid : uuidv4()
 }
 
 class App extends React.Component {
@@ -124,6 +125,9 @@ class App extends React.Component {
     this.generateNowStats()
     this.generateExpectations()
 
+    // init the amplitude user
+    setAmplitudeUserId(this.state.uid)
+
 
   }
   
@@ -158,7 +162,7 @@ class App extends React.Component {
       currentPatientIndex: 0,
       expected : {},
       now : {},
-    })
+    }, () => sendAmplitudeData(amplitudeLogsTypes.DELETE_ALL_PATIENTS))
   }
 
 
@@ -213,6 +217,7 @@ class App extends React.Component {
       isModalVisible: false
     }), () => {
       message.success("Session initialized.");
+      sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS)
     })
 
   };
@@ -239,7 +244,10 @@ class App extends React.Component {
         isDrawerVisible: false,
         currentPatientIndex: state.currentPatientIndex + 1,
         isModifyingPatient: false,
-      }), () => this.generateExpectations());
+      }), () => {
+        this.generateExpectations();
+        sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT)
+      });
     } else {
       const newPatient = {
         name: patienName,
@@ -254,7 +262,10 @@ class App extends React.Component {
         dataSource: [...state.dataSource, newPatient],
         isDrawerVisible: false,
         currentPatientIndex: state.currentPatientIndex + 1,
-      }), () => this.generateExpectations());
+      }), () => {
+        this.generateExpectations()
+        sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT)
+      });
     }
   }
 
@@ -265,6 +276,7 @@ class App extends React.Component {
     this.setState({ dataSource: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted")
       this.generateExpectations()
+      sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS)
     });
 
   }
@@ -277,7 +289,10 @@ class App extends React.Component {
     let newPatierntsData = this.state.dataSource.filter(
       (p) => p.index !== record.index
     );
-    this.setState({ dataSource: [...newPatierntsData] }, () => this.generateExpectations());
+    this.setState({ dataSource: [...newPatierntsData] }, () => {
+      this.generateExpectations();
+      sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT)
+    });
   }
 
   modifyPatient(record) {
