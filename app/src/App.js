@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./App.css";
+import "./index.css";
 import "antd/dist/antd.css";
 
 import Infos from "./Pages/Infos";
