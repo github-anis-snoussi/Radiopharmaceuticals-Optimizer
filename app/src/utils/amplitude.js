@@ -19,7 +19,10 @@ export const setAmplitudeUserProperties = properties => {
 export const sendAmplitudeData = (eventType, eventProperties) => {
     // only in prod
     if(process.env.REACT_APP_VERCEL_ENV === "production"){
-        amplitude.getInstance().logEvent(eventType, eventProperties);
+        // due to limitations of the free plan, I'm only logging : NEW_PATIENT | INJECT_PATIENT
+        if ([amplitudeLogsTypes.NEW_PATIENT, amplitudeLogsTypes.INJECT_PATIENT].includes(eventType)){
+          amplitude.getInstance().logEvent(eventType, eventProperties);
+        }
     }
 };
 
