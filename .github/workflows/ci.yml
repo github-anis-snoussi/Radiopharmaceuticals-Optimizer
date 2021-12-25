@@ -1,5 +1,5 @@
 name: e2e
-# event dispateched by vercel 
+# event dispateched by vercel when deployment starts and ends.
 on: [deployment_status]
 jobs:
   e2e:
@@ -11,5 +11,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Run Cypress
         uses: cypress-io/github-action@v2
+        with:
+          path: app
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
