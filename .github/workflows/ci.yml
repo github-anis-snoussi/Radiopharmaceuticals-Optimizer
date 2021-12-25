@@ -4,7 +4,8 @@ on: [deployment_status]
 jobs:
   e2e:
     # only runs this job on successful deploy
-    if: github.event.deployment_status.state == 'success'
+    # no need to run again when I approve the pull request
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
