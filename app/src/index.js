@@ -19,6 +19,9 @@ Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
+    ignoreErrors: [
+        "ResizeObserver loop limit exceeded"
+    ],
   });
 
 ReactDOM.render(<App />, document.getElementById("root"));
