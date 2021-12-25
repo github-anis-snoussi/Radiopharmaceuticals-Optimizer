@@ -1,4 +1,4 @@
-name: e2e
+name: ci
 # event dispateched by vercel when deployment starts and ends.
 on: [deployment_status]
 jobs:
