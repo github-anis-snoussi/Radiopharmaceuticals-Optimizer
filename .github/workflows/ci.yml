@@ -12,6 +12,6 @@ jobs:
       - name: Run Cypress
         uses: cypress-io/github-action@v2
         with:
-          spec: app/cypress/integration/*
+          project: ./app
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
