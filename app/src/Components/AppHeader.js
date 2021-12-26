@@ -1,7 +1,6 @@
 import React from "react";
 import { Tag, PageHeader } from "antd";
-import HeaderStatistics from "./HeaderStatistics"
-
+import HeaderStatistics from "./HeaderStatistics";
 
 const HeaderContent = ({ children, extra }) => (
   <div className="content">
@@ -10,9 +9,16 @@ const HeaderContent = ({ children, extra }) => (
   </div>
 );
 
-
-const AppHeader = ({ name, children, rp_activity, mesure_time, rp_vol, rp_half_life, now, total }) => {
-
+const AppHeader = ({
+  name,
+  children,
+  rp_activity,
+  mesure_time,
+  rp_vol,
+  rp_half_life,
+  now,
+  total,
+}) => {
   return (
     <PageHeader
       className="site-page-header-responsive"
@@ -33,7 +39,6 @@ const AppHeader = ({ name, children, rp_activity, mesure_time, rp_vol, rp_half_l
       </HeaderContent>
     </PageHeader>
   );
-
-}
+};
 
 export default AppHeader;

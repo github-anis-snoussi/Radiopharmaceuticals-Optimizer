@@ -2,13 +2,12 @@ import React from "react";
 import { Table } from "antd";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
 import arrayMove from "array-move";
-import TableColums from "./TableColums"
+import TableColums from "./TableColums";
 
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
 class PatientsTable extends React.Component {
-
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { dataSource } = this.props;
     if (dataSource[newIndex].status !== "waiting") {
@@ -22,7 +21,7 @@ class PatientsTable extends React.Component {
       // console.log('Sorted items: ', newData);
       this.props.updateData(newData);
     }
-    this.props.generateExpectations()
+    this.props.generateExpectations();
   };
 
   DraggableContainer = (props) => (
@@ -54,14 +53,19 @@ class PatientsTable extends React.Component {
     updateData([...dataSource]);
   };
 
-
   render() {
     const { modifyPatient, deletePatient, dataSource, updateData } = this.props;
     return (
       <Table
         pagination={false}
         dataSource={dataSource}
-        columns={TableColums(modifyPatient, deletePatient, this.updateRecordMeasureTime, dataSource, updateData)}
+        columns={TableColums(
+          modifyPatient,
+          deletePatient,
+          this.updateRecordMeasureTime,
+          dataSource,
+          updateData
+        )}
         rowKey="index"
         components={{
           body: {
