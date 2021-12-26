@@ -1,10 +1,18 @@
 #!/bin/bash
 
+
+# Some logging :
+echo "📄 - VERCEL_ENV: $VERCEL_ENV"
+echo "📄 - VERCEL_GIT_REPO_OWNER: $VERCEL_GIT_REPO_OWNER"
+echo "📄 - VERCEL_GIT_REPO_SLUG: $VERCEL_GIT_REPO_SLUG"
+echo "📄 - VERCEL_GIT_COMMIT_REF: $VERCEL_GIT_COMMIT_REF"
+
 # tell vercel only to deploy master branch, or from pull requests from dev
 # PITFALL : if ANY pull request is open while a commit is pushed to dev branch, it will deploy, but since I'm the only person working on this project, this is not an issue.
 
 if [[ "$VERCEL_GIT_COMMIT_REF" == "master" ]] ; then
   # Proceed with the build
+  echo "📄 - We are on master branch"
   echo "✅ - Build can proceed"
   exit 1;
 
@@ -30,9 +38,11 @@ else
    )"
 
   if [[ "$output" == "True" ]] ; then
+    echo "📄 - this is a PR from $VERCEL_GIT_COMMIT_REF"
     echo "✅ - Build can proceed"
     exit 1;
   else
+    echo "📄 - this is not a PR from $VERCEL_GIT_COMMIT_REF"
     echo "🛑 - Build cancelled"
     exit 0;
   fi
