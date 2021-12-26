@@ -1,0 +1,20 @@
+name: ci
+# event dispateched by vercel when deployment starts and ends.
+on: [deployment_status]
+jobs:
+  e2e:
+    # only runs this job on successful deploy
+    # no need to run again when I approve the pull request
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Run Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./app
+          record: true
+        env:
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
