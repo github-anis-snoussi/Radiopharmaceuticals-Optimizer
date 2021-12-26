@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./App.css";
 import "./index.css";
@@ -12,70 +12,62 @@ import RPOptimizer from "./Pages/RPOptimizer";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { sideMenuKey: 1 };
-    this.selectMenuItem = this.selectMenuItem.bind(this);
-  }
+const App = () => {
+  const [sideMenuKey, setSideMenuKey] = useState(1);
 
-  selectMenuItem({ key }) {
-    this.setState({ sideMenuKey: parseInt(key, 10) });
-  }
+  return (
+    <>
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sider breakpoint="lg" collapsedWidth="0">
+          <AppLogo />
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            onSelect={(selection) => {
+              setSideMenuKey(parseInt(selection.key, 10));
+            }}
+          >
+            <Menu.Item key="1" icon={<ExperimentOutlined />}>
+              RP Optimizer
+            </Menu.Item>
+            <Menu.Item key="2" icon={<InfoCircleOutlined />}>
+              Infos
+            </Menu.Item>
+          </Menu>
+        </Sider>
 
-  render() {
-    return (
-      <>
-        <Layout style={{ minHeight: "100vh" }}>
-          <Sider breakpoint="lg" collapsedWidth="0">
-            <AppLogo />
-            <Menu
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={["1"]}
-              onSelect={this.selectMenuItem}
+        <Layout>
+          <Header
+            className="site-layout-sub-header-background"
+            style={{ padding: 0 }}
+          />
+
+          <Content style={{ margin: "24px 16px 0" }}>
+            <div
+              className="site-layout-background"
+              style={{ padding: 24, minHeight: 360 }}
             >
-              <Menu.Item key="1" icon={<ExperimentOutlined />}>
-                RP Optimizer
-              </Menu.Item>
-              <Menu.Item key="2" icon={<InfoCircleOutlined />}>
-                Infos
-              </Menu.Item>
-            </Menu>
-          </Sider>
+              {sideMenuKey === 1 ? (
+                <RPOptimizer />
+              ) : sideMenuKey === 2 ? (
+                <Infos />
+              ) : null}
+            </div>
+          </Content>
 
-          <Layout>
-            <Header
-              className="site-layout-sub-header-background"
-              style={{ padding: 0 }}
-            />
-
-            <Content style={{ margin: "24px 16px 0" }}>
-              <div
-                className="site-layout-background"
-                style={{ padding: 24, minHeight: 360 }}
-              >
-                {this.state.sideMenuKey === 1 ? (
-                  <RPOptimizer />
-                ) : this.state.sideMenuKey === 2 ? (
-                  <Infos />
-                ) : null}
-              </div>
-            </Content>
-
-            <Footer style={{ textAlign: "center" }}>
-              RP optimizer {new Date().getFullYear()} Created by Anis Snoussi &
-              Walid Snoussi <br />
-              Version Ref :{" "}
-              {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA
-                ? process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)
-                : "no-ref"}
-            </Footer>
-          </Layout>
+          <Footer style={{ textAlign: "center" }}>
+            RP optimizer {new Date().getFullYear()} Created by Anis Snoussi &
+            Walid Snoussi <br />
+            Version Ref :{" "}
+            {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA
+              ? process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)
+              : "no-ref"}
+          </Footer>
         </Layout>
-      </>
-    );
-  }
-}
+      </Layout>
+    </>
+  );
+};
 
 export default App;
