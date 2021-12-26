@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Set url # we calculate manually the preview url
-        run: ./github/setuup_preview_url.sh ${{ github.event.pull_request.head.sha }}
+        run: ./.github/setuup_preview_url.sh ${{ github.event.pull_request.head.sha }}
       - name: Run Cypress
         uses: cypress-io/github-action@v2
         with:
