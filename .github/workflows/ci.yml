@@ -9,13 +9,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Set url # we calculate manually the preview url
-        run: ./.github/setuup_preview_url.sh ${{ github.event.pull_request.head.sha }}
       - name: Run Cypress
         uses: cypress-io/github-action@v2
         with:
           working-directory: ./app
           record: true
         env:
-          CYPRESS_BASE_URL: ${{ env.PREVIEW_URL }}
+          CYPRESS_BASE_URL: https://rpo-git-dev-ansnoussi.vercel.app/
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
