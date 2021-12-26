@@ -31,13 +31,15 @@ else
     }
   }"
   script="$(echo $script)"   # the query should be a one-liner, without newlines
-  output="$(curl -s -H 'Content-Type: application/json' \
+  curl_output="$(curl -s -H 'Content-Type: application/json' \
    -H "Authorization: bearer $GITHUB_TOKEN" \
-   -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql \
-   | python -c "import sys, json; print any(\"$VERCEL_GIT_COMMIT_REF\" == node['node']['headRefName'] for node in json.load(sys.stdin)['data']['search']['edges'])"
-   )"
+   -X POST -d "{ \"query\": \"$script\"}" https://api.github.com/graphql)"
 
-  if [[ "$output" == "True" ]] ; then
+  echo "📄 - CURL OUTPUT: $curl_output"
+
+  is_pull_from_dev="$(echo $curl_output | python -c "import sys, json; print any(\"$VERCEL_GIT_COMMIT_REF\" == node['node']['headRefName'] for node in json.load(sys.stdin)['data']['search']['edges'])")"
+
+  if [[ "$is_pull_from_dev" == "True" ]] ; then
     echo "📄 - this is a PR from $VERCEL_GIT_COMMIT_REF"
     echo "✅ - Build can proceed"
     exit 1;
