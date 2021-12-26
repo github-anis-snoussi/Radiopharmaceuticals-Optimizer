@@ -62,7 +62,7 @@ const initialState = {
   sideMenuKey: 1,
 
   //patients list
-  dataSource: [],
+  patientsList: [],
 
   // new patient input (stupid, I know)
   isModifyingPatient: false,
@@ -147,7 +147,7 @@ class Dashboard extends React.Component {
   deletAllPatients = () => {
     this.setState(
       {
-        dataSource: [],
+        patientsList: [],
         isModifyingPatient: false,
         modifiedPatientIndex: 0,
         patienName: "",
@@ -162,16 +162,16 @@ class Dashboard extends React.Component {
   };
 
   generateNowStats = () => {
-    if (this.state.dataSource?.length > 0) {
-      const now_dict = now(this.state.dataSource, this.getRpSetting());
+    if (this.state.patientsList?.length > 0) {
+      const now_dict = now(this.state.patientsList, this.getRpSetting());
       this.setState({ now: { ...now_dict } });
     }
   };
 
   generateExpectations = () => {
-    if (this.state.dataSource?.length > 0) {
-      const expected = expect(this.state.dataSource, this.getRpSetting());
-      let newPatientsList = [...this.state.dataSource].map((x, i) => {
+    if (this.state.patientsList?.length > 0) {
+      const expected = expect(this.state.patientsList, this.getRpSetting());
+      let newPatientsList = [...this.state.patientsList].map((x, i) => {
         return {
           ...x,
           expected_injection_time: new Date(
@@ -185,7 +185,7 @@ class Dashboard extends React.Component {
         };
       });
       this.setState(
-        { expected: { ...expected }, dataSource: [...newPatientsList] },
+        { expected: { ...expected }, patientsList: [...newPatientsList] },
         () => {
           this.generateNowStats();
         }
@@ -241,8 +241,8 @@ class Dashboard extends React.Component {
 
       this.setState(
         (state) => ({
-          dataSource: [
-            ...state.dataSource.map((p) =>
+          patientsList: [
+            ...state.patientsList.map((p) =>
               p.index === this.state.modifiedPatientIndex
                 ? { ...newPatient }
                 : p
@@ -269,7 +269,7 @@ class Dashboard extends React.Component {
 
       this.setState(
         (state) => ({
-          dataSource: [...state.dataSource, newPatient],
+          patientsList: [...state.patientsList, newPatient],
           isDrawerVisible: false,
           currentPatientIndex: state.currentPatientIndex + 1,
         }),
@@ -283,11 +283,11 @@ class Dashboard extends React.Component {
 
   sortPatients() {
     const newFormatedPatients = sort(
-      this.state.dataSource,
+      this.state.patientsList,
       this.getRpSetting()
     );
 
-    this.setState({ dataSource: [...newFormatedPatients] }, () => {
+    this.setState({ patientsList: [...newFormatedPatients] }, () => {
       message.success("Patient List sorted");
       this.generateExpectations();
       sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS);
@@ -299,10 +299,10 @@ class Dashboard extends React.Component {
   }
 
   deletePatient(record) {
-    let newPatierntsData = this.state.dataSource.filter(
+    let newPatierntsData = this.state.patientsList.filter(
       (p) => p.index !== record.index
     );
-    this.setState({ dataSource: [...newPatierntsData] }, () => {
+    this.setState({ patientsList: [...newPatierntsData] }, () => {
       this.generateExpectations();
       sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT);
     });
@@ -683,9 +683,9 @@ class Dashboard extends React.Component {
                     </AppHeader>
 
                     <PatientsTable
-                      dataSource={this.state.dataSource}
+                      patientsList={this.state.patientsList}
                       updateData={(newData) =>
-                        this.setState({ dataSource: newData }, () =>
+                        this.setState({ patientsList: newData }, () =>
                           this.generateExpectations()
                         )
                       }
