@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # tell vercel only to deploy master branch, or from pull requests from dev
+# PITFALL : if ANY pull request is open while a commit is pushed to dev branch, it will deploy, but since I'm the only person working on this project, this is not an issue.
 
 if [[ "$VERCEL_GIT_COMMIT_REF" == "master" ]] ; then
   # Proceed with the build
