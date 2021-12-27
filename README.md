@@ -1,6 +1,4 @@
-<img align="right" width="200" src="./docs/bw.png">
-<h1> Rp Optimizer </h1>
-<br>
+<h1  align="center"> Rp Optimizer </h1>
 
 <p align="center">
     <a href="#" alt="React">
@@ -22,7 +20,8 @@
 
 This app was designed and built with one goal in mind : **_use IT to make an impact and give back to the community as much as possible._**
 
-#### Case Study
+<img align="right" width="200" src="./docs/bw.png">
+<h3> Case Study </h3>
 
 The Sahloul University Hospital ,being the first Hospital to make use of this app, had a great deal of impact on the development process. In fact this app was built solely for Sahloul University Hospital but then I decided to open source it.
 
@@ -48,19 +47,6 @@ The current project is using the following toolkit:
 - [Vercel](https://vercel.com) : for deploying the app to main domain in the production environment, and each commit to a temporary url in the preview environment.
 - [Cypress Dashboard](https://vercel.com) : for running e2e tests in the CI pipeline and uploading video of the tests to an online dashboard.
 
-#### Typical contributing process
-
-1- A change is commited to the `dev` branch.
-2- Vercel detects the commit and deploys to a temporary url that is accessible to test the changes live.
-3- I create a PR to merge with `master` branch
-4- Cypress detects the PR, runs the e2e tests and uploads a video of the execution the Cypress dashboard, and then replies to the PR with the test results.
-5- Now, that Branch protection rules are satisfied, I can successfully merge the PR.
-6- Vercel detects the merge and deploys the project to main url.
-
-**PS**: Branch protection rules are :
-1- Require a pull request before merging to master
-2- Require status checks to pass before merging (the Cypress e2e tests)
-
 ## Installation
 
 Use the node package manager [npm](https://www.npmjs.com/) to install the RP-Optimizer project and run it.
@@ -85,6 +71,20 @@ npm run test
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
+
+#### Typical contributing process
+
+1. A change is commited to the `dev` branch.
+2. Vercel detects the commit and deploys to a temporary url that is accessible to test the changes live.
+3. I create a PR to merge with `master` branch
+4. Cypress detects the PR, runs the e2e tests and uploads a video of the execution the Cypress dashboard, and then replies to the PR with the test results.
+5. Now, that Branch protection rules are satisfied, I can successfully merge the PR.
+6. Vercel detects the merge and deploys the project to main url.
+
+**PS**: Branch protection rules are :
+
+1. Require a pull request before merging to master
+2. Require status checks to pass before merging (the Cypress e2e tests)
 
 ## 📝 License
 
