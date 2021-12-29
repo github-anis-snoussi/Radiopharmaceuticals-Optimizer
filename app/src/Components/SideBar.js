@@ -3,6 +3,7 @@ import { Layout } from "antd";
 import AppLogo from "./AppLogo";
 
 const SideBar = ({ menu }) => {
+
   return (
     <Layout.Sider
       className="sidebar"
@@ -10,7 +11,7 @@ const SideBar = ({ menu }) => {
       theme="dark"
       collapsedWidth={0}
       trigger={null}
-      style={{ height: document.documentElement.scrollHeight }}
+      style={{ height: "100vh", position : 'fixed', width : 200 }}
     >
       <AppLogo />
       {menu}

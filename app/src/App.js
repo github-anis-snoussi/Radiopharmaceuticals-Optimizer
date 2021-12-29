@@ -7,6 +7,8 @@ import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { ExperimentOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import useMediaQuery from "./hooks/useMediaQuery"
+
 import Infos from "./Pages/Infos";
 import RPOptimizer from "./Pages/RPOptimizer";
 
@@ -22,6 +24,13 @@ const { Content, Footer } = Layout;
 const App = () => {
   const [sideMenuKey, setSideMenuKey] = useState(1);
   const { currentTheme } = useThemeSwitcher();
+
+  // this is stupid, but I am bored with this css shit.
+  const margin = useMediaQuery(
+      '(max-width: 991.9px)',
+      0,
+      200
+    );
 
   const MyMenu = (
     <Menu
@@ -46,7 +55,7 @@ const App = () => {
       <NavBar menu={MyMenu} />
       <Layout style={{ minHeight: "100vh" }}>
         <SideBar menu={MyMenu} />
-        <Layout>
+        <Layout style={{marginLeft : margin}} >
           <Content style={{ margin: "24px 16px 0" }}>
             <div
               className="site-layout-background"
