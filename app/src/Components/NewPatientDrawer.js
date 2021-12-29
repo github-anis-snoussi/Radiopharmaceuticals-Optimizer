@@ -12,7 +12,7 @@ const NewPatientDrawer = ({
 }) => {
   return (
     <Drawer
-      title="Create a new account"
+      title="Add new Patient"
       width={720}
       onClose={closeDrawer}
       visible={isDrawerVisible}
