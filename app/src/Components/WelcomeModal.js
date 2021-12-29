@@ -12,12 +12,10 @@ import {
 } from "antd";
 import { BankOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { withContext } from "../utils/savableContext";
 
 const { Text } = Typography;
 
-const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, RPO }) => {
-  const { settings, setSettings } = RPO;
+const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, setSettings }) => {
 
   return (
     <Modal
@@ -160,4 +158,4 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, RPO }) => {
   );
 };
 
-export default withContext(WelcomeModal);
+export default WelcomeModal;

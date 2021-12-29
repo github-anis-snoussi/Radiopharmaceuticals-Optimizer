@@ -377,6 +377,8 @@ class RPOptimizer extends React.Component {
           isModalVisible={this.state.isModalVisible}
           closeModal={this.closeModal}
           confirmSettings={this.confirmSettings}
+          settings={this.getRpSetting()}
+          setSettings={(settings) => this.setState({...settings})}
         />
       </>
     );
