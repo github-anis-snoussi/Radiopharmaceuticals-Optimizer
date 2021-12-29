@@ -1,6 +1,7 @@
 import React from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const NewPatientDrawer = ({
   closeDrawer,
@@ -12,10 +13,15 @@ const NewPatientDrawer = ({
   setDuration,
 }) => {
   const { currentTheme } = useThemeSwitcher();
+  const drawerWidth = useMediaQuery(
+    "(max-width: 767px)",
+    window.innerWidth,
+    700
+  );
   return (
     <Drawer
       title="Add new Patient"
-      width={720}
+      width={drawerWidth}
       onClose={closeDrawer}
       visible={isDrawerVisible}
       bodyStyle={{
