@@ -35,7 +35,6 @@
   z-index: 9999 !important;
 }
 
-
 .sidebar {
   height: 100vh;
 }
@@ -61,12 +60,6 @@
   margin-left: 1rem;
 }
 
-
 .ant-drawer-body {
   background-color: #001528;
 }
-
-
-
-
-
