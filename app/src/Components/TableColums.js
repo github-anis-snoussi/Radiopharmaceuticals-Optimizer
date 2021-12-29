@@ -49,7 +49,7 @@ const TableColums = (
     },
     {
       title: "Name",
-      width: 130,
+      width: 80,
       fixed: 'left',
       dataIndex: "name",
       key: "name",
