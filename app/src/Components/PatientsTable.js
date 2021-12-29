@@ -59,6 +59,7 @@ class PatientsTable extends React.Component {
     return (
       <Table
         pagination={false}
+        scroll={{ x: 1000 }}
         dataSource={patientsList}
         columns={TableColums(
           modifyPatient,
