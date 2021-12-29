@@ -1,10 +1,12 @@
 import React from "react";
 import { Typography, Divider } from "antd";
 import FeedbackForm from "../Components/FeedbackForm";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 
 const { Title, Paragraph, Text } = Typography;
 
 const Infos = () => {
+  const { currentTheme } = useThemeSwitcher();
   return (
     <>
       <Typography>
@@ -24,7 +26,7 @@ const Infos = () => {
             </Paragraph>
           </div>
           <img
-            src={"logo-filled-black.png"}
+            src={currentTheme === 'dark' ? "logo-filled-white.png" : "logo-filled-black.png" }
             style={{ height: 150, aspectRatio: 1 }}
             alt="app-logo"
           />

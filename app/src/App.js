@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 
 import { Layout, Menu } from "antd";
 import { ExperimentOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 import AppLogo from "./Components/AppLogo";
 import Infos from "./Pages/Infos";
 import RPOptimizer from "./Pages/RPOptimizer";
@@ -14,6 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const App = () => {
   const [sideMenuKey, setSideMenuKey] = useState(1);
+  const { currentTheme } = useThemeSwitcher();
 
   return (
     <>
@@ -46,7 +48,7 @@ const App = () => {
           <Content style={{ margin: "24px 16px 0" }}>
             <div
               className="site-layout-background"
-              style={{ padding: 24, minHeight: 360 }}
+              style={{ padding: 24, minHeight: 360, backgroundColor : currentTheme === 'dark' ? '#121212' : 'white' }}
             >
               {sideMenuKey === 1 ? (
                 <RPOptimizer />

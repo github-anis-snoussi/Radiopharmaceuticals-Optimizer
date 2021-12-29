@@ -325,7 +325,7 @@ class RPOptimizer extends React.Component {
             key="3"
             onClick={() => this.setState({ isModalVisible: true })}
           >
-            <SettingOutlined /> RP Settings
+            <SettingOutlined /> Settings
           </Button>
 
           <Popconfirm
