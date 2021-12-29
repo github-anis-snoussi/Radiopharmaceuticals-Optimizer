@@ -2,14 +2,26 @@ import React from "react";
 import { Typography, Divider } from "antd";
 import FeedbackForm from "../Components/FeedbackForm";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import useMediaQuery from "../hooks/useMediaQuery"
 
 const { Title, Paragraph, Text } = Typography;
 
 const Infos = () => {
   const { currentTheme } = useThemeSwitcher();
+
+  const appLogo = useMediaQuery(
+    '(max-width: 767px)',
+    null,
+    <img
+      src={currentTheme === 'dark' ? "logo-filled-white.png" : "logo-filled-black.png" }
+      style={{ height: 150, aspectRatio: 1 }}
+      alt="app-logo"
+    />
+  );
+
   return (
     <>
-      <Typography>
+      <Typography >
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div>
             <Title>Radiopharmaceuticals Optimizer</Title>
@@ -25,11 +37,7 @@ const Infos = () => {
               .
             </Paragraph>
           </div>
-          <img
-            src={currentTheme === 'dark' ? "logo-filled-white.png" : "logo-filled-black.png" }
-            style={{ height: 150, aspectRatio: 1 }}
-            alt="app-logo"
-          />
+          {appLogo}
         </div>
         <Title level={2}>Case Study</Title>
         <Paragraph>
