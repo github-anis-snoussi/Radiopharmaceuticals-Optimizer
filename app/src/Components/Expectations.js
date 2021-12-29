@@ -78,7 +78,7 @@ const Expectations = ({
             }}
           >
             <Statistic
-              title="Remaining Activity Time"
+              title="Expectations at :"
               value={
                 remaining_activity_time
                   ? new Date(remaining_activity_time).toLocaleTimeString(
