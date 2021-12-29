@@ -33,8 +33,8 @@ const FeedbackForm = () => {
   if (!hasSubmitted) {
     return (
       <Form onFinish={onFinish}>
-        <Row gutter={16}>
-          <Col span={12}>
+        <Row >
+          <Col xs={24} md={12}>
             <div style={{ marginTop: 10 }}>
               <Form.Item
                 name={["name"]}
@@ -46,7 +46,7 @@ const FeedbackForm = () => {
             </div>
           </Col>
 
-          <Col span={12}>
+          <Col xs={24} md={12}>
             <div
               style={{
                 display: "flex",
@@ -56,7 +56,7 @@ const FeedbackForm = () => {
               }}
             >
               <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
-                Your Opinion matters :
+                Rate us :
               </Title>
               <Rate defaultValue={stars} onChange={setStars} />
             </div>
