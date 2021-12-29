@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import "./App.css";
-import "./index.css";
+import "./styles/App.css";
+import "./styles/index.css";
 import "antd/dist/antd.css";
 
 import { Layout, Menu } from "antd";
@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
-        <Sider breakpoint="lg" collapsedWidth="0">
+        <Sider breakpoint="lg" collapsedWidth="0" >
           <AppLogo />
           <Menu
             theme="dark"
