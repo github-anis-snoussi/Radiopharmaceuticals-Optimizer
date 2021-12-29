@@ -37,7 +37,6 @@ const TableColums = (
     {
       title: "",
       fixed: 'left',
-      width: 100,
       dataIndex: "sort",
       width: 30,
       className: "drag-visible",
