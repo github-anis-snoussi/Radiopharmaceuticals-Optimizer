@@ -7,44 +7,46 @@ import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
 import { ExperimentOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import AppLogo from "./Components/AppLogo";
 import Infos from "./Pages/Infos";
 import RPOptimizer from "./Pages/RPOptimizer";
 
-const { Header, Content, Footer, Sider } = Layout;
+
+import NavBar from "./Components/NavBar";
+import SideBar from "./Components/SideBar";
+
+
+
+
+const { Header, Content, Footer } = Layout;
 
 const App = () => {
   const [sideMenuKey, setSideMenuKey] = useState(1);
   const { currentTheme } = useThemeSwitcher();
 
+  const MyMenu = (
+    <Menu
+      theme="dark"
+      mode="inline"
+      defaultSelectedKeys={["1"]}
+      onSelect={(selection) => {
+        setSideMenuKey(parseInt(selection.key, 10));
+      }}
+    >
+      <Menu.Item key="1" icon={<ExperimentOutlined />}>
+        RP Optimizer
+      </Menu.Item>
+      <Menu.Item key="2" icon={<InfoCircleOutlined />}>
+        Infos
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <>
+      <NavBar menu={MyMenu} />
       <Layout style={{ minHeight: "100vh" }}>
-        <Sider breakpoint="lg" collapsedWidth="0" >
-          <AppLogo />
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            onSelect={(selection) => {
-              setSideMenuKey(parseInt(selection.key, 10));
-            }}
-          >
-            <Menu.Item key="1" icon={<ExperimentOutlined />}>
-              RP Optimizer
-            </Menu.Item>
-            <Menu.Item key="2" icon={<InfoCircleOutlined />}>
-              Infos
-            </Menu.Item>
-          </Menu>
-        </Sider>
-
+        <SideBar menu={MyMenu} />
         <Layout>
-          <Header
-            className="site-layout-sub-header-background"
-            style={{ padding: 0 }}
-          />
-
           <Content style={{ margin: "24px 16px 0" }}>
             <div
               className="site-layout-background"

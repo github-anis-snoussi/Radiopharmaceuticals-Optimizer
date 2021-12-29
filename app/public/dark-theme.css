@@ -27224,3 +27224,7 @@ div.ant-typography-edit-content.ant-typography-rtl {
 
 
 /*# sourceMappingURL=antd.dark.css.map*/
+
+.ant-drawer-body {
+  background-color: #1f1f1f;
+}
