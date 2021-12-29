@@ -1,5 +1,7 @@
 import React from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
+import { useThemeSwitcher } from "react-css-theme-switcher";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 const NewPatientDrawer = ({
   closeDrawer,
@@ -10,13 +12,22 @@ const NewPatientDrawer = ({
   setDose,
   setDuration,
 }) => {
+  const { currentTheme } = useThemeSwitcher();
+  const drawerWidth = useMediaQuery(
+    "(max-width: 767px)",
+    window.innerWidth,
+    700
+  );
   return (
     <Drawer
-      title="Create a new account"
-      width={720}
+      title="Add new Patient"
+      width={drawerWidth}
       onClose={closeDrawer}
       visible={isDrawerVisible}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{
+        paddingBottom: 80,
+        backgroundColor: currentTheme === "dark" ? "#1f1f1f" : "white",
+      }}
       footer={
         <div
           style={{

@@ -34,3 +34,32 @@
 .ant-picker-dropdown {
   z-index: 9999 !important;
 }
+
+.sidebar {
+  height: 100vh;
+}
+
+.navbar {
+  background-color: white;
+  padding-left: 2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .navbar {
+    display: none;
+  }
+}
+
+.logo {
+  height: 60px;
+  margin-left: 1rem;
+}
+
+.ant-drawer-body {
+  background-color: #001528;
+}

@@ -8,10 +8,9 @@ import { init } from "emailjs-com";
 import { initAmplitude } from "./utils/amplitude";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 
-
 const themes = {
   dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
-  light: 'antd/dist/antd.css',
+  light: "antd/dist/antd.css",
 };
 
 // init amplitude
@@ -29,11 +28,11 @@ Sentry.init({
 });
 
 const AppWrapper = () => {
-  return(
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
-      <App/>
+  return (
+    <ThemeSwitcherProvider themeMap={themes} defaultTheme="dark">
+      <App />
     </ThemeSwitcherProvider>
   );
-}
+};
 
-ReactDOM.render(<AppWrapper />,document.getElementById("root"));
+ReactDOM.render(<AppWrapper />, document.getElementById("root"));

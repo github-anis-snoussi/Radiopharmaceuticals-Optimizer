@@ -317,36 +317,44 @@ class RPOptimizer extends React.Component {
           now={this.state.now}
           total={this.state.rp_activity}
         >
-          <Button key="1" onClick={this.sortPatients}>
-            <FileSearchOutlined /> Sort
-          </Button>
-
-          <Button
-            key="3"
-            onClick={() => this.setState({ isModalVisible: true })}
-          >
-            <SettingOutlined /> Settings
-          </Button>
-
-          <Popconfirm
-            key="4"
-            title={"Delete All ?"}
-            icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
-            onConfirm={this.deletAllPatients}
-            okText="Delete All Patients"
-            okButtonProps={{
-              danger: true,
-            }}
-            cancelText="Cancel"
-          >
-            <Button type="primary" danger>
-              <UsergroupDeleteOutlined /> Delete All
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <Button key="1" onClick={this.sortPatients} style={{ margin: 5 }}>
+              <FileSearchOutlined /> Sort
             </Button>
-          </Popconfirm>
 
-          <Button key="2" type="primary" onClick={this.showDrawer}>
-            <UserAddOutlined /> New Patient
-          </Button>
+            <Button
+              key="3"
+              onClick={() => this.setState({ isModalVisible: true })}
+              style={{ margin: 5 }}
+            >
+              <SettingOutlined /> Settings
+            </Button>
+
+            <Popconfirm
+              key="4"
+              title={"Delete All ?"}
+              icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+              onConfirm={this.deletAllPatients}
+              okText="Delete All Patients"
+              okButtonProps={{
+                danger: true,
+              }}
+              cancelText="Cancel"
+            >
+              <Button type="primary" danger style={{ margin: 5 }}>
+                <UsergroupDeleteOutlined /> Delete All
+              </Button>
+            </Popconfirm>
+
+            <Button
+              key="2"
+              type="primary"
+              onClick={this.showDrawer}
+              style={{ margin: 5 }}
+            >
+              <UserAddOutlined /> New Patient
+            </Button>
+          </div>
         </AppHeader>
 
         <PatientsTable
@@ -378,7 +386,7 @@ class RPOptimizer extends React.Component {
           closeModal={this.closeModal}
           confirmSettings={this.confirmSettings}
           settings={this.getRpSetting()}
-          setSettings={(settings) => this.setState({...settings})}
+          setSettings={(settings) => this.setState({ ...settings })}
         />
       </>
     );
