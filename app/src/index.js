@@ -29,7 +29,7 @@ Sentry.init({
 
 const AppWrapper = () => {
   return (
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
+    <ThemeSwitcherProvider themeMap={themes} defaultTheme="dark">
       <App />
     </ThemeSwitcherProvider>
   );

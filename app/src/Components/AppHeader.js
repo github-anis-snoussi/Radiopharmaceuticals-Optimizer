@@ -1,11 +1,10 @@
 import React from "react";
-import { Tag, PageHeader } from "antd";
+import { PageHeader } from "antd";
 import HeaderStatistics from "./HeaderStatistics";
 
-const HeaderContent = ({ children, extra }) => (
+const HeaderContent = ({ children }) => (
   <div className="content">
     <div className="main">{children}</div>
-    <div className="extra">{extra}</div>
   </div>
 );
 
@@ -24,7 +23,6 @@ const AppHeader = ({
       className="site-page-header-responsive"
       title={name}
       subTitle={new Date().toDateString()}
-      tags={<Tag color="blue">Beta Version</Tag>}
       extra={children}
     >
       <HeaderContent>
