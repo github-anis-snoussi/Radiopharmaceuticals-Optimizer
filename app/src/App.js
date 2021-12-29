@@ -17,7 +17,7 @@ import SideBar from "./Components/SideBar";
 
 
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
 const App = () => {
   const [sideMenuKey, setSideMenuKey] = useState(1);
