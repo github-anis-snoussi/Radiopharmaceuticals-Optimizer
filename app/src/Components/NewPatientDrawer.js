@@ -1,5 +1,6 @@
 import React from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 
 const NewPatientDrawer = ({
   closeDrawer,
@@ -10,13 +11,17 @@ const NewPatientDrawer = ({
   setDose,
   setDuration,
 }) => {
+  const { currentTheme } = useThemeSwitcher();
   return (
     <Drawer
       title="Add new Patient"
       width={720}
       onClose={closeDrawer}
       visible={isDrawerVisible}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{
+        paddingBottom: 80,
+        backgroundColor: currentTheme === "dark" ? "#1f1f1f" : "white",
+      }}
       footer={
         <div
           style={{
