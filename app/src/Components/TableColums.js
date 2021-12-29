@@ -65,7 +65,7 @@ const TableColums = (
       render(text) {
         return {
           props: {
-            style: { background: "#fffbe6" },
+            style: { background: "rgba(245, 206, 39, 0.41)" },
           },
           children: <Text>{text || "?"}</Text>,
         };
@@ -85,7 +85,7 @@ const TableColums = (
       render(text) {
         return {
           props: {
-            style: { background: "#fffbe6" },
+            style: { background: "rgba(245, 206, 39, 0.41)" },
           },
           children: <Text>{text || "?"}</Text>,
         };

@@ -6,7 +6,13 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { init } from "emailjs-com";
 import { initAmplitude } from "./utils/amplitude";
+import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 
+
+const themes = {
+  dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
+  light: 'antd/dist/antd.css',
+};
 
 // init amplitude
 initAmplitude();
@@ -22,4 +28,12 @@ Sentry.init({
   ignoreErrors: ["ResizeObserver loop limit exceeded"],
 });
 
-ReactDOM.render(<App />,document.getElementById("root"));
+const AppWrapper = () => {
+  return(
+    <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
+      <App/>
+    </ThemeSwitcherProvider>
+  );
+}
+
+ReactDOM.render(<AppWrapper />,document.getElementById("root"));

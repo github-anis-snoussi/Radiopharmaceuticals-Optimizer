@@ -9,9 +9,11 @@ import {
   Row,
   Input,
   InputNumber,
+  Tag
 } from "antd";
 import { BankOutlined } from "@ant-design/icons";
 import moment from "moment";
+import ThemeSwitcher from "./ThemeSwitcher"
 
 const { Text } = Typography;
 
@@ -33,7 +35,16 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         </Button>,
       ]}
     >
-      <Row gutter={16} style={{ marginBottom: 10 }}>
+      <Text type="secondary">Enter your name</Text>
+      <Input
+        placeholder="Lab name"
+        prefix={<BankOutlined />}
+        value={settings.name}
+        onChange={(name) => {
+          setSettings({ ...settings, name: name.target.value });
+        }}
+      />
+      <Row gutter={16} style={{ marginBottom: 10, marginTop : 15 }}>
         <Col className="gutter-row" span={10}>
           <Text type="secondary">RP Half Life (min)</Text>
         </Col>
@@ -145,15 +156,17 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         </Col>
       </Row>
 
-      <Divider orientation="left">Additional Data</Divider>
-      <Input
-        placeholder="Lab name"
-        prefix={<BankOutlined />}
-        value={settings.name}
-        onChange={(name) => {
-          setSettings({ ...settings, name: name.target.value });
-        }}
-      />
+      <Divider orientation="left">Settings </Divider>
+
+      <Row gutter={16} style={{ marginBottom: 10 }}>
+        <Col className="gutter-row" span={20}>
+          <Text type="secondary">Dark mode <Tag color="blue">New</Tag> </Text>
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <ThemeSwitcher />
+        </Col>
+      </Row>
+
     </Modal>
   );
 };

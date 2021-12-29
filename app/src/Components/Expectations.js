@@ -1,6 +1,7 @@
 import React from "react";
 import { Statistic, Row, Col, Typography } from "antd";
 import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
+import { useThemeSwitcher } from "react-css-theme-switcher";
 const { Title, Text } = Typography;
 
 const Expectations = ({
@@ -10,6 +11,7 @@ const Expectations = ({
   usable_remaining_vol,
   remaining_activity_time,
 }) => {
+  const { currentTheme } = useThemeSwitcher();
   return (
     <div style={{ marginTop: 20 }}>
       <Row>
@@ -22,8 +24,7 @@ const Expectations = ({
             }}
           >
             <Title level={3}>
-              {" "}
-              <ExperimentOutlined /> Expectations :{" "}
+              <ExperimentOutlined /> Expectations :
             </Title>
           </div>
           <div
@@ -34,8 +35,8 @@ const Expectations = ({
               marginTop: -10,
             }}
           >
-            <Text mark>
-              (experimental <BranchesOutlined />){" "}
+            <Text mark >
+              (experimental <BranchesOutlined />)
             </Text>
           </div>
         </Col>
@@ -72,7 +73,7 @@ const Expectations = ({
               display: "flex",
               justifyContent: "center",
               marginTop: 20,
-              backgroundColor: "#ececec",
+              backgroundColor: currentTheme === 'dark' ?  "#0c0c0c" : "#ececec",
               textAlign: "center",
             }}
           >
