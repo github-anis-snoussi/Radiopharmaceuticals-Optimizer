@@ -7,7 +7,6 @@ import { Integrations } from "@sentry/tracing";
 import { init } from "emailjs-com";
 import { initAmplitude } from "./utils/amplitude";
 
-import { ContextProvider } from "./utils/savableContext";
 
 // init amplitude
 initAmplitude();
@@ -23,9 +22,4 @@ Sentry.init({
   ignoreErrors: ["ResizeObserver loop limit exceeded"],
 });
 
-ReactDOM.render(
-  <ContextProvider>
-    <App />
-  </ContextProvider>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App />,document.getElementById("root"));
