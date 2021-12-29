@@ -24,7 +24,7 @@ const Infos = () => {
       <Typography >
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div>
-            <Title>Radiopharmaceuticals Optimizer</Title>
+            <Title>RP Optimizer</Title>
             <Paragraph>
               Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open
               source web app used to make the use of Radioactive pharmaceuticals
