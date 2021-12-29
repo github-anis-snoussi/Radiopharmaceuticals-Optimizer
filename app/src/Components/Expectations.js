@@ -2,6 +2,7 @@ import React from "react";
 import { Statistic, Row, Col, Typography } from "antd";
 import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import useMediaQuery from "../hooks/useMediaQuery"
 const { Title, Text } = Typography;
 
 const Expectations = ({
@@ -12,35 +13,46 @@ const Expectations = ({
   remaining_activity_time,
 }) => {
   const { currentTheme } = useThemeSwitcher();
+
+  const position = useMediaQuery(
+      '(max-width: 767px)',
+      'center',
+      'flex-end'
+    );
+
+
   return (
     <div style={{ marginTop: 20 }}>
       <Row>
-        <Col span={16}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginRight: 20,
-            }}
-          >
-            <Title level={3}>
-              <ExperimentOutlined /> Expectations :
-            </Title>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginRight: 50,
-              marginTop: -10,
-            }}
-          >
-            <Text mark >
-              (experimental <BranchesOutlined />)
-            </Text>
+        <Col xs={0} md={6} />
+        <Col xs={24} md={8} >
+          <div               
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: position,
+            flexDirection : 'column',
+            marginRight: 20,
+            marginBottom : 20
+          }} >
+            <div>
+              <Title level={3}>
+                <ExperimentOutlined /> Expectations :
+              </Title>
+            </div>
+            <div
+              style={{
+                marginTop: -10,
+                marginRight: 15,
+              }}
+            >
+              <Text mark >
+                (experimental <BranchesOutlined />)
+              </Text>
+            </div>
           </div>
         </Col>
-        <Col span={4}>
+        <Col xs={12} md={5} >
           <Statistic
             title="Total Remaining Activity"
             value={total_remaining_activity || "?"}
@@ -52,7 +64,7 @@ const Expectations = ({
             suffix="MBq"
           />
         </Col>
-        <Col span={4}>
+        <Col xs={12} md={5} >
           <Statistic
             title="Total Remaining Volume"
             value={total_remaining_vol || "?"}
@@ -65,9 +77,10 @@ const Expectations = ({
           />
         </Col>
       </Row>
+
       <Row>
-        <Col span={16} />
-        <Col span={8}>
+        <Col xs={0} md={14} />
+        <Col xs={24} md={10} >
           <div
             style={{
               display: "flex",
