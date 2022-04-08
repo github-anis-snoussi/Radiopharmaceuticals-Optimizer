@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography, Divider } from "antd";
-import FeedbackForm from "../Components/FeedbackForm";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import useMediaQuery from "../hooks/useMediaQuery"
+import FeedbackForm from "./Components/FeedbackForm";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -10,10 +10,14 @@ const Infos = () => {
   const { currentTheme } = useThemeSwitcher();
 
   const appLogo = useMediaQuery(
-    '(max-width: 767px)',
+    "(max-width: 767px)",
     null,
     <img
-      src={currentTheme === 'dark' ? "logo-filled-white.png" : "logo-filled-black.png" }
+      src={
+        currentTheme === "dark"
+          ? "logo-filled-white.png"
+          : "logo-filled-black.png"
+      }
       style={{ height: 150, aspectRatio: 1 }}
       alt="app-logo"
     />
@@ -21,7 +25,7 @@ const Infos = () => {
 
   return (
     <>
-      <Typography >
+      <Typography>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div>
             <Title>RP Optimizer</Title>

@@ -18,7 +18,7 @@ import {
   ExperimentOutlined,
 } from "@ant-design/icons";
 import { sortableHandle } from "react-sortable-hoc";
-import { confirmInjection } from "../utils/utils";
+import { confirmInjection } from "../../../utils/utils";
 
 const { Text } = Typography;
 

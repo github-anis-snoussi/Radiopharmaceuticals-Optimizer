@@ -2,7 +2,7 @@ import React from "react";
 import { Statistic, Row, Col, Typography } from "antd";
 import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import useMediaQuery from "../hooks/useMediaQuery";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 const { Title, Text } = Typography;
 
 const Expectations = ({
