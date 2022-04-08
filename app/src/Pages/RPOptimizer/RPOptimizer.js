@@ -1,5 +1,19 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { sort, now, expect } from "../../utils/sortPatientList";
+import {
+  setAmplitudeUserId,
+  sendAmplitudeData,
+  amplitudeLogsTypes,
+} from "../../utils/amplitude";
 import { Button, message, Popconfirm } from "antd";
+import {
+  AppHeader,
+  PatientsTable,
+  Expectations,
+  WelcomeModal,
+  NewPatientDrawer,
+} from "./Components";
 import {
   UserAddOutlined,
   FileSearchOutlined,
@@ -7,18 +21,6 @@ import {
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { v4 as uuidv4 } from "uuid";
-import AppHeader from "./Components/AppHeader";
-import PatientsTable from "./Components/PatientsTable";
-import Expectations from "./Components/Expectations";
-import WelcomeModal from "./Components/WelcomeModal";
-import NewPatientDrawer from "./Components/NewPatientDrawer";
-import { sort, now, expect } from "../../utils/sortPatientList";
-import {
-  setAmplitudeUserId,
-  sendAmplitudeData,
-  amplitudeLogsTypes,
-} from "../../utils/amplitude";
 
 const initialState = {
   // rpSettings

@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-
+// styles
 import "./styles/App.css";
 import "./styles/index.css";
 import "antd/dist/antd.css";
-
-import { Layout } from "antd";
+// utils
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import useMediaQuery from "./hooks/useMediaQuery";
-
-import Infos from "./Pages/Infos/Infos";
-import RPOptimizer from "./Pages/RPOptimizer/RPOptimizer";
-
-import NavBar from "./Components/NavBar";
-import SideBar from "./Components/SideBar";
-import SideMenu from "./Components/SideMenu";
+// components
+import { Layout } from "antd";
+import { NavBar, SideBar, SideMenu } from "./Components";
+// pages
+import { RPOptimizer, Infos } from "./Pages";
 
 const { Content, Footer } = Layout;
 

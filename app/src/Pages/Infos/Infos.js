@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography, Divider } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import FeedbackForm from "./Components/FeedbackForm";
 import useMediaQuery from "../../hooks/useMediaQuery";
+import { FeedbackForm } from "./Components";
 
 const { Title, Paragraph, Text } = Typography;
 
