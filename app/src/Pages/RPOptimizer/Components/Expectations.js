@@ -2,39 +2,35 @@ import React from "react";
 import { Statistic, Row, Col, Typography } from "antd";
 import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import useMediaQuery from "../hooks/useMediaQuery"
+import useMediaQuery from "../../../hooks/useMediaQuery";
 const { Title, Text } = Typography;
 
 const Expectations = ({
-  total_remaining_activity,
-  usable_remaining_activity,
-  total_remaining_vol,
-  usable_remaining_vol,
-  remaining_activity_time,
+  totalRemainingActivity,
+  usableRemainingActivity,
+  totalRemainingVol,
+  usableRemainingVol,
+  remainingActivityTime,
 }) => {
   const { currentTheme } = useThemeSwitcher();
 
-  const position = useMediaQuery(
-      '(max-width: 767px)',
-      'center',
-      'flex-end'
-    );
-
+  const position = useMediaQuery("(max-width: 767px)", "center", "flex-end");
 
   return (
     <div style={{ marginTop: 20 }}>
       <Row>
         <Col xs={0} md={6} />
-        <Col xs={24} md={8} >
-          <div               
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: position,
-            flexDirection : 'column',
-            marginRight: 20,
-            marginBottom : 20
-          }} >
+        <Col xs={24} md={8}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: position,
+              flexDirection: "column",
+              marginRight: 20,
+              marginBottom: 20,
+            }}
+          >
             <div>
               <Title level={3}>
                 <ExperimentOutlined /> Expectations :
@@ -46,33 +42,33 @@ const Expectations = ({
                 marginRight: 15,
               }}
             >
-              <Text mark >
+              <Text mark>
                 (experimental <BranchesOutlined />)
               </Text>
             </div>
           </div>
         </Col>
-        <Col xs={12} md={5} >
+        <Col xs={12} md={5}>
           <Statistic
             title="Total Remaining Activity"
-            value={total_remaining_activity || "?"}
+            value={totalRemainingActivity || "?"}
             suffix="MBq"
           />
           <Statistic
             title="Usable Remaining Activity"
-            value={usable_remaining_activity || "?"}
+            value={usableRemainingActivity || "?"}
             suffix="MBq"
           />
         </Col>
-        <Col xs={12} md={5} >
+        <Col xs={12} md={5}>
           <Statistic
             title="Total Remaining Volume"
-            value={total_remaining_vol || "?"}
+            value={totalRemainingVol || "?"}
             suffix="ml"
           />
           <Statistic
             title="Usable Remaining Volume"
-            value={usable_remaining_vol || "?"}
+            value={usableRemainingVol || "?"}
             suffix="ml"
           />
         </Col>
@@ -80,21 +76,21 @@ const Expectations = ({
 
       <Row>
         <Col xs={0} md={14} />
-        <Col xs={24} md={10} >
+        <Col xs={24} md={10}>
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               marginTop: 20,
-              backgroundColor: currentTheme === 'dark' ?  "#0c0c0c" : "#ececec",
+              backgroundColor: currentTheme === "dark" ? "#0c0c0c" : "#ececec",
               textAlign: "center",
             }}
           >
             <Statistic
               title="Expectations at :"
               value={
-                remaining_activity_time
-                  ? new Date(remaining_activity_time).toLocaleTimeString(
+                remainingActivityTime
+                  ? new Date(remainingActivityTime).toLocaleTimeString(
                       "en-GB",
                       {
                         hour: "2-digit",

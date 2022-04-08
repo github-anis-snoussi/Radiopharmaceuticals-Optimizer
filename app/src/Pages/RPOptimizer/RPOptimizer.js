@@ -1,5 +1,19 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { sort, now, expect } from "../../utils/sortPatientList";
+import {
+  setAmplitudeUserId,
+  sendAmplitudeData,
+  amplitudeLogsTypes,
+} from "../../utils/amplitude";
 import { Button, message, Popconfirm } from "antd";
+import {
+  AppHeader,
+  PatientsTable,
+  Expectations,
+  WelcomeModal,
+  NewPatientDrawer,
+} from "./Components";
 import {
   UserAddOutlined,
   FileSearchOutlined,
@@ -7,28 +21,16 @@ import {
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { v4 as uuidv4 } from "uuid";
-import AppHeader from "../Components/AppHeader";
-import PatientsTable from "../Components/PatientsTable";
-import Expectations from "../Components/Expectations";
-import WelcomeModal from "../Components/WelcomeModal";
-import NewPatientDrawer from "../Components/NewPatientDrawer";
-import { sort, now, expect } from "../utils/sort_patient_list";
-import {
-  setAmplitudeUserId,
-  sendAmplitudeData,
-  amplitudeLogsTypes,
-} from "../utils/amplitude";
 
 const initialState = {
-  // rp_settings
-  rp_activity: 0,
-  mesure_time: null,
-  first_inj_time: null,
-  rp_half_life: 0,
-  rp_vol: 0,
-  wasted_vol: 0,
-  unextractable_vol: 0,
+  // rpSettings
+  rpActivity: 0,
+  mesureTime: null,
+  firstInjTime: null,
+  rpHalfLife: 0,
+  rpVol: 0,
+  wastedVol: 0,
+  unextractableVol: 0,
   name: "Rp Optimizer",
 
   // app status
@@ -109,13 +111,13 @@ class RPOptimizer extends React.Component {
   getRpSetting = () => {
     const { state } = this;
     return {
-      rp_activity: state.rp_activity,
-      mesure_time: new Date(state.mesure_time),
-      first_inj_time: new Date(state.first_inj_time),
-      rp_half_life: state.rp_half_life,
-      rp_vol: state.rp_vol,
-      wasted_vol: state.wasted_vol,
-      unextractable_vol: state.unextractable_vol,
+      rpActivity: state.rpActivity,
+      mesureTime: new Date(state.mesureTime),
+      firstInjTime: new Date(state.firstInjTime),
+      rpHalfLife: state.rpHalfLife,
+      rpVol: state.rpVol,
+      wastedVol: state.wastedVol,
+      unextractableVol: state.unextractableVol,
     };
   };
 
@@ -138,8 +140,8 @@ class RPOptimizer extends React.Component {
 
   generateNowStats = () => {
     if (this.state.patientsList?.length > 0) {
-      const now_dict = now(this.state.patientsList, this.getRpSetting());
-      this.setState({ now: { ...now_dict } });
+      const nowDict = now(this.state.patientsList, this.getRpSetting());
+      this.setState({ now: { ...nowDict } });
     }
   };
 
@@ -149,14 +151,13 @@ class RPOptimizer extends React.Component {
       let newPatientsList = [...this.state.patientsList].map((x, i) => {
         return {
           ...x,
-          expected_injection_time: new Date(
-            expected.patient_inj_time_list[i]
+          expectedInjectionTime: new Date(
+            expected.patientInjTimeList[i]
           ).toLocaleTimeString("en-GB", {
             hour: "2-digit",
             minute: "2-digit",
           }),
-          expected_injection_volume:
-            expected.patient_inj_vol_list[i].toFixed(2),
+          expectedInjectionVolume: expected.patientInjVolList[i].toFixed(2),
         };
       });
       this.setState(
@@ -196,8 +197,8 @@ class RPOptimizer extends React.Component {
   confirmSettings = () => {
     this.setState(
       (prevState) => ({
-        mesure_time: new Date(prevState.mesure_time),
-        first_inj_time: new Date(prevState.first_inj_time),
+        mesureTime: new Date(prevState.mesureTime),
+        firstInjTime: new Date(prevState.firstInjTime),
         isModalVisible: false,
       }),
       () => {
@@ -309,13 +310,13 @@ class RPOptimizer extends React.Component {
     return (
       <>
         <AppHeader
-          rp_activity={this.state.rp_activity}
-          mesure_time={this.state.mesure_time}
-          rp_vol={this.state.rp_vol}
-          rp_half_life={this.state.rp_half_life}
+          rpActivity={this.state.rpActivity}
+          mesureTime={this.state.mesureTime}
+          rpVol={this.state.rpVol}
+          rpHalfLife={this.state.rpHalfLife}
           name={this.state.name}
           now={this.state.now}
-          total={this.state.rp_activity}
+          total={this.state.rpActivity}
         >
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             <Button key="1" onClick={this.sortPatients} style={{ margin: 5 }}>

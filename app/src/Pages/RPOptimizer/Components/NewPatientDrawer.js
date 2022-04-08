@@ -1,7 +1,7 @@
 import React from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-import useMediaQuery from "../hooks/useMediaQuery";
+import useMediaQuery from "../../../hooks/useMediaQuery";
 
 const NewPatientDrawer = ({
   closeDrawer,

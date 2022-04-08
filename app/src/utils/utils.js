@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { clean } from "./sort_patient_list";
+import { clean } from "./sortPatientList";
 import { sendAmplitudeData, amplitudeLogsTypes } from "./amplitude";
 
 export function confirmInjection(record, patientsList, updateData) {

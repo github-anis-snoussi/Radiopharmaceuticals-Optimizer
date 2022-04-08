@@ -43,11 +43,11 @@ class PatientsTable extends React.Component {
     return <SortableItem index={index} {...restProps} />;
   };
 
-  updateRecordMeasureTime = (record, mesure_time) => {
+  updateRecordMeasureTime = (record, mesureTime) => {
     const { patientsList, updateData } = this.props;
     patientsList.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
-        theArray[index].realInjectionTime = new Date(mesure_time);
+        theArray[index].realInjectionTime = new Date(mesureTime);
       }
     });
     updateData([...patientsList]);

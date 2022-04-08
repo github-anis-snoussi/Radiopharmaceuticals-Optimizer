@@ -11,10 +11,10 @@ const HeaderContent = ({ children }) => (
 const AppHeader = ({
   name,
   children,
-  rp_activity,
-  mesure_time,
-  rp_vol,
-  rp_half_life,
+  rpActivity,
+  mesureTime,
+  rpVol,
+  rpHalfLife,
   now,
   total,
 }) => {
@@ -27,10 +27,10 @@ const AppHeader = ({
     >
       <HeaderContent>
         <HeaderStatistics
-          rp_activity={rp_activity}
-          mesure_time={mesure_time}
-          rp_vol={rp_vol}
-          rp_half_life={rp_half_life}
+          rpActivity={rpActivity}
+          mesureTime={mesureTime}
+          rpVol={rpVol}
+          rpHalfLife={rpHalfLife}
           now={now}
           total={total}
         />
