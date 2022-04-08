@@ -14,11 +14,11 @@ const FeedbackForm = () => {
     let feedback = { ...values, stars };
 
     const templateParams = {
-      to_name: "Anis",
-      from_name: feedback.name,
+      toName: "Anis",
+      fromName: feedback.name,
       message: feedback.description,
       stars: feedback.stars,
-      version_ref: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA,
+      versionRef: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA,
     };
 
     send(
@@ -33,7 +33,7 @@ const FeedbackForm = () => {
   if (!hasSubmitted) {
     return (
       <Form onFinish={onFinish}>
-        <Row >
+        <Row>
           <Col xs={24} md={12}>
             <div style={{ marginTop: 10 }}>
               <Form.Item

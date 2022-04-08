@@ -18,7 +18,7 @@ import {
   ExperimentOutlined,
 } from "@ant-design/icons";
 import { sortableHandle } from "react-sortable-hoc";
-import { confirmInjection } from "../utils/utils";
+import { confirmInjection } from "../../../utils/utils";
 
 const { Text } = Typography;
 
@@ -36,7 +36,7 @@ const TableColums = (
   return [
     {
       title: "",
-      fixed: 'left',
+      fixed: "left",
       dataIndex: "sort",
       width: 30,
       className: "drag-visible",
@@ -49,7 +49,7 @@ const TableColums = (
     {
       title: "Name",
       width: 80,
-      fixed: 'left',
+      fixed: "left",
       dataIndex: "name",
       key: "name",
       render: (text) => <Text strong>{text}</Text>,
@@ -63,8 +63,8 @@ const TableColums = (
         );
       },
       width: 100,
-      dataIndex: "expected_injection_time",
-      key: "expected_injection_time",
+      dataIndex: "expectedInjectionTime",
+      key: "expectedInjectionTime",
       render(text) {
         return {
           props: {
@@ -83,8 +83,8 @@ const TableColums = (
         );
       },
       width: 100,
-      dataIndex: "expected_injection_volume",
-      key: "expected_injection_volume",
+      dataIndex: "expectedInjectionVolume",
+      key: "expectedInjectionVolume",
       render(text) {
         return {
           props: {
@@ -165,8 +165,8 @@ const TableColums = (
                       marginTop: 10,
                       marginBottom: 10,
                     }}
-                    onSelect={(mesure_time) => {
-                      updateRecordMeasureTime(record, mesure_time);
+                    onSelect={(mesureTime) => {
+                      updateRecordMeasureTime(record, mesureTime);
                     }}
                   />
                 </>
@@ -194,7 +194,7 @@ const TableColums = (
     {
       title: "Status",
       width: 70,
-      fixed: 'right',
+      fixed: "right",
       key: "status",
       dataIndex: "status",
       render: (status) => {
