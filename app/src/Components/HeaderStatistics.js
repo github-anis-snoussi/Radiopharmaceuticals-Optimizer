@@ -2,10 +2,10 @@ import React from "react";
 import { Row, Statistic, Progress } from "antd";
 
 const HeaderStatistics = ({
-  rp_activity,
-  mesure_time,
-  rp_vol,
-  rp_half_life,
+  rpActivity,
+  mesureTime,
+  rpVol,
+  rpHalfLife,
   now,
   total,
 }) => {
@@ -15,12 +15,12 @@ const HeaderStatistics = ({
         <Statistic
           title="RP Activity"
           suffix="MBq"
-          value={rp_activity}
+          value={rpActivity}
           style={{ margin: 10 }}
         />
         <Statistic
           title="Measure Time"
-          value={new Date(mesure_time).toLocaleTimeString("en-GB", {
+          value={new Date(mesureTime).toLocaleTimeString("en-GB", {
             hour: "2-digit",
             minute: "2-digit",
           })}
@@ -29,13 +29,13 @@ const HeaderStatistics = ({
         <Statistic
           title="RP Volume"
           suffix="ml"
-          value={rp_vol}
+          value={rpVol}
           style={{ margin: 10 }}
         />
         <Statistic
           title="RP Half Life"
           suffix="min"
-          value={rp_half_life}
+          value={rpHalfLife}
           style={{ margin: 10 }}
         />
       </Row>
@@ -47,7 +47,7 @@ const HeaderStatistics = ({
               "0%": "red",
               "100%": "green",
             }}
-            percent={(now.total_activity_now / total) * 100}
+            percent={(now.totalActivityNow / total) * 100}
             format={(percent) => `${((percent * total) / 100).toFixed(0)} MBq`}
           />
         ) : null}

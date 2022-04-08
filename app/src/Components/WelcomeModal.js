@@ -9,16 +9,21 @@ import {
   Row,
   Input,
   InputNumber,
-  Tag
+  Tag,
 } from "antd";
 import { BankOutlined } from "@ant-design/icons";
 import moment from "moment";
-import ThemeSwitcher from "./ThemeSwitcher"
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const { Text } = Typography;
 
-const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, setSettings }) => {
-
+const WelcomeModal = ({
+  isModalVisible,
+  closeModal,
+  confirmSettings,
+  settings,
+  setSettings,
+}) => {
   return (
     <Modal
       title="Welcome"
@@ -29,7 +34,7 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
           key={1}
           type="primary"
           onClick={confirmSettings}
-          disabled={!settings.mesure_time || !settings.first_inj_time}
+          disabled={!settings.mesureTime || !settings.firstInjTime}
         >
           Confirm
         </Button>,
@@ -44,16 +49,16 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
           setSettings({ ...settings, name: name.target.value });
         }}
       />
-      <Row gutter={16} style={{ marginBottom: 10, marginTop : 15 }}>
+      <Row gutter={16} style={{ marginBottom: 10, marginTop: 15 }}>
         <Col className="gutter-row" span={10}>
           <Text type="secondary">RP Half Life (min)</Text>
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rp_half_life}
-            onChange={(rp_half_life) => {
-              setSettings({ ...settings, rp_half_life: rp_half_life });
+            value={settings.rpHalfLife}
+            onChange={(rpHalfLife) => {
+              setSettings({ ...settings, rpHalfLife: rpHalfLife });
             }}
           />
         </Col>
@@ -66,9 +71,9 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rp_activity}
-            onChange={(rp_activity) => {
-              setSettings({ ...settings, rp_activity: rp_activity });
+            value={settings.rpActivity}
+            onChange={(rpActivity) => {
+              setSettings({ ...settings, rpActivity: rpActivity });
             }}
           />
         </Col>
@@ -82,9 +87,9 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
           <DatePicker
             showTime
             style={{ width: "100%" }}
-            value={settings.mesure_time ? moment(settings.mesure_time) : null}
-            onChange={(mesure_time) => {
-              setSettings({ ...settings, mesure_time: mesure_time });
+            value={settings.mesureTime ? moment(settings.mesureTime) : null}
+            onChange={(mesureTime) => {
+              setSettings({ ...settings, mesureTime: mesureTime });
             }}
           />
         </Col>
@@ -98,11 +103,9 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
           <DatePicker
             showTime
             style={{ width: "100%" }}
-            value={
-              settings.first_inj_time ? moment(settings.first_inj_time) : null
-            }
-            onChange={(first_inj_time) => {
-              setSettings({ ...settings, first_inj_time: first_inj_time });
+            value={settings.firstInjTime ? moment(settings.firstInjTime) : null}
+            onChange={(firstInjTime) => {
+              setSettings({ ...settings, firstInjTime: firstInjTime });
             }}
           />
         </Col>
@@ -115,9 +118,9 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rp_vol}
-            onChange={(rp_vol) => {
-              setSettings({ ...settings, rp_vol: rp_vol });
+            value={settings.rpVol}
+            onChange={(rpVol) => {
+              setSettings({ ...settings, rpVol: rpVol });
             }}
           />
         </Col>
@@ -130,9 +133,9 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.wasted_vol}
-            onChange={(wasted_vol) => {
-              setSettings({ ...settings, wasted_vol: wasted_vol });
+            value={settings.wastedVol}
+            onChange={(wastedVol) => {
+              setSettings({ ...settings, wastedVol: wastedVol });
             }}
           />
         </Col>
@@ -145,11 +148,11 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.unextractable_vol}
-            onChange={(unextractable_vol) => {
+            value={settings.unextractableVol}
+            onChange={(unextractableVol) => {
               setSettings({
                 ...settings,
-                unextractable_vol: unextractable_vol,
+                unextractableVol: unextractableVol,
               });
             }}
           />
@@ -160,13 +163,14 @@ const WelcomeModal = ({ isModalVisible, closeModal, confirmSettings, settings, s
 
       <Row gutter={16} style={{ marginBottom: 10 }}>
         <Col className="gutter-row" span={20}>
-          <Text type="secondary">Dark mode <Tag color="blue">New</Tag> </Text>
+          <Text type="secondary">
+            Dark mode <Tag color="blue">New</Tag>{" "}
+          </Text>
         </Col>
         <Col className="gutter-row" span={4}>
           <ThemeSwitcher />
         </Col>
       </Row>
-
     </Modal>
   );
 };
