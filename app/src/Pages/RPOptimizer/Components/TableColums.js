@@ -4,7 +4,6 @@ import {
   Button,
   Popconfirm,
   message,
-  Spin,
   DatePicker,
   Typography,
 } from "antd";
@@ -41,7 +40,7 @@ const TableColums = (
       width: 30,
       className: "drag-visible",
       render: (a, b) => {
-        if (b.status === "waiting") {
+        if (b.isInjected === false) {
           return <DragHandle />;
         }
       },
@@ -117,7 +116,7 @@ const TableColums = (
             size="small"
             type="primary"
             ghost
-            disabled={record.status !== "waiting"}
+            disabled={record.isInjected}
             onClick={() => {
               modifyPatient(record);
             }}
@@ -126,7 +125,7 @@ const TableColums = (
             Modify
           </Button>
 
-          {record.status === "waiting" ? (
+          {record.isInjected === false ? (
             <Popconfirm
               title={"Proceed to delete ?"}
               icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
@@ -151,7 +150,7 @@ const TableColums = (
             </Button>
           )}
 
-          {record.status === "waiting" ? (
+          {record.isInjected === false ? (
             <Popconfirm
               title={
                 <>
@@ -195,31 +194,17 @@ const TableColums = (
       title: "Status",
       width: 70,
       fixed: "right",
-      key: "status",
-      dataIndex: "status",
-      render: (status) => {
-        switch (status) {
-          case "done":
-            return (
-              <CheckCircleOutlined
-                style={{ color: "green", fontSize: "23px" }}
-              />
-            );
-          case "test":
-            return <Spin />;
-          case "waiting":
-            return (
-              <ClockCircleOutlined
-                style={{ color: "orange", fontSize: "23px" }}
-              />
-            );
-          default:
-            return (
-              <ExclamationCircleOutlined
-                style={{ color: "red", fontSize: "23px" }}
-              />
-            );
+      key: "isInjected",
+      dataIndex: "isInjected",
+      render: (isInjected) => {
+        if (isInjected) {
+          return (
+            <CheckCircleOutlined style={{ color: "green", fontSize: "23px" }} />
+          );
         }
+        return (
+          <ClockCircleOutlined style={{ color: "orange", fontSize: "23px" }} />
+        );
       },
     },
   ];
