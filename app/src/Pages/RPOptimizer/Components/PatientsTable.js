@@ -7,9 +7,14 @@ import TableColums from "./TableColums";
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 
-class PatientsTable extends React.Component {
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { patientsList } = this.props;
+const PatientsTable = ({
+  modifyPatient,
+  deletePatient,
+  patientsList,
+  updateData,
+  generateExpectations,
+}) => {
+  const onSortEnd = ({ oldIndex, newIndex }) => {
     if (patientsList[newIndex].isInjected) {
       return;
     } else if (oldIndex !== newIndex) {
@@ -19,23 +24,22 @@ class PatientsTable extends React.Component {
         newIndex
       ).filter((el) => !!el);
       // console.log('Sorted items: ', newData);
-      this.props.updateData(newData);
+      updateData(newData);
     }
-    this.props.generateExpectations();
+    generateExpectations();
   };
 
-  DraggableContainer = (props) => (
+  const DraggableContainer = (props) => (
     <SortableContainer
       useDragHandle
       disableAutoscroll
       helperClass="row-dragging"
-      onSortEnd={this.onSortEnd}
+      onSortEnd={onSortEnd}
       {...props}
     />
   );
 
-  DraggableBodyRow = ({ className, style, ...restProps }) => {
-    const { patientsList } = this.props;
+  const DraggableBodyRow = ({ className, style, ...restProps }) => {
     // function findIndex base on Table rowKey props and should always be a right array index
     const index = patientsList.findIndex(
       (x) => x.index === restProps["data-row-key"]
@@ -43,8 +47,7 @@ class PatientsTable extends React.Component {
     return <SortableItem index={index} {...restProps} />;
   };
 
-  updateRecordMeasureTime = (record, mesureTime) => {
-    const { patientsList, updateData } = this.props;
+  const updateRecordMeasureTime = (record, mesureTime) => {
     patientsList.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
         theArray[index].realInjectionTime = new Date(mesureTime);
@@ -53,31 +56,27 @@ class PatientsTable extends React.Component {
     updateData([...patientsList]);
   };
 
-  render() {
-    const { modifyPatient, deletePatient, patientsList, updateData } =
-      this.props;
-    return (
-      <Table
-        pagination={false}
-        scroll={{ x: 950 }}
-        dataSource={patientsList}
-        columns={TableColums(
-          modifyPatient,
-          deletePatient,
-          this.updateRecordMeasureTime,
-          patientsList,
-          updateData
-        )}
-        rowKey="index"
-        components={{
-          body: {
-            wrapper: this.DraggableContainer,
-            row: this.DraggableBodyRow,
-          },
-        }}
-      />
-    );
-  }
-}
+  return (
+    <Table
+      pagination={false}
+      scroll={{ x: 950 }}
+      dataSource={patientsList}
+      columns={TableColums(
+        modifyPatient,
+        deletePatient,
+        updateRecordMeasureTime,
+        patientsList,
+        updateData
+      )}
+      rowKey="index"
+      components={{
+        body: {
+          wrapper: DraggableContainer,
+          row: DraggableBodyRow,
+        },
+      }}
+    />
+  );
+};
 
 export default PatientsTable;
