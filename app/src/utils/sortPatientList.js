@@ -32,11 +32,11 @@ const generatePatientInjTimeList = (
   patientScanTimeList.push(0);
   let patientInjTimeList = Array(patientScanTimeList.length).fill(0);
   patientList.push({
-    injected: false,
+    isInjected: false,
   });
 
   patientList.forEach((x, i) => {
-    if (x.injected) {
+    if (x.isInjected) {
       patientInjTimeList[i] = x.realInjectionTime;
     } else if (i === 0) {
       patientInjTimeList[i] = rpSettings.firstInjTime;
@@ -61,7 +61,7 @@ const firstSorting = (patientListOg) => {
   patientList = patientList.map((x) => {
     return {
       ...x,
-      ratio: x.injected ? 0 : x.duration / x.dose,
+      ratio: x.isInjected ? 0 : x.duration / x.dose,
     };
   });
 
@@ -82,7 +82,7 @@ const secondSorting = (patientList, rpSettings) => {
   while (sortingCondition) {
     sortingCondition = false;
     for (var i = 0; i < patientList.length - 1; i++) {
-      if (patientList[i].injected === false) {
+      if (patientList[i].isInjected === false) {
         // some logging
         // console.log("=============================")
         // console.log(`+++ Swapping [${i}] & [${i+1}] +++`)
@@ -136,7 +136,7 @@ const sortPatientList = (patientListOg, rpSettings) => {
 const activityNow = (patientList, rpSettings) => {
   let nowDict = {};
 
-  let injectedPatientsList = patientList.filter((x) => x.injected);
+  let injectedPatientsList = patientList.filter((x) => x.isInjected);
   let k = injectedPatientsList.length;
 
   injectedPatientsList = injectedPatientsList.map((x) => ({
@@ -313,12 +313,7 @@ const calculFinalExpectedActivity = (patientList, rpSettings) => {
 // ++++++++++++++++++++++++++++++++++++++++
 
 const formatFront2Back = (formatedPatientInfos) => {
-  return formatedPatientInfos.map((e) => {
-    return {
-      ...e,
-      injected: e.status === "waiting" ? false : true,
-    };
-  });
+  return formatedPatientInfos;
 };
 
 const formatBack2Front = (PatientInfos) => {
@@ -372,13 +367,13 @@ export const now = (patientListOg, rpSettings) => {
 
 // // 2. testcase patients
 // const patientList = [
-//     {name:"Rami", dose:183, duration:45, injected:false, realInjectionTime:null},
-//     {name:"Wael", dose:120, duration:30, injected:false, realInjectionTime:null},
-//     {name:"Hama", dose:200, duration:30, injected:false, realInjectionTime:null},
-//     {name:"Hihi", dose:300, duration:30, injected:true,  realInjectionTime: new Date(2021,5,10,9,20)},
-//     {name:"Hous", dose:150, duration:30, injected:true,  realInjectionTime: new Date(2021,5,10,9,0)},
-//     {name:"Kiki", dose:300, duration:30, injected:false, realInjectionTime:null},
-//     {name:"Saki", dose:300, duration:40, injected:false, realInjectionTime:null}
+//     {name:"Rami", dose:183, duration:45, isInjected:false, realInjectionTime:null},
+//     {name:"Wael", dose:120, duration:30, isInjected:false, realInjectionTime:null},
+//     {name:"Hama", dose:200, duration:30, isInjected:false, realInjectionTime:null},
+//     {name:"Hihi", dose:300, duration:30, isInjected:true,  realInjectionTime: new Date(2021,5,10,9,20)},
+//     {name:"Hous", dose:150, duration:30, isInjected:true,  realInjectionTime: new Date(2021,5,10,9,0)},
+//     {name:"Kiki", dose:300, duration:30, isInjected:false, realInjectionTime:null},
+//     {name:"Saki", dose:300, duration:40, isInjected:false, realInjectionTime:null}
 // ]
 
 // // 3. testcase execution

@@ -9,7 +9,7 @@ export function confirmInjection(record, patientsList, updateData) {
     // we change the status to injected
     patientsList.forEach(function (part, index, theArray) {
       if (theArray[index].index === record.index) {
-        theArray[index].status = "done";
+        theArray[index].isInjected = true;
       }
     });
 

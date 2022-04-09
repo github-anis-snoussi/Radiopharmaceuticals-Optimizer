@@ -11,7 +11,7 @@ echo "📄 - VERCEL_GIT_REPO_SLUG: $VERCEL_GIT_REPO_SLUG"
 echo "📄 - VERCEL_GIT_COMMIT_REF: $VERCEL_GIT_COMMIT_REF"
 
 
-########################################## BEHOLD MY WASTED TIME : ##################################################
+############################################### DESCRIPTION : #######################################################
 #####################################################################################################################
 # The goal is to only deploy master branch commits to prod url, and pull requests to master branch to preview urls
 # THE PROBLEM is vercel cashes the output of this script when I push to dev branch (exit 0) 
