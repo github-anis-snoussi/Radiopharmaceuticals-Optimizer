@@ -10,7 +10,7 @@ const SortableContainer = sortableContainer((props) => <tbody {...props} />);
 class PatientsTable extends React.Component {
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { patientsList } = this.props;
-    if (patientsList[newIndex].status !== "waiting") {
+    if (patientsList[newIndex].isInjected) {
       return;
     } else if (oldIndex !== newIndex) {
       const newData = arrayMove(

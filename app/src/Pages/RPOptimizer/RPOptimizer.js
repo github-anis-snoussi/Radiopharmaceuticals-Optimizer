@@ -216,7 +216,7 @@ class RPOptimizer extends React.Component {
         name: patienName,
         dose: patientDose,
         duration: patientScanDuration,
-        status: "waiting",
+        isInjected: false,
         index: this.state.modifiedPatientIndex,
         realInjectionTime: null,
       };
@@ -244,7 +244,7 @@ class RPOptimizer extends React.Component {
         name: patienName,
         dose: patientDose,
         duration: patientScanDuration,
-        status: "waiting",
+        isInjected: false,
         index: this.state.currentPatientIndex,
         realInjectionTime: null,
       };
