@@ -32,7 +32,7 @@ const RPOptimizer = () => {
   const [rpVol, setRpVol] = useState(0);
   const [wastedVol, setWastedVol] = useState(0);
   const [unextractableVol, setUnextractableVol] = useState(0);
-  const [name, setName] = useState("Rp Optimizer");
+  const [labName, setLabName] = useState("Rp Optimizer");
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -197,7 +197,7 @@ const RPOptimizer = () => {
         mesureTime={mesureTime}
         rpVol={rpVol}
         rpHalfLife={rpHalfLife}
-        name={name}
+        labName={labName}
         now={now}
         total={rpActivity}
       >
