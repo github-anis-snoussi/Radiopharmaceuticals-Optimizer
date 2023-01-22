@@ -192,15 +192,7 @@ const RPOptimizer = () => {
 
   return (
     <>
-      <AppHeader
-        rpActivity={rpActivity}
-        mesureTime={mesureTime}
-        rpVol={rpVol}
-        rpHalfLife={rpHalfLife}
-        labName={labName}
-        now={now}
-        total={rpActivity}
-      >
+      <AppHeader>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           <Button key="1" onClick={sortPatients} style={{ margin: 5 }}>
             <FileSearchOutlined /> Sort
