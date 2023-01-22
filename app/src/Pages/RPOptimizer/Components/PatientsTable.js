@@ -23,7 +23,6 @@ const PatientsTable = ({
         oldIndex,
         newIndex
       ).filter((el) => !!el);
-      // console.log('Sorted items: ', newData);
       updateData(newData);
     }
     generateExpectations();
@@ -42,18 +41,19 @@ const PatientsTable = ({
   const DraggableBodyRow = ({ className, style, ...restProps }) => {
     // function findIndex base on Table rowKey props and should always be a right array index
     const index = patientsList.findIndex(
-      (x) => x.index === restProps["data-row-key"]
+      (x) => x.id === restProps["data-row-key"]
     );
     return <SortableItem index={index} {...restProps} />;
   };
 
   const updateRecordMeasureTime = (record, mesureTime) => {
-    patientsList.forEach(function (part, index, theArray) {
-      if (theArray[index].index === record.index) {
+    let patients = [...patientsList];
+    patients.forEach(function (part, index, theArray) {
+      if (theArray[index].id === record.id) {
         theArray[index].realInjectionTime = new Date(mesureTime);
       }
     });
-    updateData([...patientsList]);
+    updateData(patients);
   };
 
   return (
@@ -68,7 +68,7 @@ const PatientsTable = ({
         patientsList,
         updateData
       )}
-      rowKey="index"
+      rowKey="id"
       components={{
         body: {
           wrapper: DraggableContainer,
