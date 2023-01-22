@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import useMediaQuery from "../../../hooks/useMediaQuery";
@@ -8,9 +8,6 @@ const NewPatientDrawer = ({
   isDrawerVisible,
   formRef,
   onAddPatient,
-  setName,
-  setDose,
-  setDuration,
 }) => {
   const { currentTheme } = useThemeSwitcher();
   const drawerWidth = useMediaQuery(
@@ -18,6 +15,11 @@ const NewPatientDrawer = ({
     window.innerWidth,
     700
   );
+
+  const [name, setName] = useState("");
+  const [dose, setDose] = useState(0);
+  const [duration, setDuration] = useState(0);
+
   return (
     <Drawer
       title="Add new Patient"
@@ -37,13 +39,24 @@ const NewPatientDrawer = ({
           <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
             Cancel
           </Button>
-          <Button onClick={onAddPatient} type="primary">
+          <Button
+            type="primary"
+            onClick={() => {
+              formRef.current.submit();
+            }}
+          >
             Submit
           </Button>
         </div>
       }
     >
-      <Form layout="vertical" ref={formRef}>
+      <Form
+        layout="vertical"
+        ref={formRef}
+        onFinish={() => {
+          onAddPatient({ name, dose, duration });
+        }}
+      >
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item
