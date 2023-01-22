@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { sort, now, expect } from "../../utils/sortPatientList";
 import {
@@ -53,6 +53,8 @@ const RPOptimizer = () => {
   // expectations values
   const [expected, setExpected] = useState({});
   const [now, setNow] = useState({});
+
+  const newPatientForm = useRef(null);
 
   useEffect(() => {
     const statsInterval = setInterval(generateNowStats, 60000);
@@ -125,21 +127,9 @@ const RPOptimizer = () => {
     }
   };
 
-  const showDrawer = () => {
-    setIsDrawerVisible(true);
-  };
-
   const closeDrawer = () => {
     setIsDrawerVisible(false);
     setIsModifyingPatient(false);
-  };
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
   };
 
   const confirmSettings = () => {
@@ -218,11 +208,11 @@ const RPOptimizer = () => {
     setPatientDose(record.dose);
     setIsDrawerVisible(true);
 
-    // this.formRef.current.setFieldsValue({
-    //   name: record.name,
-    //   dose: record.dose,
-    //   duration: record.duration,
-    // });
+    newPatientForm.current.setFieldsValue({
+      name: record.name,
+      dose: record.dose,
+      duration: record.duration,
+    });
   };
 
   return (
@@ -268,7 +258,9 @@ const RPOptimizer = () => {
           <Button
             key="2"
             type="primary"
-            onClick={showDrawer}
+            onClick={() => {
+              setIsDrawerVisible(true);
+            }}
             style={{ margin: 5 }}
           >
             <UserAddOutlined /> New Patient
@@ -292,14 +284,16 @@ const RPOptimizer = () => {
         isDrawerVisible={isDrawerVisible}
         closeDrawer={closeDrawer}
         onAddPatient={onAddPatient}
-        // formRef={this.formRef}
+        formRef={newPatientForm}
         setName={(name) => setPatienName(name)}
         setDose={(dose) => setPatientDose(dose)}
         setDuration={(duartion) => setPatientScanDuration(duration)}
       />
       <WelcomeModal
         isModalVisible={isModalVisible}
-        closeModal={closeModal}
+        closeModal={() => {
+          setIsModalVisible(false);
+        }}
         confirmSettings={confirmSettings}
         settings={getRpSetting()}
         setSettings={(settings) => {
