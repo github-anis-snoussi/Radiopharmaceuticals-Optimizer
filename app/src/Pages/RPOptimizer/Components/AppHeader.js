@@ -9,7 +9,7 @@ const HeaderContent = ({ children }) => (
 );
 
 const AppHeader = ({
-  name,
+  labName,
   children,
   rpActivity,
   mesureTime,
@@ -21,7 +21,7 @@ const AppHeader = ({
   return (
     <PageHeader
       className="site-page-header-responsive"
-      title={name}
+      title={labName}
       subTitle={new Date().toDateString()}
       extra={children}
     >

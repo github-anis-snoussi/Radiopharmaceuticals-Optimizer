@@ -31,7 +31,6 @@ const WelcomeModal = ({
       onCancel={closeModal}
       footer={[
         <Button
-          key={1}
           type="primary"
           onClick={confirmSettings}
           disabled={!settings.mesureTime || !settings.firstInjTime}
@@ -40,7 +39,7 @@ const WelcomeModal = ({
         </Button>,
       ]}
     >
-      <Text type="secondary">Enter your name</Text>
+      <Text type="secondary">Enter your Lab name</Text>
       <Input
         placeholder="Lab name"
         prefix={<BankOutlined />}
