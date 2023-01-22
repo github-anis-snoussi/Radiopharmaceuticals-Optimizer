@@ -11,6 +11,8 @@ import { Layout } from "antd";
 import { NavBar, SideBar, SideMenu } from "./Components";
 // pages
 import { RPOptimizer, Infos } from "./Pages";
+// context
+import { ContextProvider } from "./Context";
 
 const { Content, Footer } = Layout;
 
@@ -22,7 +24,7 @@ const App = () => {
   const MyMenu = <SideMenu setSideMenuKey={setSideMenuKey} />;
 
   return (
-    <>
+    <ContextProvider>
       <NavBar menu={MyMenu} />
       <Layout style={{ minHeight: "100vh" }}>
         <SideBar menu={MyMenu} />
@@ -54,7 +56,7 @@ const App = () => {
           </Footer>
         </Layout>
       </Layout>
-    </>
+    </ContextProvider>
   );
 };
 
