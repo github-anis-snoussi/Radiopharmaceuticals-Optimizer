@@ -43,12 +43,7 @@ const RPOptimizer = () => {
   const [patientsList, setPatientsList] = useState([]);
 
   // new patient input (stupid, I know)
-  const [isModifyingPatient, setIsModifyingPatient] = useState(false);
-  const [modifiedPatientIndex, setModifiedPatientIndex] = useState(0);
-  const [patienName, setPatienName] = useState("");
-  const [patientScanDuration, setPatientScanDuration] = useState(0);
-  const [patientDose, setPatientDose] = useState(0);
-  const [currentPatientIndex, setCurrentPatientIndex] = useState(0);
+  const [modifiedPatientId, setModifiedPatientId] = useState();
 
   // expectations values
   const [expected, setExpected] = useState({});
@@ -86,13 +81,6 @@ const RPOptimizer = () => {
 
   const deletAllPatients = () => {
     setPatientsList([]);
-    setIsModifyingPatient(false);
-    setModifiedPatientIndex(0);
-    setModifiedPatientIndex(0);
-    setPatienName("");
-    setPatientScanDuration(0);
-    setPatientDose(0);
-    setCurrentPatientIndex(0);
     setExpected({});
     setNow({});
 
@@ -127,11 +115,6 @@ const RPOptimizer = () => {
     }
   };
 
-  const closeDrawer = () => {
-    setIsDrawerVisible(false);
-    setIsModifyingPatient(false);
-  };
-
   const confirmSettings = () => {
     setMesureTime(new Date(mesureTime));
     setFirstInjTime(new Date(firstInjTime));
@@ -159,11 +142,7 @@ const RPOptimizer = () => {
   };
 
   const modifyPatient = (record) => {
-    setIsModifyingPatient(true);
-    setModifiedPatientIndex(record.index);
-    setPatienName(record.name);
-    setPatientScanDuration(record.duartion);
-    setPatientDose(record.dose);
+    setModifiedPatientId(record.id);
     setIsDrawerVisible(true);
 
     newPatientForm.current.setFieldsValue({
@@ -174,38 +153,38 @@ const RPOptimizer = () => {
   };
 
   const onAddPatient = ({ name, dose, duration }) => {
-    if (isModifyingPatient) {
+    if (modifiedPatientId) {
       const newPatient = {
-        id: uuidv4(),
+        id: modifiedPatientId,
         name: name,
         dose: dose,
         duration: duration,
         isInjected: false,
         realInjectionTime: null,
-        index: patientsList.length,
       };
+
       setPatientsList(
-        patientsList.map((p) =>
-          p.index === modifiedPatientIndex ? { ...newPatient } : p
+        patientsList.map((patient) =>
+          patient.id === modifiedPatientId ? newPatient : patient
         )
       );
+      setModifiedPatientId(null);
       setIsDrawerVisible(false);
-      setCurrentPatientIndex(currentPatientIndex + 1);
-      setIsModifyingPatient(false);
+
       generateExpectations();
       sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
     } else {
       const newPatient = {
+        id: uuidv4(),
         name,
         dose,
         duration,
         isInjected: false,
-        index: currentPatientIndex,
         realInjectionTime: null,
       };
-      setPatientsList([...patientsList, newPatient]);
+      setPatientsList(patientsList.push(newPatient));
       setIsDrawerVisible(false);
-      setCurrentPatientIndex(currentPatientIndex + 1);
+
       generateExpectations();
       sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
     }
@@ -278,7 +257,9 @@ const RPOptimizer = () => {
       <Expectations {...expected} />
       <NewPatientDrawer
         isDrawerVisible={isDrawerVisible}
-        closeDrawer={closeDrawer}
+        closeDrawer={() => {
+          setIsDrawerVisible(false);
+        }}
         onAddPatient={onAddPatient}
         formRef={newPatientForm}
       />
