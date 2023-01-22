@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Typography,
   Modal,
@@ -10,20 +10,47 @@ import {
   Input,
   InputNumber,
   Tag,
+  message,
 } from "antd";
 import { BankOutlined } from "@ant-design/icons";
 import moment from "moment";
+import {
+  sendAmplitudeData,
+  amplitudeLogsTypes,
+} from "../../../utils/amplitude";
+
 import ThemeSwitcher from "./ThemeSwitcher";
+import { Context } from "../../../Context";
 
 const { Text } = Typography;
 
-const WelcomeModal = ({
-  isModalVisible,
-  closeModal,
-  confirmSettings,
-  settings,
-  setSettings,
-}) => {
+const WelcomeModal = ({ isModalVisible, closeModal }) => {
+  const {
+    labName,
+    setLabName,
+    rpActivity,
+    setRpActivity,
+    rpVol,
+    setRpVol,
+    rpHalfLife,
+    setRpHalfLife,
+    mesureTime,
+    setMesureTime,
+    firstInjTime,
+    setFirstInjTime,
+    wastedVol,
+    setWastedVol,
+    unextractableVol,
+    setUnextractableVol,
+  } = useContext(Context);
+
+  const finishEdit = () => {
+    closeModal();
+
+    message.success("Session initialized.");
+    sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
+  };
+
   return (
     <Modal
       title="Welcome"
@@ -32,8 +59,8 @@ const WelcomeModal = ({
       footer={[
         <Button
           type="primary"
-          onClick={confirmSettings}
-          disabled={!settings.mesureTime || !settings.firstInjTime}
+          onClick={finishEdit}
+          disabled={!mesureTime || !firstInjTime}
         >
           Confirm
         </Button>,
@@ -43,9 +70,9 @@ const WelcomeModal = ({
       <Input
         placeholder="Lab name"
         prefix={<BankOutlined />}
-        value={settings.name}
-        onChange={(name) => {
-          setSettings({ ...settings, name: name.target.value });
+        value={labName}
+        onChange={(event) => {
+          setLabName(event.target.value);
         }}
       />
       <Row gutter={16} style={{ marginBottom: 10, marginTop: 15 }}>
@@ -55,9 +82,9 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rpHalfLife}
+            value={rpHalfLife}
             onChange={(rpHalfLife) => {
-              setSettings({ ...settings, rpHalfLife: rpHalfLife });
+              setRpHalfLife(rpHalfLife);
             }}
           />
         </Col>
@@ -70,9 +97,9 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rpActivity}
+            value={rpActivity}
             onChange={(rpActivity) => {
-              setSettings({ ...settings, rpActivity: rpActivity });
+              setRpActivity(rpActivity);
             }}
           />
         </Col>
@@ -86,9 +113,9 @@ const WelcomeModal = ({
           <DatePicker
             showTime
             style={{ width: "100%" }}
-            value={settings.mesureTime ? moment(settings.mesureTime) : null}
-            onChange={(mesureTime) => {
-              setSettings({ ...settings, mesureTime: mesureTime });
+            value={mesureTime ? moment(mesureTime) : null}
+            onChange={(date, dateString) => {
+              setMesureTime(dateString);
             }}
           />
         </Col>
@@ -102,9 +129,9 @@ const WelcomeModal = ({
           <DatePicker
             showTime
             style={{ width: "100%" }}
-            value={settings.firstInjTime ? moment(settings.firstInjTime) : null}
-            onChange={(firstInjTime) => {
-              setSettings({ ...settings, firstInjTime: firstInjTime });
+            value={firstInjTime ? moment(firstInjTime) : null}
+            onChange={(date, dateString) => {
+              setFirstInjTime(dateString);
             }}
           />
         </Col>
@@ -117,9 +144,9 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.rpVol}
+            value={rpVol}
             onChange={(rpVol) => {
-              setSettings({ ...settings, rpVol: rpVol });
+              setRpVol(rpVol);
             }}
           />
         </Col>
@@ -132,9 +159,9 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.wastedVol}
+            value={wastedVol}
             onChange={(wastedVol) => {
-              setSettings({ ...settings, wastedVol: wastedVol });
+              setWastedVol(wastedVol);
             }}
           />
         </Col>
@@ -147,12 +174,9 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <InputNumber
             style={{ width: "100%" }}
-            value={settings.unextractableVol}
+            value={unextractableVol}
             onChange={(unextractableVol) => {
-              setSettings({
-                ...settings,
-                unextractableVol: unextractableVol,
-              });
+              setUnextractableVol(unextractableVol);
             }}
           />
         </Col>
