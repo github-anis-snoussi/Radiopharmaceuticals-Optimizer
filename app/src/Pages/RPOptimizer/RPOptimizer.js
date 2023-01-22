@@ -21,7 +21,6 @@ import {
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { duration } from "moment";
 
 const RPOptimizer = () => {
   // rpSettings
@@ -113,15 +112,6 @@ const RPOptimizer = () => {
       setExpected({ ...expected });
       generateNowStats();
     }
-  };
-
-  const confirmSettings = () => {
-    setMesureTime(new Date(mesureTime));
-    setFirstInjTime(new Date(firstInjTime));
-    setIsModalVisible(false);
-
-    message.success("Session initialized.");
-    sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
   };
 
   const sortPatients = () => {
@@ -259,11 +249,6 @@ const RPOptimizer = () => {
         isModalVisible={isModalVisible}
         closeModal={() => {
           setIsModalVisible(false);
-        }}
-        confirmSettings={confirmSettings}
-        settings={getRpSetting()}
-        setSettings={(settings) => {
-          return;
         }}
       />
     </>
