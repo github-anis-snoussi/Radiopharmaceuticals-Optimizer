@@ -17,8 +17,6 @@ const { Content, Footer } = Layout;
 const App = () => {
   const [sideMenuKey, setSideMenuKey] = useState(1);
   const { currentTheme } = useThemeSwitcher();
-
-  // this is stupid, but I am bored with this css shit.
   const margin = useMediaQuery("(max-width: 991.9px)", 0, 200);
 
   const MyMenu = <SideMenu setSideMenuKey={setSideMenuKey} />;
@@ -49,7 +47,7 @@ const App = () => {
           <Footer style={{ textAlign: "center" }}>
             RP optimizer {new Date().getFullYear()} Created by Anis Snoussi &
             Walid Snoussi <br />
-            Version Ref :{" "}
+            Version Ref :
             {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA
               ? process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)
               : "no-ref"}
