@@ -141,48 +141,6 @@ const RPOptimizer = () => {
     sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
   };
 
-  const onAddPatient = () => {
-    if (isModifyingPatient) {
-      const newPatient = {
-        name: patienName,
-        dose: patientDose,
-        duration: patientScanDuration,
-        isInjected: false,
-        index: modifiedPatientIndex,
-        realInjectionTime: null,
-      };
-
-      setPatientsList(
-        patientsList.map((p) =>
-          p.index === modifiedPatientIndex ? { ...newPatient } : p
-        )
-      );
-
-      setIsDrawerVisible(false);
-      setCurrentPatientIndex(currentPatientIndex + 1);
-      setIsModifyingPatient(false);
-
-      generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
-    } else {
-      const newPatient = {
-        name: patienName,
-        dose: patientDose,
-        duration: patientScanDuration,
-        isInjected: false,
-        index: currentPatientIndex,
-        realInjectionTime: null,
-      };
-
-      setPatientsList([...patientsList, newPatient]);
-      setIsDrawerVisible(false);
-      setCurrentPatientIndex(currentPatientIndex + 1);
-
-      generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
-    }
-  };
-
   const sortPatients = () => {
     const newFormatedPatients = sort(patientsList, getRpSetting());
 
@@ -213,6 +171,44 @@ const RPOptimizer = () => {
       dose: record.dose,
       duration: record.duration,
     });
+  };
+
+  const onAddPatient = ({ name, dose, duration }) => {
+    if (isModifyingPatient) {
+      const newPatient = {
+        id: uuidv4(),
+        name: name,
+        dose: dose,
+        duration: duration,
+        isInjected: false,
+        realInjectionTime: null,
+        index: patientsList.length,
+      };
+      setPatientsList(
+        patientsList.map((p) =>
+          p.index === modifiedPatientIndex ? { ...newPatient } : p
+        )
+      );
+      setIsDrawerVisible(false);
+      setCurrentPatientIndex(currentPatientIndex + 1);
+      setIsModifyingPatient(false);
+      generateExpectations();
+      sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
+    } else {
+      const newPatient = {
+        name,
+        dose,
+        duration,
+        isInjected: false,
+        index: currentPatientIndex,
+        realInjectionTime: null,
+      };
+      setPatientsList([...patientsList, newPatient]);
+      setIsDrawerVisible(false);
+      setCurrentPatientIndex(currentPatientIndex + 1);
+      generateExpectations();
+      sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
+    }
   };
 
   return (
@@ -285,9 +281,6 @@ const RPOptimizer = () => {
         closeDrawer={closeDrawer}
         onAddPatient={onAddPatient}
         formRef={newPatientForm}
-        setName={(name) => setPatienName(name)}
-        setDose={(dose) => setPatientDose(dose)}
-        setDuration={(duartion) => setPatientScanDuration(duration)}
       />
       <WelcomeModal
         isModalVisible={isModalVisible}
