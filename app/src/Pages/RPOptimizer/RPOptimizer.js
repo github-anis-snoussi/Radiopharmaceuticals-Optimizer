@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { sort, now, expect } from "../../utils/sortPatientList";
 import {
@@ -21,134 +21,93 @@ import {
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
+import { duration } from "moment";
 
-const initialState = {
+const RPOptimizer = () => {
   // rpSettings
-  rpActivity: 0,
-  mesureTime: null,
-  firstInjTime: null,
-  rpHalfLife: 0,
-  rpVol: 0,
-  wastedVol: 0,
-  unextractableVol: 0,
-  name: "Rp Optimizer",
+  const [rpActivity, setRpActivity] = useState(0);
+  const [mesureTime, setMesureTime] = useState(null);
+  const [firstInjTime, setFirstInjTime] = useState(null);
+  const [rpHalfLife, setRpHalfLife] = useState(0);
+  const [rpVol, setRpVol] = useState(0);
+  const [wastedVol, setWastedVol] = useState(0);
+  const [unextractableVol, setUnextractableVol] = useState(0);
+  const [name, setName] = useState("Rp Optimizer");
 
   // app status
-  isDrawerVisible: false,
-  isModalVisible: true,
-  sideMenuKey: 1,
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [sideMenuKey, setSideMenuKey] = useState(1);
 
   //patients list
-  patientsList: [],
+  const [patientsList, setPatientsList] = useState([]);
 
   // new patient input (stupid, I know)
-  isModifyingPatient: false,
-  modifiedPatientIndex: 0,
-  patienName: "",
-  patientScanDuration: 0,
-  patientDose: 0,
-  currentPatientIndex: 0,
+  const [isModifyingPatient, setIsModifyingPatient] = useState(false);
+  const [modifiedPatientIndex, setModifiedPatientIndex] = useState(0);
+  const [patienName, setPatienName] = useState("");
+  const [patientScanDuration, setPatientScanDuration] = useState(0);
+  const [patientDose, setPatientDose] = useState(0);
+  const [currentPatientIndex, setCurrentPatientIndex] = useState(0);
 
   // expectations values
-  expected: {},
-  now: {},
+  const [expected, setExpected] = useState({});
+  const [now, setNow] = useState({});
 
-  // interval for updating the now object
-  intervalId: null,
-
-  // the user unique id for amplitude
-  uid: uuidv4(),
-};
-
-class RPOptimizer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = JSON.parse(localStorage.getItem("state"))
-      ? JSON.parse(localStorage.getItem("state"))
-      : initialState;
-
-    this.formRef = React.createRef();
-    this.onAddPatient = this.onAddPatient.bind(this);
-    this.sortPatients = this.sortPatients.bind(this);
-    this.deletePatient = this.deletePatient.bind(this);
-    this.modifyPatient = this.modifyPatient.bind(this);
-    this.getRpSetting = this.getRpSetting.bind(this);
-    this.generateExpectations = this.generateExpectations.bind(this);
-    this.generateNowStats = this.generateNowStats.bind(this);
-    this.deletAllPatients = this.deletAllPatients.bind(this);
-  }
-
-  componentDidMount() {
-    var intervalId = setInterval(this.generateNowStats, 60000);
-    this.setState({ intervalId: intervalId });
-
-    // override this.setState to automatically save state after each update
-    const orginial = this.setState;
-    this.setState = function () {
-      let arguments0 = arguments[0];
-      let arguments1 = () => {
-        localStorage.setItem("state", JSON.stringify({ ...this.state }));
-        if (arguments[1]) {
-          arguments[1]();
-        }
-      };
-      orginial.bind(this)(arguments0, arguments1);
-    };
+  useEffect(() => {
+    const statsInterval = setInterval(generateNowStats, 60000);
 
     // in case this is after refresh
-    this.generateNowStats();
-    this.generateExpectations();
+    generateNowStats();
+    generateExpectations();
 
     // init the amplitude user
-    setAmplitudeUserId(this.state.uid);
-  }
+    setAmplitudeUserId(uuidv4());
 
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
-  }
+    return () => {
+      clearInterval(statsInterval);
+    };
+  }, []);
 
   // helper function
-  getRpSetting = () => {
-    const { state } = this;
+  const getRpSetting = () => {
     return {
-      rpActivity: state.rpActivity,
-      mesureTime: new Date(state.mesureTime),
-      firstInjTime: new Date(state.firstInjTime),
-      rpHalfLife: state.rpHalfLife,
-      rpVol: state.rpVol,
-      wastedVol: state.wastedVol,
-      unextractableVol: state.unextractableVol,
+      rpActivity,
+      mesureTime: new Date(mesureTime),
+      firstInjTime: new Date(firstInjTime),
+      rpHalfLife,
+      rpVol,
+      wastedVol,
+      unextractableVol,
     };
   };
 
-  deletAllPatients = () => {
-    this.setState(
-      {
-        patientsList: [],
-        isModifyingPatient: false,
-        modifiedPatientIndex: 0,
-        patienName: "",
-        patientScanDuration: 0,
-        patientDose: 0,
-        currentPatientIndex: 0,
-        expected: {},
-        now: {},
-      },
-      () => sendAmplitudeData(amplitudeLogsTypes.DELETE_ALL_PATIENTS)
-    );
+  const deletAllPatients = () => {
+    setPatientsList([]);
+    setIsModifyingPatient(false);
+    setModifiedPatientIndex(0);
+    setModifiedPatientIndex(0);
+    setPatienName("");
+    setPatientScanDuration(0);
+    setPatientDose(0);
+    setCurrentPatientIndex(0);
+    setExpected({});
+    setNow({});
+
+    sendAmplitudeData(amplitudeLogsTypes.DELETE_ALL_PATIENTS);
   };
 
-  generateNowStats = () => {
-    if (this.state.patientsList?.length > 0) {
-      const nowDict = now(this.state.patientsList, this.getRpSetting());
-      this.setState({ now: { ...nowDict } });
+  const generateNowStats = () => {
+    if (patientsList?.length > 0) {
+      const nowDict = now(patientsList, getRpSetting());
+      setNow({ ...nowDict });
     }
   };
 
-  generateExpectations = () => {
-    if (this.state.patientsList?.length > 0) {
-      const expected = expect(this.state.patientsList, this.getRpSetting());
-      let newPatientsList = [...this.state.patientsList].map((x, i) => {
+  const generateExpectations = () => {
+    if (patientsList?.length > 0) {
+      const expected = expect(patientsList, getRpSetting());
+      let newPatientsList = [...patientsList].map((x, i) => {
         return {
           ...x,
           expectedInjectionTime: new Date(
@@ -160,238 +119,195 @@ class RPOptimizer extends React.Component {
           expectedInjectionVolume: expected.patientInjVolList[i].toFixed(2),
         };
       });
-      this.setState(
-        { expected: { ...expected }, patientsList: [...newPatientsList] },
-        () => {
-          this.generateNowStats();
-        }
-      );
+      setPatientsList([...newPatientsList]);
+      setExpected({ ...expected });
+      generateNowStats();
     }
   };
 
-  showDrawer = () => {
-    this.setState({
-      isDrawerVisible: true,
-    });
+  const showDrawer = () => {
+    setIsDrawerVisible(true);
   };
 
-  closeDrawer = () => {
-    this.setState({
-      isDrawerVisible: false,
-      isModifyingPatient: false,
-    });
+  const closeDrawer = () => {
+    setIsDrawerVisible(false);
+    setIsModifyingPatient(false);
   };
 
-  showModal = () => {
-    this.setState({
-      isModalVisible: true,
-    });
+  const showModal = () => {
+    setIsModalVisible(true);
   };
 
-  closeModal = () => {
-    this.setState({
-      isModalVisible: false,
-    });
+  const closeModal = () => {
+    setIsModalVisible(false);
   };
 
-  confirmSettings = () => {
-    this.setState(
-      (prevState) => ({
-        mesureTime: new Date(prevState.mesureTime),
-        firstInjTime: new Date(prevState.firstInjTime),
-        isModalVisible: false,
-      }),
-      () => {
-        message.success("Session initialized.");
-        sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
-      }
-    );
+  const confirmSettings = () => {
+    setMesureTime(new Date(mesureTime));
+    setFirstInjTime(new Date(firstInjTime));
+    setIsModalVisible(false);
+
+    message.success("Session initialized.");
+    sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
   };
 
-  onAddPatient() {
-    const { patienName, patientScanDuration, patientDose, isModifyingPatient } =
-      this.state;
+  const onAddPatient = () => {
     if (isModifyingPatient) {
       const newPatient = {
         name: patienName,
         dose: patientDose,
         duration: patientScanDuration,
         isInjected: false,
-        index: this.state.modifiedPatientIndex,
+        index: modifiedPatientIndex,
         realInjectionTime: null,
       };
 
-      this.setState(
-        (state) => ({
-          patientsList: [
-            ...state.patientsList.map((p) =>
-              p.index === this.state.modifiedPatientIndex
-                ? { ...newPatient }
-                : p
-            ),
-          ],
-          isDrawerVisible: false,
-          currentPatientIndex: state.currentPatientIndex + 1,
-          isModifyingPatient: false,
-        }),
-        () => {
-          this.generateExpectations();
-          sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
-        }
+      setPatientsList(
+        patientsList.map((p) =>
+          p.index === modifiedPatientIndex ? { ...newPatient } : p
+        )
       );
+
+      setIsDrawerVisible(false);
+      setCurrentPatientIndex(currentPatientIndex + 1);
+      setIsModifyingPatient(false);
+
+      generateExpectations();
+      sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
     } else {
       const newPatient = {
         name: patienName,
         dose: patientDose,
         duration: patientScanDuration,
         isInjected: false,
-        index: this.state.currentPatientIndex,
+        index: currentPatientIndex,
         realInjectionTime: null,
       };
 
-      this.setState(
-        (state) => ({
-          patientsList: [...state.patientsList, newPatient],
-          isDrawerVisible: false,
-          currentPatientIndex: state.currentPatientIndex + 1,
-        }),
-        () => {
-          this.generateExpectations();
-          sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
-        }
-      );
+      setPatientsList([...patientsList, newPatient]);
+      setIsDrawerVisible(false);
+      setCurrentPatientIndex(currentPatientIndex + 1);
+
+      generateExpectations();
+      sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
     }
-  }
+  };
 
-  sortPatients() {
-    const newFormatedPatients = sort(
-      this.state.patientsList,
-      this.getRpSetting()
-    );
+  const sortPatients = () => {
+    const newFormatedPatients = sort(patientsList, getRpSetting());
 
-    this.setState({ patientsList: [...newFormatedPatients] }, () => {
-      message.success("Patient List sorted");
-      this.generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS);
-    });
-  }
+    setPatientsList([...newFormatedPatients]);
+    message.success("Patient List sorted");
+    generateExpectations();
+    sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS);
+  };
 
-  deletePatient(record) {
-    let newPatierntsData = this.state.patientsList.filter(
-      (p) => p.index !== record.index
-    );
-    this.setState({ patientsList: [...newPatierntsData] }, () => {
-      this.generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT);
-    });
-  }
+  const deletePatient = (record) => {
+    let newPatierntsData = patientsList.filter((p) => p.index !== record.index);
 
-  modifyPatient(record) {
-    this.setState(
-      {
-        isModifyingPatient: true,
-        modifiedPatientIndex: record.index,
-        patienName: record.name,
-        patientScanDuration: record.duration,
-        patientDose: record.dose,
-        isDrawerVisible: true,
-      },
-      () => {
-        this.formRef.current.setFieldsValue({
-          name: record.name,
-          dose: record.dose,
-          duration: record.duration,
-        });
-      }
-    );
-  }
+    setPatientsList([...newPatierntsData]);
+    generateExpectations();
+    sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT);
+  };
 
-  render() {
-    return (
-      <>
-        <AppHeader
-          rpActivity={this.state.rpActivity}
-          mesureTime={this.state.mesureTime}
-          rpVol={this.state.rpVol}
-          rpHalfLife={this.state.rpHalfLife}
-          name={this.state.name}
-          now={this.state.now}
-          total={this.state.rpActivity}
-        >
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            <Button key="1" onClick={this.sortPatients} style={{ margin: 5 }}>
-              <FileSearchOutlined /> Sort
+  const modifyPatient = (record) => {
+    setIsModifyingPatient(true);
+    setModifiedPatientIndex(record.index);
+    setPatienName(record.name);
+    setPatientScanDuration(record.duartion);
+    setPatientDose(record.dose);
+    setIsDrawerVisible(true);
+
+    // this.formRef.current.setFieldsValue({
+    //   name: record.name,
+    //   dose: record.dose,
+    //   duration: record.duration,
+    // });
+  };
+
+  return (
+    <>
+      <AppHeader
+        rpActivity={rpActivity}
+        mesureTime={mesureTime}
+        rpVol={rpVol}
+        rpHalfLife={rpHalfLife}
+        name={name}
+        now={now}
+        total={rpActivity}
+      >
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <Button key="1" onClick={sortPatients} style={{ margin: 5 }}>
+            <FileSearchOutlined /> Sort
+          </Button>
+
+          <Button
+            key="3"
+            onClick={() => setIsModalVisible(true)}
+            style={{ margin: 5 }}
+          >
+            <SettingOutlined /> Settings
+          </Button>
+
+          <Popconfirm
+            key="4"
+            title={"Delete All ?"}
+            icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+            onConfirm={deletAllPatients}
+            okText="Delete All Patients"
+            okButtonProps={{
+              danger: true,
+            }}
+            cancelText="Cancel"
+          >
+            <Button type="primary" danger style={{ margin: 5 }}>
+              <UsergroupDeleteOutlined /> Delete All
             </Button>
+          </Popconfirm>
 
-            <Button
-              key="3"
-              onClick={() => this.setState({ isModalVisible: true })}
-              style={{ margin: 5 }}
-            >
-              <SettingOutlined /> Settings
-            </Button>
+          <Button
+            key="2"
+            type="primary"
+            onClick={showDrawer}
+            style={{ margin: 5 }}
+          >
+            <UserAddOutlined /> New Patient
+          </Button>
+        </div>
+      </AppHeader>
 
-            <Popconfirm
-              key="4"
-              title={"Delete All ?"}
-              icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
-              onConfirm={this.deletAllPatients}
-              okText="Delete All Patients"
-              okButtonProps={{
-                danger: true,
-              }}
-              cancelText="Cancel"
-            >
-              <Button type="primary" danger style={{ margin: 5 }}>
-                <UsergroupDeleteOutlined /> Delete All
-              </Button>
-            </Popconfirm>
+      <PatientsTable
+        patientsList={patientsList}
+        updateData={(newData) => {
+          setPatientsList(newData);
+          generateExpectations();
+        }}
+        deletePatient={deletePatient}
+        modifyPatient={modifyPatient}
+        generateExpectations={generateExpectations}
+      />
 
-            <Button
-              key="2"
-              type="primary"
-              onClick={this.showDrawer}
-              style={{ margin: 5 }}
-            >
-              <UserAddOutlined /> New Patient
-            </Button>
-          </div>
-        </AppHeader>
-
-        <PatientsTable
-          patientsList={this.state.patientsList}
-          updateData={(newData) =>
-            this.setState({ patientsList: newData }, () =>
-              this.generateExpectations()
-            )
-          }
-          deletePatient={this.deletePatient}
-          modifyPatient={this.modifyPatient}
-          generateExpectations={this.generateExpectations}
-        />
-
-        <Expectations {...this.state.expected} />
-        <NewPatientDrawer
-          isDrawerVisible={this.state.isDrawerVisible}
-          closeDrawer={this.closeDrawer}
-          onAddPatient={this.onAddPatient}
-          formRef={this.formRef}
-          setName={(name) => this.setState({ patienName: name })}
-          setDose={(dose) => this.setState({ patientDose: dose })}
-          setDuration={(duartion) =>
-            this.setState({ patientScanDuration: duartion })
-          }
-        />
-        <WelcomeModal
-          isModalVisible={this.state.isModalVisible}
-          closeModal={this.closeModal}
-          confirmSettings={this.confirmSettings}
-          settings={this.getRpSetting()}
-          setSettings={(settings) => this.setState({ ...settings })}
-        />
-      </>
-    );
-  }
-}
+      <Expectations {...expected} />
+      <NewPatientDrawer
+        isDrawerVisible={isDrawerVisible}
+        closeDrawer={closeDrawer}
+        onAddPatient={onAddPatient}
+        // formRef={this.formRef}
+        setName={(name) => setPatienName(name)}
+        setDose={(dose) => setPatientDose(dose)}
+        setDuration={(duartion) => setPatientScanDuration(duration)}
+      />
+      <WelcomeModal
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        confirmSettings={confirmSettings}
+        settings={getRpSetting()}
+        setSettings={(settings) => {
+          return;
+        }}
+      />
+    </>
+  );
+};
 
 export default RPOptimizer;
