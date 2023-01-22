@@ -8,12 +8,15 @@ const NavBar = ({ menu }) => {
   const [visible, setVisible] = useState(false);
   const { currentTheme } = useThemeSwitcher();
 
-
   return (
-    <nav className="navbar" style={{backgroundColor : currentTheme === 'dark' ? '#1f1f1f' : 'white'}} >
+    <nav
+      className="navbar"
+      style={{ backgroundColor: currentTheme === "dark" ? "#1f1f1f" : "white" }}
+    >
       <Button
         className="menu"
-        type="primary"
+        type="text"
+        size={"large"}
         icon={<MenuOutlined />}
         onClick={() => setVisible(true)}
       />
@@ -22,10 +25,10 @@ const NavBar = ({ menu }) => {
         onClick={() => setVisible(false)}
         onClose={() => setVisible(false)}
         visible={visible}
-      > 
+      >
         <AppLogo />
         {menu}
-     </Drawer>
+      </Drawer>
     </nav>
   );
 };
