@@ -16,6 +16,9 @@ function ContextProvider({ children }) {
   const [unextractableVol, setUnextractableVol] = useState(0);
   const [labName, setLabName] = useState("Rp Optimizer");
 
+  //patients list
+  const [patientsList, setPatientsList] = useState([]);
+
   const setRpSettings = ({
     rpActivity,
     mesureTime,
@@ -52,6 +55,27 @@ function ContextProvider({ children }) {
     }
   }
 
+  const addPatient = (newPatient) => {
+    setPatientsList(prevPatients => [...prevPatients, newPatient])
+  }
+
+  const deletePatient = (id) => {
+    setPatientsList(prevPatients => prevPatients.filter(item => item.id !== id))
+  }
+
+  const updatePatient = (patient) => {
+    setPatientsList(prevPatients => prevPatients.forEach((p, index) => {
+      if(p.id === patient.id) {
+          prevPatients[index] = patient;
+      }
+    }))
+  }
+
+  const deletePatientsList = (newPatientsList) => {
+    setPatientsList(newPatientsList)
+  }
+
+
   return (
     <Context.Provider
       value={{
@@ -64,6 +88,11 @@ function ContextProvider({ children }) {
         unextractableVol,
         labName,
         setRpSettings,
+        patientsList,
+        addPatient,
+        deletePatient,
+        updatePatient,
+        deletePatientsList,
       }}
     >
       {children}
