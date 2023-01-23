@@ -1,7 +1,7 @@
 // Providing Context
 // ==================
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Context = React.createContext();
 
@@ -66,7 +66,7 @@ function ContextProvider({ children }) {
   const updatePatient = (patient) => {
     setPatientsList(prevPatients => prevPatients.forEach((p, index) => {
       if(p.id === patient.id) {
-          prevPatients[index] = patient;
+          prevPatients[index] = { ...prevPatients[index],  patient};
       }
     }))
   }

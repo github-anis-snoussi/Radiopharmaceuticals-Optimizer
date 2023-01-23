@@ -1,24 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import { v4 as uuidv4 } from "uuid";
 import useMediaQuery from "../../../hooks/useMediaQuery";
+import { Context } from "../../../Context";
 
 const NewPatientDrawer = ({
   closeDrawer,
   isDrawerVisible,
-  formRef,
-  onAddPatient,
+  modifiedPatientId
 }) => {
   const { currentTheme } = useThemeSwitcher();
+  const newPatientForm = useRef(null);
   const drawerWidth = useMediaQuery(
     "(max-width: 767px)",
     window.innerWidth,
     700
   );
 
+  const {
+    patientsList,
+    addPatient,
+    updatePatient,
+  } = useContext(Context);
+
   const [name, setName] = useState("");
   const [dose, setDose] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    if(modifiedPatientId) {
+      let modifiedPatient = patientsList.find(element => element.id === modifiedPatientId);
+      setName(modifiedPatient.name);
+      setDose(modifiedPatient.dose);
+      setDuration(modifiedPatient.duration)
+    }
+  }, [])
+
+  const finishedEdit = () => {
+    if(modifiedPatientId) {
+      updatePatient({id : modifiedPatientId, name, dose, duration})
+    } else {
+      addPatient({id : uuidv4(), name, dose, duration})
+    }
+    closeDrawer();
+  }
 
   return (
     <Drawer
@@ -42,7 +68,7 @@ const NewPatientDrawer = ({
           <Button
             type="primary"
             onClick={() => {
-              formRef.current.submit();
+              newPatientForm.current.submit();
             }}
           >
             Submit
@@ -52,10 +78,8 @@ const NewPatientDrawer = ({
     >
       <Form
         layout="vertical"
-        ref={formRef}
-        onFinish={() => {
-          onAddPatient({ name, dose, duration });
-        }}
+        ref={newPatientForm}
+        onFinish={finishedEdit}
       >
         <Row gutter={16}>
           <Col span={24}>
