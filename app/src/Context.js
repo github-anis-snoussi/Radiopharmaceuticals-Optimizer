@@ -16,25 +16,54 @@ function ContextProvider({ children }) {
   const [unextractableVol, setUnextractableVol] = useState(0);
   const [labName, setLabName] = useState("Rp Optimizer");
 
+  const setRpSettings = ({
+    rpActivity,
+    mesureTime,
+    firstInjTime,
+    rpHalfLife,
+    rpVol,
+    wastedVol,
+    unextractableVol,
+    labName
+  }) => {
+    if(rpActivity) {
+      setRpActivity(rpActivity)
+    }
+    if(mesureTime) {
+      setMesureTime(mesureTime)
+    }
+    if(firstInjTime) {
+      setFirstInjTime(firstInjTime)
+    }
+    if(rpHalfLife) {
+      setRpHalfLife(rpHalfLife)
+    }
+    if(rpVol) {
+      setRpVol(rpVol)
+    }
+    if(wastedVol) {
+      setWastedVol(wastedVol)
+    }
+    if(unextractableVol) {
+      setUnextractableVol(unextractableVol)
+    }
+    if(labName) {
+      setLabName(labName)
+    }
+  }
+
   return (
     <Context.Provider
       value={{
         rpActivity,
-        setRpActivity,
         mesureTime,
-        setMesureTime,
         firstInjTime,
-        setFirstInjTime,
         rpHalfLife,
-        setRpHalfLife,
         rpVol,
-        setRpVol,
         wastedVol,
-        setWastedVol,
         unextractableVol,
-        setUnextractableVol,
         labName,
-        setLabName,
+        setRpSettings,
       }}
     >
       {children}

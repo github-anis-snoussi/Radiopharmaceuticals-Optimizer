@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Typography,
   Modal,
@@ -26,25 +26,37 @@ const { Text } = Typography;
 
 const WelcomeModal = ({ isModalVisible, closeModal }) => {
   const {
-    labName,
-    setLabName,
-    rpActivity,
-    setRpActivity,
-    rpVol,
-    setRpVol,
-    rpHalfLife,
-    setRpHalfLife,
-    mesureTime,
-    setMesureTime,
-    firstInjTime,
-    setFirstInjTime,
-    wastedVol,
-    setWastedVol,
-    unextractableVol,
-    setUnextractableVol,
+    labName : initLabName,
+    rpActivity : initRpActivity,
+    rpVol : initRpVol,
+    rpHalfLife : initRpHalfLife,
+    mesureTime : initMesureTime,
+    firstInjTime : initFirstInjTime,
+    wastedVol : initWastedVol,
+    unextractableVol : initUnextractableVol,
+    setRpSettings,
   } = useContext(Context);
 
+  const [rpActivity, setRpActivity] = useState(initRpActivity);
+  const [mesureTime, setMesureTime] = useState(initMesureTime);
+  const [firstInjTime, setFirstInjTime] = useState(initFirstInjTime);
+  const [rpHalfLife, setRpHalfLife] = useState(initRpHalfLife);
+  const [rpVol, setRpVol] = useState(initRpVol);
+  const [wastedVol, setWastedVol] = useState(initWastedVol);
+  const [unextractableVol, setUnextractableVol] = useState(initUnextractableVol);
+  const [labName, setLabName] = useState(initLabName);
+
   const finishEdit = () => {
+    setRpSettings({
+      rpActivity,
+      mesureTime,
+      firstInjTime,
+      rpHalfLife,
+      rpVol,
+      wastedVol,
+      unextractableVol,
+      labName
+    })
     closeModal();
 
     message.success("Session initialized.");
@@ -59,6 +71,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }) => {
       footer={[
         <Button
           type="primary"
+          htmlType="submit"
           onClick={finishEdit}
           disabled={!mesureTime || !firstInjTime}
         >
