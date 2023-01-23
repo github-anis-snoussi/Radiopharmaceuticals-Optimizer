@@ -23,6 +23,9 @@ import {
 } from "@ant-design/icons";
 
 const RPOptimizer = () => {
+  const [modifiedPatientId, setModifiedPatientId] = useState(null);
+
+  // OLD stuff
   // rpSettings
   const [rpActivity, setRpActivity] = useState(0);
   const [mesureTime, setMesureTime] = useState(null);
@@ -40,9 +43,6 @@ const RPOptimizer = () => {
 
   //patients list
   const [patientsList, setPatientsList] = useState([]);
-
-  // new patient input (stupid, I know)
-  const [modifiedPatientId, setModifiedPatientId] = useState();
 
   // expectations values
   const [expected, setExpected] = useState({});
@@ -241,9 +241,9 @@ const RPOptimizer = () => {
         isDrawerVisible={isDrawerVisible}
         closeDrawer={() => {
           setIsDrawerVisible(false);
+          setModifiedPatientId(null);
         }}
-        onAddPatient={onAddPatient}
-        formRef={newPatientForm}
+        modifiedPatientId={modifiedPatientId}
       />
       <WelcomeModal
         isModalVisible={isModalVisible}
