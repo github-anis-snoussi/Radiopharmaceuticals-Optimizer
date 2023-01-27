@@ -1,11 +1,16 @@
 import React from "react";
 import { Table } from "antd";
-import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import {
+  SortableContainer as BaseSortableContainer,
+  SortableElement,
+} from "react-sortable-hoc";
 import arrayMove from "array-move";
 import TableColums from "./TableColums";
 
-const SortableItem = sortableElement((props) => <tr {...props} />);
-const SortableContainer = sortableContainer((props) => <tbody {...props} />);
+const SortableItem = SortableElement((props: any) => <tr {...props} />);
+const SortableContainer = BaseSortableContainer((props: any) => (
+  <tbody {...props} />
+));
 
 const PatientsTable = ({
   modifyPatient,
@@ -13,8 +18,20 @@ const PatientsTable = ({
   patientsList,
   updateData,
   generateExpectations,
+}: {
+  modifyPatient: any;
+  deletePatient: any;
+  patientsList: any;
+  updateData: any;
+  generateExpectations: any;
 }) => {
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+  const onSortEnd = ({
+    oldIndex,
+    newIndex,
+  }: {
+    oldIndex: any;
+    newIndex: any;
+  }) => {
     if (patientsList[newIndex].isInjected) {
       return;
     } else if (oldIndex !== newIndex) {
@@ -28,7 +45,7 @@ const PatientsTable = ({
     generateExpectations();
   };
 
-  const DraggableContainer = (props) => (
+  const DraggableContainer = (props: any) => (
     <SortableContainer
       useDragHandle
       disableAutoscroll
@@ -38,15 +55,23 @@ const PatientsTable = ({
     />
   );
 
-  const DraggableBodyRow = ({ className, style, ...restProps }) => {
+  const DraggableBodyRow = ({
+    className,
+    style,
+    ...restProps
+  }: {
+    className: any;
+    style: any;
+    [x: string]: any;
+  }) => {
     // function findIndex base on Table rowKey props and should always be a right array index
     const index = patientsList.findIndex(
-      (x) => x.id === restProps["data-row-key"]
+      (x: any) => x.id === restProps["data-row-key"]
     );
     return <SortableItem index={index} {...restProps} />;
   };
 
-  const updateRecordMeasureTime = (record, mesureTime) => {
+  const updateRecordMeasureTime = (record: any, mesureTime: any) => {
     let patients = [...patientsList];
     patients.forEach(function (part, index, theArray) {
       if (theArray[index].id === record.id) {
@@ -61,6 +86,7 @@ const PatientsTable = ({
       pagination={false}
       scroll={{ x: 950 }}
       dataSource={patientsList}
+      // @ts-ignore */
       columns={TableColums(
         modifyPatient,
         deletePatient,
