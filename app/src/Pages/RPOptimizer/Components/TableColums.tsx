@@ -16,12 +16,12 @@ import {
   EditOutlined,
   ExperimentOutlined,
 } from "@ant-design/icons";
-import { sortableHandle } from "react-sortable-hoc";
+import { SortableHandle } from "react-sortable-hoc";
 import { confirmInjection } from "../../../utils/utils";
 
 const { Text } = Typography;
 
-const DragHandle = sortableHandle(() => (
+const DragHandle = SortableHandle(() => (
   <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
 ));
 

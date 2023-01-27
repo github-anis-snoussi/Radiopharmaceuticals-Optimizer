@@ -3,13 +3,13 @@ import { PageHeader } from "antd";
 import HeaderStatistics from "./HeaderStatistics";
 import { Context } from "../../../Context";
 
-const HeaderContent = ({ children }) => (
+const HeaderContent = ({ children }: { children: any }) => (
   <div className="content">
     <div className="main">{children}</div>
   </div>
 );
 
-const AppHeader = ({ children, now }) => {
+const AppHeader = ({ children, now }: { children: any; now: any }) => {
   const { labName, rpActivity, rpVol, rpHalfLife, mesureTime } =
     useContext(Context);
   return (
