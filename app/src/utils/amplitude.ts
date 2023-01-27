@@ -1,22 +1,22 @@
 import amplitude from "amplitude-js";
 
 export const initAmplitude = () => {
-  amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE);
+  amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE ?? '');
 };
 
-export const setAmplitudeUserDevice = (installationToken) => {
+export const setAmplitudeUserDevice = (installationToken: any) => {
   amplitude.getInstance().setDeviceId(installationToken);
 };
 
-export const setAmplitudeUserId = (userId) => {
+export const setAmplitudeUserId = (userId: any) => {
   amplitude.getInstance().setUserId(userId);
 };
 
-export const setAmplitudeUserProperties = (properties) => {
+export const setAmplitudeUserProperties = (properties: any) => {
   amplitude.getInstance().setUserProperties(properties);
 };
 
-export const sendAmplitudeData = (eventType, eventProperties) => {
+export const sendAmplitudeData = (eventType: any, eventProperties?: any) => {
   // only in prod
   if (process.env.REACT_APP_VERCEL_ENV === "production") {
     // due to limitations of the free plan, I'm only logging : NEW_PATIENT | INJECT_PATIENT
