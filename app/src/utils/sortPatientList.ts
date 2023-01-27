@@ -1,15 +1,15 @@
-const diffTime = (date1, date2) => {
+const diffTime = (date1: any, date2: any) => {
   const diffMs = Math.abs(date1 - date2);
   const diffMinutes = Math.round(diffMs / 60000);
   return diffMinutes;
 };
 
-const decay = (a0, halfLife, t) => {
+const decay = (a0: any, halfLife: any, t: any) => {
   const a = a0 * Math.exp((-Math.log(2) * t) / halfLife);
   return a;
 };
 
-const activityAtFirstInj = (patientInjTimeList, rpSettings) => {
+const activityAtFirstInj = (patientInjTimeList: any, rpSettings: any) => {
   const ta = decay(
     rpSettings.rpActivity,
     rpSettings.rpHalfLife,
@@ -20,14 +20,14 @@ const activityAtFirstInj = (patientInjTimeList, rpSettings) => {
   return ra;
 };
 
-const usableActivity = (totalRpActivity, totalRpVol, unextractableRpVol) => {
+const usableActivity = (totalRpActivity: any, totalRpVol: any, unextractableRpVol: any) => {
   return (totalRpActivity * (totalRpVol - unextractableRpVol)) / totalRpVol;
 };
 
 const generatePatientInjTimeList = (
-  patientList,
-  patientScanTimeList,
-  rpSettings
+  patientList: any,
+  patientScanTimeList: any,
+  rpSettings: any
 ) => {
   patientScanTimeList.push(0);
   let patientInjTimeList = Array(patientScanTimeList.length).fill(0);
@@ -35,7 +35,7 @@ const generatePatientInjTimeList = (
     isInjected: false,
   });
 
-  patientList.forEach((x, i) => {
+  patientList.forEach((x: any, i: any) => {
     if (x.isInjected) {
       patientInjTimeList[i] = x.realInjectionTime;
     } else if (i === 0) {
@@ -44,7 +44,7 @@ const generatePatientInjTimeList = (
       // patientInjTimeList[i] = patientInjTimeList[i-1] + datetime.timedelta(minutes = patientScanTimeList[i-1])
       patientInjTimeList[i] = new Date(patientInjTimeList[i - 1]).setMinutes(
         new Date(patientInjTimeList[i - 1]).getMinutes() +
-          patientScanTimeList[i - 1]
+        patientScanTimeList[i - 1]
       );
     }
   });
@@ -55,7 +55,7 @@ const generatePatientInjTimeList = (
   return patientInjTimeList;
 };
 
-const firstSorting = (patientListOg) => {
+const firstSorting = (patientListOg: any) => {
   let patientList = [...patientListOg];
 
   patientList = patientList.map((x) => {
@@ -77,7 +77,7 @@ const firstSorting = (patientListOg) => {
   return patientList;
 };
 
-const secondSorting = (patientList, rpSettings) => {
+const secondSorting = (patientList: any, rpSettings: any) => {
   let sortingCondition = true;
   while (sortingCondition) {
     sortingCondition = false;
@@ -125,7 +125,7 @@ const secondSorting = (patientList, rpSettings) => {
   }
 };
 
-const sortPatientList = (patientListOg, rpSettings) => {
+const sortPatientList = (patientListOg: any, rpSettings: any) => {
   let patientList = [...patientListOg];
   sortingAfterEveryInjection(patientList);
   let sortedList = firstSorting(patientList);
@@ -133,13 +133,13 @@ const sortPatientList = (patientListOg, rpSettings) => {
   return sortedList;
 };
 
-const activityNow = (patientList, rpSettings) => {
-  let nowDict = {};
+const activityNow = (patientList: any, rpSettings: any) => {
+  let nowDict: any = {};
 
-  let injectedPatientsList = patientList.filter((x) => x.isInjected);
+  let injectedPatientsList = patientList.filter((x: any) => x.isInjected);
   let k = injectedPatientsList.length;
 
-  injectedPatientsList = injectedPatientsList.map((x) => ({
+  injectedPatientsList = injectedPatientsList.map((x: any) => ({
     ...x,
     realInjectionTime: x.realInjectionTime
       ? new Date(x.realInjectionTime)
@@ -168,9 +168,9 @@ const activityNow = (patientList, rpSettings) => {
       rpSettings.unextractableVol
     );
   } else {
-    let patientDoseList = injectedPatientsList.map((x) => x.dose);
+    let patientDoseList = injectedPatientsList.map((x: any) => x.dose);
     let patientInjTimeList = injectedPatientsList.map(
-      (x) => x.realInjectionTime
+      (x: any) => x.realInjectionTime
     );
     let injTimeActivityList = Array(k).fill(0);
     let remainingActivityList = Array(k).fill(0);
@@ -221,18 +221,18 @@ const activityNow = (patientList, rpSettings) => {
   return nowDict;
 };
 
-const sortingAfterEveryInjection = (patientList) => {
-  patientList.sort((a, b) => {
+const sortingAfterEveryInjection = (patientList: any) => {
+  patientList.sort((a: any, b: any) => {
     return (
-      (a.realInjectionTime === null) - (b.realInjectionTime === null) ||
+      (a.realInjectionTime === null) as any - ((b.realInjectionTime === null) as any) ||
       +(a.realInjectionTime > b.realInjectionTime) ||
       -(a.realInjectionTime < b.realInjectionTime)
     );
   });
 };
 
-const calculFinalExpectedActivity = (patientList, rpSettings) => {
-  patientList = patientList.map((x) => ({
+const calculFinalExpectedActivity = (patientList: any, rpSettings: any) => {
+  patientList = patientList.map((x: any) => ({
     ...x,
     realInjectionTime: x.realInjectionTime
       ? new Date(x.realInjectionTime)
@@ -244,8 +244,8 @@ const calculFinalExpectedActivity = (patientList, rpSettings) => {
     firstInjTime: new Date(rpSettings.firstInjTime),
   };
 
-  let patientDoseList = patientList.map((x) => x.dose);
-  let patientScanTimeList = patientList.map((x) => x.duration);
+  let patientDoseList = patientList.map((x: any) => x.dose);
+  let patientScanTimeList = patientList.map((x: any) => x.duration);
   let patientInjTimeList = generatePatientInjTimeList(
     patientList,
     patientScanTimeList,
@@ -259,7 +259,7 @@ const calculFinalExpectedActivity = (patientList, rpSettings) => {
   let patientInjVolList = [...injTimeActivityList];
   let remainingVolList = [...injTimeActivityList];
 
-  patientDoseList.forEach((x, i) => {
+  patientDoseList.forEach((x: any, i: any) => {
     if (i === 0) {
       injTimeActivityList[i] = activityAtFirstInj(
         patientInjTimeList,
@@ -312,11 +312,11 @@ const calculFinalExpectedActivity = (patientList, rpSettings) => {
 // +++++++++ HELPER FUNCTIONS  ++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++
 
-const formatFront2Back = (formatedPatientInfos) => {
+const formatFront2Back = (formatedPatientInfos: any) => {
   return formatedPatientInfos;
 };
 
-const formatBack2Front = (PatientInfos) => {
+const formatBack2Front = (PatientInfos: any) => {
   return PatientInfos;
 };
 
@@ -324,25 +324,25 @@ const formatBack2Front = (PatientInfos) => {
 // +++++++++ EXPOSED INTERFACE ++++++++++++
 // ++++++++++++++++++++++++++++++++++++++++
 
-export const sort = (patientListOg, rpSettings) => {
+export const sort = (patientListOg: any, rpSettings: any) => {
   let patientList = formatFront2Back(patientListOg);
   const sortedPatientList = sortPatientList(patientList, rpSettings);
   return formatBack2Front(sortedPatientList);
 };
 
-export const clean = (patientListOg) => {
+export const clean = (patientListOg: any) => {
   let patientList = formatFront2Back(patientListOg);
   sortingAfterEveryInjection(patientList);
   return formatBack2Front(patientList);
 };
 
-export const expect = (patientListOg, rpSettings) => {
+export const expect = (patientListOg: any, rpSettings: any) => {
   let patientList = formatFront2Back(patientListOg);
   const nowDict = calculFinalExpectedActivity(patientList, rpSettings);
   return nowDict;
 };
 
-export const now = (patientListOg, rpSettings) => {
+export const now = (patientListOg: any, rpSettings: any) => {
   let patientList = formatFront2Back(patientListOg);
   const predictDict = activityNow(patientList, rpSettings);
   return predictDict;

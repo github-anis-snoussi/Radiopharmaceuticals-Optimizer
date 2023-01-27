@@ -6,7 +6,7 @@ const ThemeSwitcher = () => {
   const { switcher, themes, currentTheme } = useThemeSwitcher();
   const [isDarkMode, setIsDarkMode] = React.useState(currentTheme === "dark");
 
-  const toggleTheme = (isChecked) => {
+  const toggleTheme = (isChecked: boolean) => {
     setIsDarkMode(isChecked);
     switcher({ theme: isChecked ? themes.dark : themes.light });
   };

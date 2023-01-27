@@ -17,7 +17,7 @@ const themes = {
 initAmplitude();
 
 // init emailjs
-init(process.env.REACT_APP_EMAILSJS_USER);
+init(process.env.REACT_APP_EMAILSJS_USER ?? "");
 
 // init sentry
 Sentry.init({

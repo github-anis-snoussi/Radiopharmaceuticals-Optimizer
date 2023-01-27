@@ -10,7 +10,7 @@ const FeedbackForm = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [stars, setStars] = useState(1);
 
-  const onFinish = (values) => {
+  const onFinish = (values: any) => {
     let feedback = { ...values, stars };
 
     const templateParams = {
@@ -22,8 +22,8 @@ const FeedbackForm = () => {
     };
 
     send(
-      process.env.REACT_APP_EMAILJS_SERVICE,
-      process.env.REACT_APP_EMAILJS_TEMPLATE,
+      process.env.REACT_APP_EMAILJS_SERVICE ?? "",
+      process.env.REACT_APP_EMAILJS_TEMPLATE ?? "",
       { ...templateParams }
     );
 

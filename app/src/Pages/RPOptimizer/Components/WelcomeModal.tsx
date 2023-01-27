@@ -24,16 +24,22 @@ import { Context } from "../../../Context";
 
 const { Text } = Typography;
 
-const WelcomeModal = ({ isModalVisible, closeModal }) => {
+const WelcomeModal = ({
+  isModalVisible,
+  closeModal,
+}: {
+  isModalVisible: any;
+  closeModal: any;
+}) => {
   const {
-    labName : initLabName,
-    rpActivity : initRpActivity,
-    rpVol : initRpVol,
-    rpHalfLife : initRpHalfLife,
-    mesureTime : initMesureTime,
-    firstInjTime : initFirstInjTime,
-    wastedVol : initWastedVol,
-    unextractableVol : initUnextractableVol,
+    labName: initLabName,
+    rpActivity: initRpActivity,
+    rpVol: initRpVol,
+    rpHalfLife: initRpHalfLife,
+    mesureTime: initMesureTime,
+    firstInjTime: initFirstInjTime,
+    wastedVol: initWastedVol,
+    unextractableVol: initUnextractableVol,
     setRpSettings,
   } = useContext(Context);
 
@@ -43,7 +49,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }) => {
   const [rpHalfLife, setRpHalfLife] = useState(initRpHalfLife);
   const [rpVol, setRpVol] = useState(initRpVol);
   const [wastedVol, setWastedVol] = useState(initWastedVol);
-  const [unextractableVol, setUnextractableVol] = useState(initUnextractableVol);
+  const [unextractableVol, setUnextractableVol] =
+    useState(initUnextractableVol);
   const [labName, setLabName] = useState(initLabName);
 
   const finishEdit = () => {
@@ -55,8 +62,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }) => {
       rpVol,
       wastedVol,
       unextractableVol,
-      labName
-    })
+      labName,
+    });
     closeModal();
 
     message.success("Session initialized.");
