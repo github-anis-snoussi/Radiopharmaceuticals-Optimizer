@@ -26,11 +26,11 @@ const DragHandle = SortableHandle(() => (
 ));
 
 const TableColums = (
-  modifyPatient,
-  deletePatient,
-  updateRecordMeasureTime,
-  patientsList,
-  updateData
+  modifyPatient: any,
+  deletePatient: any,
+  updateRecordMeasureTime: any,
+  patientsList: any,
+  updateData: any
 ) => {
   return [
     {
@@ -39,7 +39,7 @@ const TableColums = (
       dataIndex: "sort",
       width: 30,
       className: "drag-visible",
-      render: (a, b) => {
+      render: (a: any, b: any) => {
         if (b.isInjected === false) {
           return <DragHandle />;
         }
@@ -51,7 +51,7 @@ const TableColums = (
       fixed: "left",
       dataIndex: "name",
       key: "name",
-      render: (text) => <Text strong>{text}</Text>,
+      render: (text: string) => <Text strong>{text}</Text>,
     },
     {
       title: () => {
@@ -64,7 +64,7 @@ const TableColums = (
       width: 100,
       dataIndex: "expectedInjectionTime",
       key: "expectedInjectionTime",
-      render(text) {
+      render(text: string) {
         return {
           props: {
             style: { background: "rgba(245, 206, 39, 0.41)" },
@@ -84,7 +84,7 @@ const TableColums = (
       width: 100,
       dataIndex: "expectedInjectionVolume",
       key: "expectedInjectionVolume",
-      render(text) {
+      render(text: string) {
         return {
           props: {
             style: { background: "rgba(245, 206, 39, 0.41)" },
@@ -104,13 +104,13 @@ const TableColums = (
       width: 100,
       dataIndex: "duration",
       key: "duration",
-      render: (text) => <Text>{text}</Text>,
+      render: (text: string) => <Text>{text}</Text>,
     },
     {
       title: "Actions",
       width: 300,
       key: "action",
-      render: (text, record) => (
+      render: (text: string, record: any) => (
         <Space>
           <Button
             size="small"
@@ -196,7 +196,7 @@ const TableColums = (
       fixed: "right",
       key: "isInjected",
       dataIndex: "isInjected",
-      render: (isInjected) => {
+      render: (isInjected: boolean) => {
         if (isInjected) {
           return (
             <CheckCircleOutlined style={{ color: "green", fontSize: "23px" }} />
