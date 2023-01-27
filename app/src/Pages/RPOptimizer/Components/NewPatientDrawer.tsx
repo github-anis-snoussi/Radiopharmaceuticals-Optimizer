@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Drawer, Form, Button, Col, Row, Input, InputNumber } from "antd";
+import {
+  Drawer,
+  Form,
+  Button,
+  Col,
+  Row,
+  Input,
+  InputNumber,
+  FormInstance,
+} from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { v4 as uuidv4 } from "uuid";
 import useMediaQuery from "../../../hooks/useMediaQuery";
@@ -8,43 +17,45 @@ import { Context } from "../../../Context";
 const NewPatientDrawer = ({
   closeDrawer,
   isDrawerVisible,
-  modifiedPatientId
+  modifiedPatientId,
+}: {
+  closeDrawer: any;
+  isDrawerVisible: any;
+  modifiedPatientId: any;
 }) => {
   const { currentTheme } = useThemeSwitcher();
-  const newPatientForm = useRef(null);
+  const newPatientForm = useRef<FormInstance<any> | null>(null);
   const drawerWidth = useMediaQuery(
     "(max-width: 767px)",
     window.innerWidth,
     700
   );
 
-  const {
-    patientsList,
-    addPatient,
-    updatePatient,
-  } = useContext(Context);
+  const { patientsList, addPatient, updatePatient } = useContext(Context);
 
   const [name, setName] = useState("");
   const [dose, setDose] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    if(modifiedPatientId) {
-      let modifiedPatient = patientsList.find(element => element.id === modifiedPatientId);
+    if (modifiedPatientId) {
+      let modifiedPatient = patientsList.find(
+        (element: any) => element.id === modifiedPatientId
+      );
       setName(modifiedPatient.name);
       setDose(modifiedPatient.dose);
-      setDuration(modifiedPatient.duration)
+      setDuration(modifiedPatient.duration);
     }
-  }, [])
+  }, []);
 
   const finishedEdit = () => {
-    if(modifiedPatientId) {
-      updatePatient({id : modifiedPatientId, name, dose, duration})
+    if (modifiedPatientId) {
+      updatePatient({ id: modifiedPatientId, name, dose, duration });
     } else {
-      addPatient({id : uuidv4(), name, dose, duration})
+      addPatient({ id: uuidv4(), name, dose, duration });
     }
     closeDrawer();
-  }
+  };
 
   return (
     <Drawer
@@ -68,7 +79,7 @@ const NewPatientDrawer = ({
           <Button
             type="primary"
             onClick={() => {
-              newPatientForm.current.submit();
+              newPatientForm?.current?.submit();
             }}
           >
             Submit
@@ -76,11 +87,7 @@ const NewPatientDrawer = ({
         </div>
       }
     >
-      <Form
-        layout="vertical"
-        ref={newPatientForm}
-        onFinish={finishedEdit}
-      >
+      <Form layout="vertical" ref={newPatientForm} onFinish={finishedEdit}>
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item

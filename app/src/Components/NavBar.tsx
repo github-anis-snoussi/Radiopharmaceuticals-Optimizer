@@ -4,7 +4,7 @@ import { MenuOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import AppLogo from "./AppLogo";
 
-const NavBar = ({ menu }) => {
+const NavBar = ({ menu }: { menu: any }) => {
   const [visible, setVisible] = useState(false);
   const { currentTheme } = useThemeSwitcher();
 
@@ -22,7 +22,6 @@ const NavBar = ({ menu }) => {
       />
       <Drawer
         placement="left"
-        onClick={() => setVisible(false)}
         onClose={() => setVisible(false)}
         visible={visible}
       >

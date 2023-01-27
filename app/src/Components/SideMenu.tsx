@@ -2,7 +2,7 @@ import React from "react";
 import { Menu } from "antd";
 import { ExperimentOutlined, InfoCircleOutlined } from "@ant-design/icons";
 
-const SideMenu = ({ setSideMenuKey }) => {
+const SideMenu = ({ setSideMenuKey }: { setSideMenuKey: any }) => {
   return (
     <Menu
       theme="dark"

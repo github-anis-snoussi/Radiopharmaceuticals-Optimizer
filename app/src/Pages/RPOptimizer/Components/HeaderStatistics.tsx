@@ -8,6 +8,13 @@ const HeaderStatistics = ({
   rpHalfLife,
   now,
   total,
+}: {
+  rpActivity: any;
+  mesureTime: any;
+  rpVol: any;
+  rpHalfLife: any;
+  now: any;
+  total: any;
 }) => {
   return (
     <>
@@ -48,7 +55,9 @@ const HeaderStatistics = ({
               "100%": "green",
             }}
             percent={(now.totalActivityNow / total) * 100}
-            format={(percent) => `${((percent * total) / 100).toFixed(0)} MBq`}
+            format={(percent) =>
+              `${((percent ? percent * total : 0) / 100).toFixed(0)} MBq`
+            }
           />
         ) : null}
       </Row>
