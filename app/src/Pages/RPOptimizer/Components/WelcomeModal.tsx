@@ -1,39 +1,15 @@
-import React, { useContext, useState } from "react";
-import {
-  Typography,
-  Modal,
-  DatePicker,
-  Divider,
-  Button,
-  Col,
-  Row,
-  Input,
-  InputNumber,
-  Tag,
-  message,
-} from "antd";
-import { BankOutlined } from "@ant-design/icons";
-import moment from "moment";
-import {
-  sendAmplitudeData,
-  amplitudeLogsTypes,
-} from "../../../utils/amplitude";
+import React, { useContext, useState } from 'react';
+import { Typography, Modal, DatePicker, Divider, Button, Col, Row, Input, InputNumber, Tag, message } from 'antd';
+import { BankOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { sendAmplitudeData, amplitudeLogsTypes } from '../../../utils/amplitude';
 
-import ThemeSwitcher from "./ThemeSwitcher";
-import {
-  RpSettingsContextContext,
-  RpSettingsContextType,
-} from "../../../context/RpSettingsContext";
+import ThemeSwitcher from './ThemeSwitcher';
+import { RpSettingsContextContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 
 const { Text } = Typography;
 
-const WelcomeModal = ({
-  isModalVisible,
-  closeModal,
-}: {
-  isModalVisible: any;
-  closeModal: any;
-}) => {
+const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; closeModal: any }) => {
   const {
     rpSettings: {
       labName: initLabName,
@@ -54,8 +30,7 @@ const WelcomeModal = ({
   const [rpHalfLife, setRpHalfLife] = useState(initRpHalfLife);
   const [rpVol, setRpVol] = useState(initRpVol);
   const [wastedVol, setWastedVol] = useState(initWastedVol);
-  const [unextractableVol, setUnextractableVol] =
-    useState(initUnextractableVol);
+  const [unextractableVol, setUnextractableVol] = useState(initUnextractableVol);
   const [labName, setLabName] = useState(initLabName);
 
   const finishEdit = () => {
@@ -71,7 +46,7 @@ const WelcomeModal = ({
     });
     closeModal();
 
-    message.success("Session initialized.");
+    message.success('Session initialized.');
     sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
   };
 
@@ -81,12 +56,7 @@ const WelcomeModal = ({
       visible={isModalVisible}
       onCancel={closeModal}
       footer={[
-        <Button
-          type="primary"
-          htmlType="submit"
-          onClick={finishEdit}
-          disabled={!mesureTime || !firstInjTime}
-        >
+        <Button type="primary" htmlType="submit" onClick={finishEdit} disabled={!mesureTime || !firstInjTime}>
           Confirm
         </Button>,
       ]}
@@ -96,7 +66,7 @@ const WelcomeModal = ({
         placeholder="Lab name"
         prefix={<BankOutlined />}
         value={labName}
-        onChange={(event) => {
+        onChange={event => {
           setLabName(event.target.value);
         }}
       />
@@ -106,9 +76,9 @@ const WelcomeModal = ({
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={rpHalfLife}
-            onChange={(rpHalfLife) => {
+            onChange={rpHalfLife => {
               setRpHalfLife(rpHalfLife);
             }}
           />
@@ -121,9 +91,9 @@ const WelcomeModal = ({
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={rpActivity}
-            onChange={(rpActivity) => {
+            onChange={rpActivity => {
               setRpActivity(rpActivity);
             }}
           />
@@ -137,7 +107,7 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <DatePicker
             showTime
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={mesureTime ? moment(mesureTime) : null}
             onChange={(date, dateString) => {
               setMesureTime(dateString);
@@ -153,7 +123,7 @@ const WelcomeModal = ({
         <Col className="gutter-row" span={14}>
           <DatePicker
             showTime
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={firstInjTime ? moment(firstInjTime) : null}
             onChange={(date, dateString) => {
               setFirstInjTime(dateString);
@@ -168,9 +138,9 @@ const WelcomeModal = ({
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={rpVol}
-            onChange={(rpVol) => {
+            onChange={rpVol => {
               setRpVol(rpVol);
             }}
           />
@@ -183,9 +153,9 @@ const WelcomeModal = ({
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={wastedVol}
-            onChange={(wastedVol) => {
+            onChange={wastedVol => {
               setWastedVol(wastedVol);
             }}
           />
@@ -198,9 +168,9 @@ const WelcomeModal = ({
         </Col>
         <Col className="gutter-row" span={14}>
           <InputNumber
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             value={unextractableVol}
-            onChange={(unextractableVol) => {
+            onChange={unextractableVol => {
               setUnextractableVol(unextractableVol);
             }}
           />
@@ -212,7 +182,7 @@ const WelcomeModal = ({
       <Row gutter={16} style={{ marginBottom: 10 }}>
         <Col className="gutter-row" span={20}>
           <Text type="secondary">
-            Dark mode <Tag color="blue">New</Tag>{" "}
+            Dark mode <Tag color="blue">New</Tag>{' '}
           </Text>
         </Col>
         <Col className="gutter-row" span={4}>

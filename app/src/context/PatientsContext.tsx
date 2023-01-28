@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export interface PatientType {
   id: string;
   name: string;
   dose: number;
   duration: number;
+  isInjected: boolean;
+  realInjectionTime: string;
 }
 
 export interface PatientsContextType {
@@ -22,13 +24,11 @@ const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [patientsList, setPatientsList] = useState<PatientType[]>([]);
 
   const addPatient = (newPatient: PatientType) => {
-    setPatientsList((prevPatients) => [...prevPatients, newPatient]);
+    setPatientsList(prevPatients => [...prevPatients, newPatient]);
   };
 
   const deletePatient = (id: string) => {
-    setPatientsList((prevPatients) =>
-      prevPatients.filter((item) => item.id !== id)
-    );
+    setPatientsList(prevPatients => prevPatients.filter(item => item.id !== id));
   };
 
   const updatePatient = (patient: PatientType) => {
