@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 import { PageHeader } from "antd";
 import HeaderStatistics from "./HeaderStatistics";
-import { Context } from "../../../Context";
+import {
+  RpSettingsContextContext,
+  RpSettingsContextType,
+} from "../../../context/RpSettingsContext";
 
 const HeaderContent = ({ children }: { children: any }) => (
   <div className="content">
@@ -10,8 +13,10 @@ const HeaderContent = ({ children }: { children: any }) => (
 );
 
 const AppHeader = ({ children, now }: { children: any; now: any }) => {
-  const { labName, rpActivity, rpVol, rpHalfLife, mesureTime } =
-    useContext(Context);
+  const {
+    rpSettings: { labName, rpActivity, rpVol, rpHalfLife, mesureTime },
+  } = useContext(RpSettingsContextContext) as RpSettingsContextType;
+
   return (
     <PageHeader
       className="site-page-header-responsive"

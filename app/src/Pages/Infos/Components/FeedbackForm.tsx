@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Typography, Form, Button, Rate, Result, Input, Row, Col } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import { send } from "emailjs-com";

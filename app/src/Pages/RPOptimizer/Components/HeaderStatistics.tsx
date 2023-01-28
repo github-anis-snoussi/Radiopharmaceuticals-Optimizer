@@ -1,4 +1,3 @@
-import React from "react";
 import { Row, Statistic, Progress } from "antd";
 
 const HeaderStatistics = ({

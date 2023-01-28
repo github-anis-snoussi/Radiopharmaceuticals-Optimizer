@@ -11,14 +11,13 @@ export interface RpSettingsType {
   labName: string;
 }
 
-export interface GloabContextType {
+export interface RpSettingsContextType {
   rpSettings: RpSettingsType;
   setRpSettings: (settings: RpSettingsType) => void;
 }
 
-const RpSettingsContextContext = React.createContext<GloabContextType | null>(
-  null
-);
+const RpSettingsContextContext =
+  React.createContext<RpSettingsContextType | null>(null);
 
 const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // rpSettings

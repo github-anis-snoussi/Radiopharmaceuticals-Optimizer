@@ -3,9 +3,11 @@ import React, { useState } from "react";
 export interface PatientType {
   id: string;
   name: string;
+  dose: number;
+  duration: number;
 }
 
-export interface GloabContextType {
+export interface PatientsContextType {
   patientsList: PatientType[];
   addPatient: (newPatient: PatientType) => void;
   deletePatient: (id: string) => void;
@@ -13,7 +15,7 @@ export interface GloabContextType {
   updatePatientsList: (newPatientsList: PatientType[]) => void;
 }
 
-const PatientsContext = React.createContext<GloabContextType | null>(null);
+const PatientsContext = React.createContext<PatientsContextType | null>(null);
 
 const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   //patients list
