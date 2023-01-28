@@ -7,6 +7,8 @@ import { Integrations } from "@sentry/tracing";
 import { init } from "emailjs-com";
 import { initAmplitude } from "./utils/amplitude";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+import { PatientsContextProvider } from "./context/PatientsContext";
+import { RpSettingsContextProvider } from "./context/RpSettingsContext";
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
@@ -30,7 +32,11 @@ Sentry.init({
 const AppWrapper = () => {
   return (
     <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
-      <App />
+      <RpSettingsContextProvider>
+        <PatientsContextProvider>
+          <App />
+        </PatientsContextProvider>
+      </RpSettingsContextProvider>
     </ThemeSwitcherProvider>
   );
 };
