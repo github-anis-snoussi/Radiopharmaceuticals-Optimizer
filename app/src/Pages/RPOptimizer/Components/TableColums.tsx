@@ -21,7 +21,7 @@ const TableColums = (
   deletePatient: any,
   updateRecordMeasureTime: any,
   patientsList: any,
-  updateData: any,
+  updatePatientsList: any,
 ) => {
   return [
     {
@@ -165,7 +165,7 @@ const TableColums = (
                 if (!record.realInjectionTime) {
                   message.warning('Please select Injection time first.');
                 } else {
-                  confirmInjection(record, patientsList, updateData);
+                  confirmInjection(record, patientsList, updatePatientsList);
                 }
               }}
               okText="Inject"
