@@ -1,22 +1,9 @@
-import { useState, useRef, useEffect, useContext } from "react";
-import {
-  Drawer,
-  Form,
-  Button,
-  Col,
-  Row,
-  Input,
-  InputNumber,
-  FormInstance,
-} from "antd";
-import { useThemeSwitcher } from "react-css-theme-switcher";
-import { v4 as uuidv4 } from "uuid";
-import useMediaQuery from "../../../hooks/useMediaQuery";
-import {
-  PatientsContext,
-  PatientsContextType,
-  PatientType,
-} from "../../../context/PatientsContext";
+import { useState, useRef, useEffect, useContext } from 'react';
+import { Drawer, Form, Button, Col, Row, Input, InputNumber, FormInstance } from 'antd';
+import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { v4 as uuidv4 } from 'uuid';
+import useMediaQuery from '../../../hooks/useMediaQuery';
+import { PatientsContext, PatientsContextType, PatientType } from '../../../context/PatientsContext';
 
 const NewPatientDrawer = ({
   closeDrawer,
@@ -29,26 +16,18 @@ const NewPatientDrawer = ({
 }) => {
   const { currentTheme } = useThemeSwitcher();
   const newPatientForm = useRef<FormInstance<any> | null>(null);
-  const drawerWidth = useMediaQuery(
-    "(max-width: 767px)",
-    window.innerWidth,
-    700
-  );
+  const drawerWidth = useMediaQuery('(max-width: 767px)', window.innerWidth, 700);
 
-  const { patientsList, addPatient, updatePatient } = useContext(
-    PatientsContext
-  ) as PatientsContextType;
+  const { patientsList, addPatient, updatePatient } = useContext(PatientsContext) as PatientsContextType;
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [dose, setDose] = useState(0);
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     if (modifiedPatientId) {
-      let modifiedPatient = patientsList.find(
-        (element: any) => element.id === modifiedPatientId
-      );
-      setName(modifiedPatient?.name ?? "");
+      let modifiedPatient = patientsList.find((element: any) => element.id === modifiedPatientId);
+      setName(modifiedPatient?.name ?? '');
       setDose(modifiedPatient?.dose ?? 0);
       setDuration(modifiedPatient?.duration ?? 0);
     }
@@ -71,12 +50,12 @@ const NewPatientDrawer = ({
       visible={isDrawerVisible}
       bodyStyle={{
         paddingBottom: 80,
-        backgroundColor: currentTheme === "dark" ? "#1f1f1f" : "white",
+        backgroundColor: currentTheme === 'dark' ? '#1f1f1f' : 'white',
       }}
       footer={
         <div
           style={{
-            textAlign: "right",
+            textAlign: 'right',
           }}
         >
           <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
@@ -96,14 +75,10 @@ const NewPatientDrawer = ({
       <Form layout="vertical" ref={newPatientForm} onFinish={finishedEdit}>
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: "Please enter user name" }]}
-            >
+            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter user name' }]}>
               <Input
                 placeholder="Please enter user name"
-                onChange={(name) => {
+                onChange={name => {
                   setName(name.target.value);
                 }}
               />
@@ -113,15 +88,11 @@ const NewPatientDrawer = ({
 
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item
-              name="dose"
-              label="Dose (MBq)"
-              rules={[{ required: true, message: "Please enter the dose" }]}
-            >
+            <Form.Item name="dose" label="Dose (MBq)" rules={[{ required: true, message: 'Please enter the dose' }]}>
               <InputNumber
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 min={0}
-                onChange={(dose) => {
+                onChange={dose => {
                   setDose(dose);
                 }}
               />
@@ -132,12 +103,12 @@ const NewPatientDrawer = ({
             <Form.Item
               name="duration"
               label="Scan Duration (min)"
-              rules={[{ required: true, message: "Please enter the duration" }]}
+              rules={[{ required: true, message: 'Please enter the duration' }]}
             >
               <InputNumber
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 min={0}
-                onChange={(duration) => {
+                onChange={duration => {
                   setDuration(duration);
                 }}
               />

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Typography, Form, Button, Rate, Result, Input, Row, Col } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
-import { send } from "emailjs-com";
+import { useState } from 'react';
+import { Typography, Form, Button, Rate, Result, Input, Row, Col } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import { send } from 'emailjs-com';
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -14,18 +14,16 @@ const FeedbackForm = () => {
     let feedback = { ...values, stars };
 
     const templateParams = {
-      toName: "Anis",
+      toName: 'Anis',
       fromName: feedback.name,
       message: feedback.description,
       stars: feedback.stars,
       versionRef: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA,
     };
 
-    send(
-      process.env.REACT_APP_EMAILJS_SERVICE ?? "",
-      process.env.REACT_APP_EMAILJS_TEMPLATE ?? "",
-      { ...templateParams }
-    );
+    send(process.env.REACT_APP_EMAILJS_SERVICE ?? '', process.env.REACT_APP_EMAILJS_TEMPLATE ?? '', {
+      ...templateParams,
+    });
 
     setHasSubmitted(true);
   };
@@ -36,11 +34,7 @@ const FeedbackForm = () => {
         <Row>
           <Col xs={24} md={12}>
             <div style={{ marginTop: 10 }}>
-              <Form.Item
-                name={["name"]}
-                label="Name"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name={['name']} label="Name" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
             </div>
@@ -49,10 +43,10 @@ const FeedbackForm = () => {
           <Col xs={24} md={12}>
             <div
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Title level={4} style={{ marginRight: 20, paddingTop: 10 }}>
@@ -63,8 +57,8 @@ const FeedbackForm = () => {
           </Col>
         </Row>
 
-        <Form.Item name={["description"]} rules={[{ required: true }]}>
-          <TextArea rows={4} onChange={() => {}} value={""} />
+        <Form.Item name={['description']} rules={[{ required: true }]}>
+          <TextArea rows={4} onChange={() => {}} value={''} />
         </Form.Item>
         <Form.Item>
           <Button htmlType="submit" type="primary">
@@ -74,9 +68,7 @@ const FeedbackForm = () => {
       </Form>
     );
   } else {
-    return (
-      <Result icon={<SmileOutlined />} title="Thank you for your feedback." />
-    );
+    return <Result icon={<SmileOutlined />} title="Thank you for your feedback." />;
   }
 };
 

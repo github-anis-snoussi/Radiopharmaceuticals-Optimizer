@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import { PageHeader } from "antd";
-import HeaderStatistics from "./HeaderStatistics";
-import {
-  RpSettingsContextContext,
-  RpSettingsContextType,
-} from "../../../context/RpSettingsContext";
+import React, { useContext } from 'react';
+import { PageHeader } from 'antd';
+import HeaderStatistics from './HeaderStatistics';
+import { RpSettingsContextContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 
 const HeaderContent = ({ children }: { children: any }) => (
   <div className="content">
@@ -12,7 +9,7 @@ const HeaderContent = ({ children }: { children: any }) => (
   </div>
 );
 
-const AppHeader = ({ children, now }: { children: any; now: any }) => {
+const AppHeader = ({ children, now }: { children: any; now?: any }) => {
   const {
     rpSettings: { labName, rpActivity, rpVol, rpHalfLife, mesureTime },
   } = useContext(RpSettingsContextContext) as RpSettingsContextType;

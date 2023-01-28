@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export interface RpSettingsType {
   rpActivity: number;
@@ -16,8 +16,7 @@ export interface RpSettingsContextType {
   setRpSettings: (settings: RpSettingsType) => void;
 }
 
-const RpSettingsContextContext =
-  React.createContext<RpSettingsContextType | null>(null);
+const RpSettingsContextContext = React.createContext<RpSettingsContextType | null>(null);
 
 const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // rpSettings
@@ -28,7 +27,7 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [rpVol, setRpVol] = useState<number>(0);
   const [wastedVol, setWastedVol] = useState<number>(0);
   const [unextractableVol, setUnextractableVol] = useState<number>(0);
-  const [labName, setLabName] = useState<string>("Rp Optimizer");
+  const [labName, setLabName] = useState<string>('Rp Optimizer');
 
   const setRpSettings = ({
     rpActivity,

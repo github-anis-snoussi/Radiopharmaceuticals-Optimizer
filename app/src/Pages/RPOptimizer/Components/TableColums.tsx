@@ -1,12 +1,5 @@
-import React from "react";
-import {
-  Space,
-  Button,
-  Popconfirm,
-  message,
-  DatePicker,
-  Typography,
-} from "antd";
+import React from 'react';
+import { Space, Button, Popconfirm, message, DatePicker, Typography } from 'antd';
 import {
   MenuOutlined,
   ClockCircleOutlined,
@@ -15,30 +8,28 @@ import {
   DeleteOutlined,
   EditOutlined,
   ExperimentOutlined,
-} from "@ant-design/icons";
-import { SortableHandle } from "react-sortable-hoc";
-import { confirmInjection } from "../../../utils/utils";
+} from '@ant-design/icons';
+import { SortableHandle } from 'react-sortable-hoc';
+import { confirmInjection } from '../../../utils/utils';
 
 const { Text } = Typography;
 
-const DragHandle = SortableHandle(() => (
-  <MenuOutlined style={{ cursor: "pointer", color: "#999" }} />
-));
+const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />);
 
 const TableColums = (
   modifyPatient: any,
   deletePatient: any,
   updateRecordMeasureTime: any,
   patientsList: any,
-  updateData: any
+  updateData: any,
 ) => {
   return [
     {
-      title: "",
-      fixed: "left",
-      dataIndex: "sort",
+      title: '',
+      fixed: 'left',
+      dataIndex: 'sort',
       width: 30,
-      className: "drag-visible",
+      className: 'drag-visible',
       render: (a: any, b: any) => {
         if (b.isInjected === false) {
           return <DragHandle />;
@@ -46,70 +37,70 @@ const TableColums = (
       },
     },
     {
-      title: "Name",
+      title: 'Name',
       width: 80,
-      fixed: "left",
-      dataIndex: "name",
-      key: "name",
+      fixed: 'left',
+      dataIndex: 'name',
+      key: 'name',
       render: (text: string) => <Text strong>{text}</Text>,
     },
     {
       title: () => {
         return (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <ExperimentOutlined /> Injection time
           </div>
         );
       },
       width: 100,
-      dataIndex: "expectedInjectionTime",
-      key: "expectedInjectionTime",
+      dataIndex: 'expectedInjectionTime',
+      key: 'expectedInjectionTime',
       render(text: string) {
         return {
           props: {
-            style: { background: "rgba(245, 206, 39, 0.41)" },
+            style: { background: 'rgba(245, 206, 39, 0.41)' },
           },
-          children: <Text>{text || "?"}</Text>,
+          children: <Text>{text || '?'}</Text>,
         };
       },
     },
     {
       title: () => {
         return (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <ExperimentOutlined /> Injection volume (ml)
           </div>
         );
       },
       width: 100,
-      dataIndex: "expectedInjectionVolume",
-      key: "expectedInjectionVolume",
+      dataIndex: 'expectedInjectionVolume',
+      key: 'expectedInjectionVolume',
       render(text: string) {
         return {
           props: {
-            style: { background: "rgba(245, 206, 39, 0.41)" },
+            style: { background: 'rgba(245, 206, 39, 0.41)' },
           },
-          children: <Text>{text || "?"}</Text>,
+          children: <Text>{text || '?'}</Text>,
         };
       },
     },
     {
-      title: "Dose (MBq)",
+      title: 'Dose (MBq)',
       width: 100,
-      dataIndex: "dose",
-      key: "dose",
+      dataIndex: 'dose',
+      key: 'dose',
     },
     {
-      title: "Test Duration (min)",
+      title: 'Test Duration (min)',
       width: 100,
-      dataIndex: "duration",
-      key: "duration",
+      dataIndex: 'duration',
+      key: 'duration',
       render: (text: string) => <Text>{text}</Text>,
     },
     {
-      title: "Actions",
+      title: 'Actions',
       width: 300,
-      key: "action",
+      key: 'action',
       render: (text: string, record: any) => (
         <Space>
           <Button
@@ -127,8 +118,8 @@ const TableColums = (
 
           {record.isInjected === false ? (
             <Popconfirm
-              title={"Proceed to delete ?"}
-              icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+              title={'Proceed to delete ?'}
+              icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
               onConfirm={() => {
                 deletePatient(record);
               }}
@@ -159,12 +150,12 @@ const TableColums = (
                     showTime
                     size="small"
                     style={{
-                      width: "100%",
+                      width: '100%',
                       marginRight: 10,
                       marginTop: 10,
                       marginBottom: 10,
                     }}
-                    onSelect={(mesureTime) => {
+                    onSelect={mesureTime => {
                       updateRecordMeasureTime(record, mesureTime);
                     }}
                   />
@@ -172,7 +163,7 @@ const TableColums = (
               }
               onConfirm={() => {
                 if (!record.realInjectionTime) {
-                  message.warning("Please select Injection time first.");
+                  message.warning('Please select Injection time first.');
                 } else {
                   confirmInjection(record, patientsList, updateData);
                 }
@@ -191,20 +182,16 @@ const TableColums = (
       ),
     },
     {
-      title: "Status",
+      title: 'Status',
       width: 70,
-      fixed: "right",
-      key: "isInjected",
-      dataIndex: "isInjected",
+      fixed: 'right',
+      key: 'isInjected',
+      dataIndex: 'isInjected',
       render: (isInjected: boolean) => {
         if (isInjected) {
-          return (
-            <CheckCircleOutlined style={{ color: "green", fontSize: "23px" }} />
-          );
+          return <CheckCircleOutlined style={{ color: 'green', fontSize: '23px' }} />;
         }
-        return (
-          <ClockCircleOutlined style={{ color: "orange", fontSize: "23px" }} />
-        );
+        return <ClockCircleOutlined style={{ color: 'orange', fontSize: '23px' }} />;
       },
     },
   ];

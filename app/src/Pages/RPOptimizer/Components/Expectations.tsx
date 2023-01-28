@@ -1,7 +1,7 @@
-import { Statistic, Row, Col, Typography } from "antd";
-import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
-import { useThemeSwitcher } from "react-css-theme-switcher";
-import useMediaQuery from "../../../hooks/useMediaQuery";
+import { Statistic, Row, Col, Typography } from 'antd';
+import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
+import { useThemeSwitcher } from 'react-css-theme-switcher';
+import useMediaQuery from '../../../hooks/useMediaQuery';
 const { Title, Text } = Typography;
 
 const Expectations = ({
@@ -19,7 +19,7 @@ const Expectations = ({
 }) => {
   const { currentTheme } = useThemeSwitcher();
 
-  const position = useMediaQuery("(max-width: 767px)", "center", "flex-end");
+  const position = useMediaQuery('(max-width: 767px)', 'center', 'flex-end');
 
   return (
     <div style={{ marginTop: 20 }}>
@@ -28,10 +28,10 @@ const Expectations = ({
         <Col xs={24} md={8}>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
               alignItems: position,
-              flexDirection: "column",
+              flexDirection: 'column',
               marginRight: 20,
               marginBottom: 20,
             }}
@@ -54,28 +54,12 @@ const Expectations = ({
           </div>
         </Col>
         <Col xs={12} md={5}>
-          <Statistic
-            title="Total Remaining Activity"
-            value={totalRemainingActivity || "?"}
-            suffix="MBq"
-          />
-          <Statistic
-            title="Usable Remaining Activity"
-            value={usableRemainingActivity || "?"}
-            suffix="MBq"
-          />
+          <Statistic title="Total Remaining Activity" value={totalRemainingActivity || '?'} suffix="MBq" />
+          <Statistic title="Usable Remaining Activity" value={usableRemainingActivity || '?'} suffix="MBq" />
         </Col>
         <Col xs={12} md={5}>
-          <Statistic
-            title="Total Remaining Volume"
-            value={totalRemainingVol || "?"}
-            suffix="ml"
-          />
-          <Statistic
-            title="Usable Remaining Volume"
-            value={usableRemainingVol || "?"}
-            suffix="ml"
-          />
+          <Statistic title="Total Remaining Volume" value={totalRemainingVol || '?'} suffix="ml" />
+          <Statistic title="Usable Remaining Volume" value={usableRemainingVol || '?'} suffix="ml" />
         </Col>
       </Row>
 
@@ -84,25 +68,22 @@ const Expectations = ({
         <Col xs={24} md={10}>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
               marginTop: 20,
-              backgroundColor: currentTheme === "dark" ? "#0c0c0c" : "#ececec",
-              textAlign: "center",
+              backgroundColor: currentTheme === 'dark' ? '#0c0c0c' : '#ececec',
+              textAlign: 'center',
             }}
           >
             <Statistic
               title="Expectations at :"
               value={
                 remainingActivityTime
-                  ? new Date(remainingActivityTime).toLocaleTimeString(
-                      "en-GB",
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )
-                  : "?"
+                  ? new Date(remainingActivityTime).toLocaleTimeString('en-GB', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : '?'
               }
             />
           </div>
