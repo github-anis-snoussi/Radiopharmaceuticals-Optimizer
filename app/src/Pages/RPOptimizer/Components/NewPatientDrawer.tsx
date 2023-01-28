@@ -12,7 +12,7 @@ const NewPatientDrawer = ({
 }: {
   closeDrawer: () => void;
   isDrawerVisible: boolean;
-  modifiedPatientId: string;
+  modifiedPatientId?: string;
 }) => {
   const { currentTheme } = useThemeSwitcher();
   const newPatientForm = useRef<FormInstance<any> | null>(null);
@@ -35,9 +35,9 @@ const NewPatientDrawer = ({
 
   const finishedEdit = () => {
     if (modifiedPatientId) {
-      updatePatient({ id: modifiedPatientId, name, dose, duration });
+      updatePatient({ id: modifiedPatientId, name, dose, duration, isInjected: false });
     } else {
-      addPatient({ id: uuidv4(), name, dose, duration });
+      addPatient({ id: uuidv4(), name, dose, duration, isInjected: false });
     }
     closeDrawer();
   };

@@ -11,11 +11,11 @@ const Expectations = ({
   usableRemainingVol,
   remainingActivityTime,
 }: {
-  totalRemainingActivity: any;
-  usableRemainingActivity: any;
-  totalRemainingVol: any;
-  usableRemainingVol: any;
-  remainingActivityTime: any;
+  totalRemainingActivity?: any;
+  usableRemainingActivity?: any;
+  totalRemainingVol?: any;
+  usableRemainingVol?: any;
+  remainingActivityTime?: any;
 }) => {
   const { currentTheme } = useThemeSwitcher();
 

@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 
 const RPOptimizer = () => {
-  const [modifiedPatientId, setModifiedPatientId] = useState(null);
+  const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -196,7 +196,7 @@ const RPOptimizer = () => {
         isDrawerVisible={isDrawerVisible}
         closeDrawer={() => {
           setIsDrawerVisible(false);
-          setModifiedPatientId(null);
+          setModifiedPatientId(undefined);
         }}
         modifiedPatientId={modifiedPatientId}
       />

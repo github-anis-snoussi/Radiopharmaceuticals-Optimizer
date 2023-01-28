@@ -6,7 +6,7 @@ export interface PatientType {
   dose: number;
   duration: number;
   isInjected: boolean;
-  realInjectionTime: string;
+  realInjectionTime?: string;
 }
 
 export interface PatientsContextType {
