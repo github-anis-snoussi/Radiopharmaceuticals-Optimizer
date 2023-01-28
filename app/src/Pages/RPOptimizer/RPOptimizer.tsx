@@ -1,205 +1,169 @@
-import React, { useState, useEffect, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { sort, now, expect } from "../../utils/sortPatientList";
-import {
-  setAmplitudeUserId,
-  sendAmplitudeData,
-  amplitudeLogsTypes,
-} from "../../utils/amplitude";
-import { Button, message, Popconfirm } from "antd";
-import {
-  AppHeader,
-  PatientsTable,
-  Expectations,
-  WelcomeModal,
-  NewPatientDrawer,
-} from "./Components";
+import React, { useState, useEffect, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { sort, now, expect } from '../../utils/sortPatientList';
+import { setAmplitudeUserId, sendAmplitudeData, amplitudeLogsTypes } from '../../utils/amplitude';
+import { Button, message, Popconfirm } from 'antd';
+import { AppHeader, PatientsTable, Expectations, WelcomeModal, NewPatientDrawer } from './Components';
 import {
   UserAddOutlined,
   FileSearchOutlined,
   SettingOutlined,
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState(null);
-
-  // OLD stuff
-  // rpSettings
-  const [rpActivity, setRpActivity] = useState(0);
-  const [mesureTime, setMesureTime] = useState(null);
-  const [firstInjTime, setFirstInjTime] = useState(null);
-  const [rpHalfLife, setRpHalfLife] = useState(0);
-  const [rpVol, setRpVol] = useState(0);
-  const [wastedVol, setWastedVol] = useState(0);
-  const [unextractableVol, setUnextractableVol] = useState(0);
-  const [labName, setLabName] = useState("Rp Optimizer");
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [sideMenuKey, setSideMenuKey] = useState(1);
 
-  //patients list
-  const [patientsList, setPatientsList] = useState([]);
-
   // expectations values
   const [expected, setExpected] = useState({});
   const [now, setNow] = useState({});
 
-  const newPatientForm = useRef(null);
+  // FUNCTIONS TO IMPLEMENT
+  const sortPatients = () => {};
+  const deletAllPatients = () => {};
+  const generateExpectations = () => {};
 
-  useEffect(() => {
-    const statsInterval = setInterval(generateNowStats, 60000);
+  // // OLD FUNCTIONS
 
-    // in case this is after refresh
-    generateNowStats();
-    generateExpectations();
+  // useEffect(() => {
+  //   const statsInterval = setInterval(generateNowStats, 60000);
 
-    // init the amplitude user
-    setAmplitudeUserId(uuidv4());
+  //   // in case this is after refresh
+  //   generateNowStats();
+  //   generateExpectations();
 
-    return () => {
-      clearInterval(statsInterval);
-    };
-  }, []);
+  //   // init the amplitude user
+  //   setAmplitudeUserId(uuidv4());
 
-  // helper function
-  const getRpSetting = () => {
-    return {
-      rpActivity,
-      mesureTime: new Date(mesureTime),
-      firstInjTime: new Date(firstInjTime),
-      rpHalfLife,
-      rpVol,
-      wastedVol,
-      unextractableVol,
-    };
-  };
+  //   return () => {
+  //     clearInterval(statsInterval);
+  //   };
+  // }, []);
 
-  const deletAllPatients = () => {
-    setPatientsList([]);
-    setExpected({});
-    setNow({});
+  // const deletAllPatients = () => {
+  //   setPatientsList([]);
+  //   setExpected({});
+  //   setNow({});
 
-    sendAmplitudeData(amplitudeLogsTypes.DELETE_ALL_PATIENTS);
-  };
+  //   sendAmplitudeData(amplitudeLogsTypes.DELETE_ALL_PATIENTS);
+  // };
 
-  const generateNowStats = () => {
-    if (patientsList?.length > 0) {
-      const nowDict = now(patientsList, getRpSetting());
-      setNow({ ...nowDict });
-    }
-  };
+  // const generateNowStats = () => {
+  //   if (patientsList?.length > 0) {
+  //     const nowDict = now(patientsList, getRpSetting());
+  //     setNow({ ...nowDict });
+  //   }
+  // };
 
-  const generateExpectations = () => {
-    if (patientsList?.length > 0) {
-      const expected = expect(patientsList, getRpSetting());
-      let newPatientsList = [...patientsList].map((x, i) => {
-        return {
-          ...x,
-          expectedInjectionTime: new Date(
-            expected.patientInjTimeList[i]
-          ).toLocaleTimeString("en-GB", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          expectedInjectionVolume: expected.patientInjVolList[i].toFixed(2),
-        };
-      });
-      setPatientsList([...newPatientsList]);
-      setExpected({ ...expected });
-      generateNowStats();
-    }
-  };
+  // const generateExpectations = () => {
+  //   if (patientsList?.length > 0) {
+  //     const expected = expect(patientsList, getRpSetting());
+  //     let newPatientsList = [...patientsList].map((x, i) => {
+  //       return {
+  //         ...x,
+  //         expectedInjectionTime: new Date(
+  //           expected.patientInjTimeList[i]
+  //         ).toLocaleTimeString("en-GB", {
+  //           hour: "2-digit",
+  //           minute: "2-digit",
+  //         }),
+  //         expectedInjectionVolume: expected.patientInjVolList[i].toFixed(2),
+  //       };
+  //     });
+  //     setPatientsList([...newPatientsList]);
+  //     setExpected({ ...expected });
+  //     generateNowStats();
+  //   }
+  // };
 
-  const sortPatients = () => {
-    const newFormatedPatients = sort(patientsList, getRpSetting());
+  // const sortPatients = () => {
+  //   const newFormatedPatients = sort(patientsList, getRpSetting());
 
-    setPatientsList([...newFormatedPatients]);
-    message.success("Patient List sorted");
-    generateExpectations();
-    sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS);
-  };
+  //   setPatientsList([...newFormatedPatients]);
+  //   message.success("Patient List sorted");
+  //   generateExpectations();
+  //   sendAmplitudeData(amplitudeLogsTypes.SORT_PATIENTS);
+  // };
 
-  const deletePatient = (record) => {
-    let newPatierntsData = patientsList.filter((p) => p.index !== record.index);
+  // const deletePatient = (record) => {
+  //   let newPatierntsData = patientsList.filter((p) => p.index !== record.index);
 
-    setPatientsList([...newPatierntsData]);
-    generateExpectations();
-    sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT);
-  };
+  //   setPatientsList([...newPatierntsData]);
+  //   generateExpectations();
+  //   sendAmplitudeData(amplitudeLogsTypes.DELETE_PATIENT);
+  // };
 
-  const modifyPatient = (record) => {
-    setModifiedPatientId(record.id);
-    setIsDrawerVisible(true);
+  // const modifyPatient = (record) => {
+  //   setModifiedPatientId(record.id);
+  //   setIsDrawerVisible(true);
 
-    newPatientForm.current.setFieldsValue({
-      name: record.name,
-      dose: record.dose,
-      duration: record.duration,
-    });
-  };
+  //   newPatientForm.current.setFieldsValue({
+  //     name: record.name,
+  //     dose: record.dose,
+  //     duration: record.duration,
+  //   });
+  // };
 
-  const onAddPatient = ({ name, dose, duration }) => {
-    if (modifiedPatientId) {
-      const newPatient = {
-        id: modifiedPatientId,
-        name: name,
-        dose: dose,
-        duration: duration,
-        isInjected: false,
-        realInjectionTime: null,
-      };
+  // const onAddPatient = ({ name, dose, duration }) => {
+  //   if (modifiedPatientId) {
+  //     const newPatient = {
+  //       id: modifiedPatientId,
+  //       name: name,
+  //       dose: dose,
+  //       duration: duration,
+  //       isInjected: false,
+  //       realInjectionTime: null,
+  //     };
 
-      setPatientsList(
-        patientsList.map((patient) =>
-          patient.id === modifiedPatientId ? newPatient : patient
-        )
-      );
-      setModifiedPatientId(null);
-      setIsDrawerVisible(false);
+  //     setPatientsList(
+  //       patientsList.map((patient) =>
+  //         patient.id === modifiedPatientId ? newPatient : patient
+  //       )
+  //     );
+  //     setModifiedPatientId(null);
+  //     setIsDrawerVisible(false);
 
-      generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
-    } else {
-      const newPatient = {
-        id: uuidv4(),
-        name,
-        dose,
-        duration,
-        isInjected: false,
-        realInjectionTime: null,
-      };
-      setPatientsList(patientsList.push(newPatient));
-      setIsDrawerVisible(false);
+  //     generateExpectations();
+  //     sendAmplitudeData(amplitudeLogsTypes.MODIFY_PATIENT);
+  //   } else {
+  //     const newPatient = {
+  //       id: uuidv4(),
+  //       name,
+  //       dose,
+  //       duration,
+  //       isInjected: false,
+  //       realInjectionTime: null,
+  //     };
+  //     setPatientsList(patientsList.push(newPatient));
+  //     setIsDrawerVisible(false);
 
-      generateExpectations();
-      sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
-    }
-  };
+  //     generateExpectations();
+  //     sendAmplitudeData(amplitudeLogsTypes.NEW_PATIENT);
+  //   }
+  // };
 
   return (
     <>
       <AppHeader>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Button key="1" onClick={sortPatients} style={{ margin: 5 }}>
             <FileSearchOutlined /> Sort
           </Button>
 
-          <Button
-            key="3"
-            onClick={() => setIsModalVisible(true)}
-            style={{ margin: 5 }}
-          >
+          <Button key="3" onClick={() => setIsModalVisible(true)} style={{ margin: 5 }}>
             <SettingOutlined /> Settings
           </Button>
 
           <Popconfirm
             key="4"
-            title={"Delete All ?"}
-            icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
+            title={'Delete All ?'}
+            icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
             onConfirm={deletAllPatients}
             okText="Delete All Patients"
             okButtonProps={{
@@ -225,16 +189,7 @@ const RPOptimizer = () => {
         </div>
       </AppHeader>
 
-      <PatientsTable
-        patientsList={patientsList}
-        updateData={(newData) => {
-          setPatientsList(newData);
-          generateExpectations();
-        }}
-        deletePatient={deletePatient}
-        modifyPatient={modifyPatient}
-        generateExpectations={generateExpectations}
-      />
+      <PatientsTable generateExpectations={generateExpectations} />
 
       <Expectations {...expected} />
       <NewPatientDrawer

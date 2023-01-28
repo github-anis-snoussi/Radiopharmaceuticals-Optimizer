@@ -1,10 +1,10 @@
-import React from "react";
-import { useThemeSwitcher } from "react-css-theme-switcher";
-import { Switch } from "antd";
+import React from 'react';
+import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { Switch } from 'antd';
 
 const ThemeSwitcher = () => {
   const { switcher, themes, currentTheme } = useThemeSwitcher();
-  const [isDarkMode, setIsDarkMode] = React.useState(currentTheme === "dark");
+  const [isDarkMode, setIsDarkMode] = React.useState(currentTheme === 'dark');
 
   const toggleTheme = (isChecked: boolean) => {
     setIsDarkMode(isChecked);
