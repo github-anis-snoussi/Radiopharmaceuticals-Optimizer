@@ -1,4 +1,3 @@
-import React from "react";
 import { Typography, Divider } from "antd";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import useMediaQuery from "../../hooks/useMediaQuery";

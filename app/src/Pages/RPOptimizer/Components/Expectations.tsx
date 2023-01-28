@@ -1,4 +1,3 @@
-import React from "react";
 import { Statistic, Row, Col, Typography } from "antd";
 import { BranchesOutlined, ExperimentOutlined } from "@ant-design/icons";
 import { useThemeSwitcher } from "react-css-theme-switcher";

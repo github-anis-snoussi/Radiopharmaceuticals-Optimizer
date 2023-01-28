@@ -20,7 +20,10 @@ import {
 } from "../../../utils/amplitude";
 
 import ThemeSwitcher from "./ThemeSwitcher";
-import { Context } from "../../../Context";
+import {
+  RpSettingsContextContext,
+  RpSettingsContextType,
+} from "../../../context/RpSettingsContext";
 
 const { Text } = Typography;
 
@@ -32,16 +35,18 @@ const WelcomeModal = ({
   closeModal: any;
 }) => {
   const {
-    labName: initLabName,
-    rpActivity: initRpActivity,
-    rpVol: initRpVol,
-    rpHalfLife: initRpHalfLife,
-    mesureTime: initMesureTime,
-    firstInjTime: initFirstInjTime,
-    wastedVol: initWastedVol,
-    unextractableVol: initUnextractableVol,
+    rpSettings: {
+      labName: initLabName,
+      rpActivity: initRpActivity,
+      rpVol: initRpVol,
+      rpHalfLife: initRpHalfLife,
+      mesureTime: initMesureTime,
+      firstInjTime: initFirstInjTime,
+      wastedVol: initWastedVol,
+      unextractableVol: initUnextractableVol,
+    },
     setRpSettings,
-  } = useContext(Context);
+  } = useContext(RpSettingsContextContext) as RpSettingsContextType;
 
   const [rpActivity, setRpActivity] = useState(initRpActivity);
   const [mesureTime, setMesureTime] = useState(initMesureTime);

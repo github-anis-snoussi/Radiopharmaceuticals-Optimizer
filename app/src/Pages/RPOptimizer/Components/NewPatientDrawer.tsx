@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import {
   Drawer,
   Form,
@@ -12,16 +12,20 @@ import {
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { v4 as uuidv4 } from "uuid";
 import useMediaQuery from "../../../hooks/useMediaQuery";
-import { Context } from "../../../Context";
+import {
+  PatientsContext,
+  PatientsContextType,
+  PatientType,
+} from "../../../context/PatientsContext";
 
 const NewPatientDrawer = ({
   closeDrawer,
   isDrawerVisible,
   modifiedPatientId,
 }: {
-  closeDrawer: any;
-  isDrawerVisible: any;
-  modifiedPatientId: any;
+  closeDrawer: () => void;
+  isDrawerVisible: boolean;
+  modifiedPatientId: string;
 }) => {
   const { currentTheme } = useThemeSwitcher();
   const newPatientForm = useRef<FormInstance<any> | null>(null);
@@ -31,7 +35,9 @@ const NewPatientDrawer = ({
     700
   );
 
-  const { patientsList, addPatient, updatePatient } = useContext(Context);
+  const { patientsList, addPatient, updatePatient } = useContext(
+    PatientsContext
+  ) as PatientsContextType;
 
   const [name, setName] = useState("");
   const [dose, setDose] = useState(0);
@@ -42,9 +48,9 @@ const NewPatientDrawer = ({
       let modifiedPatient = patientsList.find(
         (element: any) => element.id === modifiedPatientId
       );
-      setName(modifiedPatient.name);
-      setDose(modifiedPatient.dose);
-      setDuration(modifiedPatient.duration);
+      setName(modifiedPatient?.name ?? "");
+      setDose(modifiedPatient?.dose ?? 0);
+      setDuration(modifiedPatient?.duration ?? 0);
     }
   }, []);
 
