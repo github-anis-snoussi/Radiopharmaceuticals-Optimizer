@@ -49,7 +49,7 @@ const PatientsTable = ({ generateExpectations }: { generateExpectations: any }) 
       scroll={{ x: 950 }}
       dataSource={patientsList}
       // @ts-ignore */
-      columns={TableColums(updatePatient, deletePatient, updateRecordMeasureTime, patientsList, updateData)}
+      columns={TableColums(updatePatientsList, deletePatient, updateRecordMeasureTime, patientsList)}
       rowKey="id"
       components={{
         body: {

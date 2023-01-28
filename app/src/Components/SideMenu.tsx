@@ -1,14 +1,13 @@
-import React from "react";
-import { Menu } from "antd";
-import { ExperimentOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Menu } from 'antd';
+import { ExperimentOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const SideMenu = ({ setSideMenuKey }: { setSideMenuKey: any }) => {
   return (
     <Menu
       theme="dark"
       mode="inline"
-      defaultSelectedKeys={["1"]}
-      onSelect={(selection) => {
+      defaultSelectedKeys={['1']}
+      onSelect={selection => {
         setSideMenuKey(parseInt(selection.key, 10));
       }}
     >
