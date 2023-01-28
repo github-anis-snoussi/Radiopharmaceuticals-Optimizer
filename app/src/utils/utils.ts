@@ -2,7 +2,7 @@ import { message } from "antd";
 import { clean } from "./sortPatientList";
 import { sendAmplitudeData, amplitudeLogsTypes } from "./amplitude";
 
-export function confirmInjection(record: any, patientsList: any, updateData: any) {
+export function confirmInjection(record: any, patientsList: any, updatePatientsList: any) {
   if (record.realInjectionTime === null) {
     message.warning("Operation aborted");
   } else {
@@ -14,7 +14,7 @@ export function confirmInjection(record: any, patientsList: any, updateData: any
     });
 
     const newFormatedPatients = clean(patientsList);
-    updateData([...newFormatedPatients]);
+    updatePatientsList([...newFormatedPatients]);
     sendAmplitudeData(amplitudeLogsTypes.INJECT_PATIENT);
     message.success("Patient injected");
   }

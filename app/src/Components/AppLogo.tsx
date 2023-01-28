@@ -1,28 +1,22 @@
-import React from "react";
-
 const AppLogo = () => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         margin: 10,
       }}
     >
-      <img
-        src={"logo-filled-white.png"}
-        style={{ height: 60, aspectRatio: 1 }}
-        alt="app-logo"
-      />
+      <img src={'logo-filled-white.png'} style={{ height: 60, aspectRatio: 1 }} alt="app-logo" />
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
           padding: 0,
           margin: 0,
         }}
@@ -30,9 +24,9 @@ const AppLogo = () => {
         <span
           style={{
             fontSize: 20,
-            fontWeight: "bold",
-            color: "white",
-            textAlign: "center",
+            fontWeight: 'bold',
+            color: 'white',
+            textAlign: 'center',
             padding: 0,
             margin: 0,
             height: 20,
@@ -43,9 +37,9 @@ const AppLogo = () => {
         <span
           style={{
             fontSize: 20,
-            fontWeight: "bold",
-            color: "white",
-            textAlign: "center",
+            fontWeight: 'bold',
+            color: 'white',
+            textAlign: 'center',
             padding: 0,
             margin: 0,
             height: 20,
