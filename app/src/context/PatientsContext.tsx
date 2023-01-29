@@ -37,16 +37,10 @@ const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   };
 
   const updatePatient = (patient: Partial<PatientType>) => {
-    setPatientsList((prevPatients: PatientType[]) => {
-      let newPatientList = [...prevPatients];
-      newPatientList.forEach((p, index) => {
-        if (p.id === patient.id) {
-          prevPatients[index] = { ...prevPatients[index], ...patient };
-        }
-      });
-
-      return newPatientList;
-    });
+    let newPatientList = [...patientsList];
+    let patientIndex = newPatientList.findIndex(p => p.id === patient.id);
+    newPatientList[patientIndex] = { ...newPatientList[patientIndex], ...patient };
+    setPatientsList(newPatientList);
   };
 
   const updatePatientsList = (newPatientsList: PatientType[]) => {
