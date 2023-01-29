@@ -27,7 +27,13 @@ const RPOptimizer = () => {
   // FUNCTIONS TO IMPLEMENT
   const sortPatients = () => {};
   const deletAllPatients = () => {};
-  const generateExpectations = () => {};
+  const generateExpectations = () => {
+    console.log('generating expectations');
+  };
+  const modifyPatient = (id: string) => {
+    setModifiedPatientId(id);
+    setIsDrawerVisible(true);
+  };
 
   // // OLD FUNCTIONS
 
@@ -189,7 +195,7 @@ const RPOptimizer = () => {
         </div>
       </AppHeader>
 
-      <PatientsTable generateExpectations={generateExpectations} />
+      <PatientsTable generateExpectations={generateExpectations} modifyPatient={modifyPatient} />
 
       <Expectations {...expected} />
       <NewPatientDrawer
