@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Table } from 'antd';
 import { SortableContainer as BaseSortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
@@ -8,10 +8,16 @@ import { PatientsContext, PatientsContextType } from '../../../context/PatientsC
 const SortableItem = SortableElement((props: any) => <tr {...props} />);
 const SortableContainer = BaseSortableContainer((props: any) => <tbody {...props} />);
 
-const PatientsTable = ({ generateExpectations }: { generateExpectations: any }) => {
-  const { patientsList, updatePatient, updatePatientsList, deletePatient } = useContext(
-    PatientsContext,
-  ) as PatientsContextType;
+const PatientsTable = ({
+  generateExpectations,
+  modifyPatient,
+}: {
+  generateExpectations: () => void;
+  modifyPatient: (id: string) => void;
+}) => {
+  const { patientsList, updatePatientsList, deletePatient } = useContext(PatientsContext) as PatientsContextType;
+
+  const [selectedInjectionTime, setSelectedInjectionTime] = useState<string | undefined>(undefined);
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: any; newIndex: any }) => {
     if (patientsList[newIndex].isInjected) {
@@ -33,23 +39,19 @@ const PatientsTable = ({ generateExpectations }: { generateExpectations: any }) 
     return <SortableItem index={index} {...restProps} />;
   };
 
-  const updateRecordMeasureTime = (record: any, mesureTime: any) => {
-    let patients = [...patientsList];
-    patients.forEach(function (part, index, theArray) {
-      if (theArray[index].id === record.id) {
-        theArray[index].realInjectionTime = new Date(mesureTime).toDateString();
-      }
-    });
-    updatePatientsList(patients);
-  };
-
   return (
     <Table
       pagination={false}
       scroll={{ x: 950 }}
       dataSource={patientsList}
-      // @ts-ignore */
-      columns={TableColums(updatePatientsList, deletePatient, updateRecordMeasureTime, patientsList)}
+      columns={TableColums(
+        updatePatientsList,
+        deletePatient,
+        selectedInjectionTime ?? '',
+        setSelectedInjectionTime,
+        modifyPatient,
+        patientsList,
+      )}
       rowKey="id"
       components={{
         body: {

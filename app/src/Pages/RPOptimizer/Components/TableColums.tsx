@@ -1,4 +1,3 @@
-import React from 'react';
 import { Space, Button, Popconfirm, message, DatePicker, Typography } from 'antd';
 import {
   MenuOutlined,
@@ -17,16 +16,17 @@ const { Text } = Typography;
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />);
 
 const TableColums = (
-  modifyPatient: any,
-  deletePatient: any,
-  updateRecordMeasureTime: any,
-  patientsList: any,
   updatePatientsList: any,
+  deletePatient: any,
+  selectedInjectionTime: string,
+  setSelectedInjectionTime: any,
+  modifyPatient: any,
+  patientsList: any,
 ) => {
   return [
     {
       title: '',
-      fixed: 'left',
+      fixed: 'left' as const,
       dataIndex: 'sort',
       width: 30,
       className: 'drag-visible',
@@ -39,7 +39,7 @@ const TableColums = (
     {
       title: 'Name',
       width: 80,
-      fixed: 'left',
+      fixed: 'left' as const,
       dataIndex: 'name',
       key: 'name',
       render: (text: string) => <Text strong>{text}</Text>,
@@ -109,7 +109,7 @@ const TableColums = (
             ghost
             disabled={record.isInjected}
             onClick={() => {
-              modifyPatient(record);
+              modifyPatient(record.id);
             }}
           >
             <EditOutlined />
@@ -121,7 +121,7 @@ const TableColums = (
               title={'Proceed to delete ?'}
               icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
               onConfirm={() => {
-                deletePatient(record);
+                deletePatient(record.id);
               }}
               okText="Delete Patient"
               okButtonProps={{
@@ -156,7 +156,7 @@ const TableColums = (
                       marginBottom: 10,
                     }}
                     onSelect={mesureTime => {
-                      updateRecordMeasureTime(record, mesureTime);
+                      setSelectedInjectionTime(record, mesureTime.toString());
                     }}
                   />
                 </>
@@ -165,7 +165,7 @@ const TableColums = (
                 if (!record.realInjectionTime) {
                   message.warning('Please select Injection time first.');
                 } else {
-                  confirmInjection(record, patientsList, updatePatientsList);
+                  confirmInjection(record, patientsList, updatePatientsList, selectedInjectionTime);
                 }
               }}
               okText="Inject"
@@ -184,7 +184,7 @@ const TableColums = (
     {
       title: 'Status',
       width: 70,
-      fixed: 'right',
+      fixed: 'right' as const,
       key: 'isInjected',
       dataIndex: 'isInjected',
       render: (isInjected: boolean) => {
