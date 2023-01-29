@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export interface PatientType {
   id: string;
@@ -13,7 +13,7 @@ export interface PatientsContextType {
   patientsList: PatientType[];
   addPatient: (newPatient: PatientType) => void;
   deletePatient: (id: string) => void;
-  updatePatient: (newPatient: PatientType) => void;
+  updatePatient: (newPatient: Partial<PatientType>) => void;
   updatePatientsList: (newPatientsList: PatientType[]) => void;
 }
 
@@ -23,6 +23,11 @@ const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   //patients list
   const [patientsList, setPatientsList] = useState<PatientType[]>([]);
 
+  // DEBUG
+  useEffect(() => {
+    console.log(patientsList);
+  }, [patientsList]);
+
   const addPatient = (newPatient: PatientType) => {
     setPatientsList(prevPatients => [...prevPatients, newPatient]);
   };
@@ -31,7 +36,7 @@ const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     setPatientsList(prevPatients => prevPatients.filter(item => item.id !== id));
   };
 
-  const updatePatient = (patient: PatientType) => {
+  const updatePatient = (patient: Partial<PatientType>) => {
     setPatientsList((prevPatients: PatientType[]) => {
       let newPatientList = [...prevPatients];
       newPatientList.forEach((p, index) => {

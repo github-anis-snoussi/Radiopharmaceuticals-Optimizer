@@ -3,7 +3,7 @@ import { Drawer, Form, Button, Col, Row, Input, InputNumber, FormInstance } from
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { v4 as uuidv4 } from 'uuid';
 import useMediaQuery from '../../../hooks/useMediaQuery';
-import { PatientsContext, PatientsContextType, PatientType } from '../../../context/PatientsContext';
+import { PatientsContext, PatientsContextType } from '../../../context/PatientsContext';
 
 const NewPatientDrawer = ({
   closeDrawer,
@@ -25,17 +25,18 @@ const NewPatientDrawer = ({
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
+    console.log('hello there');
     if (modifiedPatientId) {
       let modifiedPatient = patientsList.find((element: any) => element.id === modifiedPatientId);
       setName(modifiedPatient?.name ?? '');
       setDose(modifiedPatient?.dose ?? 0);
       setDuration(modifiedPatient?.duration ?? 0);
     }
-  }, []);
+  }, [modifiedPatientId]);
 
   const finishedEdit = () => {
     if (modifiedPatientId) {
-      updatePatient({ id: modifiedPatientId, name, dose, duration, isInjected: false });
+      updatePatient({ id: modifiedPatientId, name, dose, duration });
     } else {
       addPatient({ id: uuidv4(), name, dose, duration, isInjected: false });
     }
