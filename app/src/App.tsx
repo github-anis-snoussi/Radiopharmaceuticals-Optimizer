@@ -42,7 +42,7 @@ const App = () => {
 
           <Footer style={{ textAlign: 'center' }}>
             RP optimizer {new Date().getFullYear()} Created by Anis Snoussi & Walid Snoussi <br />
-            Version Ref :
+            Version Ref :{' '}
             {process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA
               ? process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA.substring(0, 8)
               : 'no-ref'}

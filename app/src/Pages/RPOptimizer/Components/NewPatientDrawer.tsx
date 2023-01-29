@@ -15,8 +15,9 @@ const NewPatientDrawer = ({
   modifiedPatientId?: string;
 }) => {
   const { currentTheme } = useThemeSwitcher();
-  const newPatientForm = useRef<FormInstance<any> | null>(null);
   const drawerWidth = useMediaQuery('(max-width: 767px)', window.innerWidth, 700);
+  const newPatientForm = useRef<FormInstance<any> | null>(null);
+  const [form] = Form.useForm();
 
   const { patientsList, addPatient, updatePatient } = useContext(PatientsContext) as PatientsContextType;
 
@@ -25,14 +26,15 @@ const NewPatientDrawer = ({
   const [duration, setDuration] = useState(0);
 
   useEffect(() => {
-    console.log('hello there');
     if (modifiedPatientId) {
       let modifiedPatient = patientsList.find((element: any) => element.id === modifiedPatientId);
-      setName(modifiedPatient?.name ?? '');
-      setDose(modifiedPatient?.dose ?? 0);
-      setDuration(modifiedPatient?.duration ?? 0);
+      form.setFieldsValue({
+        name: modifiedPatient?.name ?? '',
+        dose: modifiedPatient?.dose ?? 0,
+        duration: modifiedPatient?.duration ?? 0,
+      });
     }
-  }, [modifiedPatientId]);
+  }, [modifiedPatientId, patientsList]);
 
   const finishedEdit = () => {
     if (modifiedPatientId) {
@@ -73,12 +75,13 @@ const NewPatientDrawer = ({
         </div>
       }
     >
-      <Form layout="vertical" ref={newPatientForm} onFinish={finishedEdit}>
+      <Form layout="vertical" ref={newPatientForm} onFinish={finishedEdit} form={form}>
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter user name' }]}>
               <Input
                 placeholder="Please enter user name"
+                value={name}
                 onChange={name => {
                   setName(name.target.value);
                 }}
@@ -93,6 +96,7 @@ const NewPatientDrawer = ({
               <InputNumber
                 style={{ width: '100%' }}
                 min={0}
+                value={dose}
                 onChange={dose => {
                   setDose(dose);
                 }}
@@ -109,6 +113,7 @@ const NewPatientDrawer = ({
               <InputNumber
                 style={{ width: '100%' }}
                 min={0}
+                value={duration}
                 onChange={duration => {
                   setDuration(duration);
                 }}
