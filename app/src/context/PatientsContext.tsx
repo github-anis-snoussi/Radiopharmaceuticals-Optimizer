@@ -7,6 +7,9 @@ export interface PatientType {
   duration: number;
   isInjected: boolean;
   realInjectionTime?: string;
+  realInjectionVolume?: number;
+  expectedInjectionTime?: string;
+  expectedInjectionVolume?: number;
 }
 
 export interface PatientsContextType {

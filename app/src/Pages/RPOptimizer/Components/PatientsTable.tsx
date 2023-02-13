@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { Table } from 'antd';
+import { useContext, useState, useCallback } from 'react';
+import { Table, message } from 'antd';
 import { SortableContainer as BaseSortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import TableColums from './TableColums';
@@ -29,6 +29,17 @@ const PatientsTable = ({
     generateExpectations();
   };
 
+  const injectPatient = (id: string) => {
+    if (!selectedInjectionTime) {
+      message.warning('Please select Injection time first.');
+    }
+    console.log('Injecting patient: ', id);
+  };
+
+  const setInjTime = useCallback((time: string) => {
+    setSelectedInjectionTime(time.toString());
+  }, []);
+
   const DraggableContainer = (props: any) => (
     <SortableContainer useDragHandle disableAutoscroll helperClass="row-dragging" onSortEnd={onSortEnd} {...props} />
   );
@@ -44,15 +55,8 @@ const PatientsTable = ({
       pagination={false}
       scroll={{ x: 950 }}
       dataSource={patientsList}
-      columns={TableColums(
-        updatePatientsList,
-        deletePatient,
-        selectedInjectionTime ?? '',
-        setSelectedInjectionTime,
-        modifyPatient,
-        patientsList,
-      )}
-      rowKey="id"
+      columns={TableColums(injectPatient, deletePatient, setInjTime, modifyPatient)}
+      rowKey={patient => patient.id}
       components={{
         body: {
           wrapper: DraggableContainer,
