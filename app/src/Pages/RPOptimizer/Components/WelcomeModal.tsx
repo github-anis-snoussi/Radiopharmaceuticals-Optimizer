@@ -56,7 +56,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
       visible={isModalVisible}
       onCancel={closeModal}
       footer={[
-        <Button type="primary" htmlType="submit" onClick={finishEdit} disabled={!mesureTime || !firstInjTime}>
+        <Button key={1} type="primary" htmlType="submit" onClick={finishEdit} disabled={!mesureTime || !firstInjTime}>
           Confirm
         </Button>,
       ]}

@@ -1,4 +1,5 @@
-import { Space, Button, Popconfirm, message, DatePicker, Typography } from 'antd';
+import { useEffect } from 'react';
+import { Space, Button, Popconfirm, DatePicker, Typography } from 'antd';
 import {
   MenuOutlined,
   ClockCircleOutlined,
@@ -9,20 +10,21 @@ import {
   ExperimentOutlined,
 } from '@ant-design/icons';
 import { SortableHandle } from 'react-sortable-hoc';
-import { confirmInjection } from '../../../utils/utils';
 
 const { Text } = Typography;
 
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />);
 
 const TableColums = (
-  updatePatientsList: any,
-  deletePatient: any,
-  selectedInjectionTime: string,
-  setSelectedInjectionTime: any,
-  modifyPatient: any,
-  patientsList: any,
+  injectPatient: (id: string) => void,
+  deletePatient: (id: string) => void,
+  setInjTime: (time: string) => void,
+  modifyPatient: (id: string) => void,
 ) => {
+  useEffect(() => {
+    console.log('re-render');
+  }, []);
+
   return [
     {
       title: '',
@@ -155,18 +157,14 @@ const TableColums = (
                       marginTop: 10,
                       marginBottom: 10,
                     }}
-                    onSelect={mesureTime => {
-                      setSelectedInjectionTime(record, mesureTime.toString());
+                    onChange={(date, dateString) => {
+                      setInjTime(dateString);
                     }}
                   />
                 </>
               }
               onConfirm={() => {
-                if (!record.realInjectionTime) {
-                  message.warning('Please select Injection time first.');
-                } else {
-                  confirmInjection(record, patientsList, updatePatientsList, selectedInjectionTime);
-                }
+                injectPatient(record.id);
               }}
               okText="Inject"
               cancelText="Cancel"
