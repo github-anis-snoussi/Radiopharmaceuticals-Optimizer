@@ -5,7 +5,7 @@ import moment from 'moment';
 import { sendAmplitudeData, amplitudeLogsTypes } from '../../../utils/amplitude';
 
 import ThemeSwitcher from './ThemeSwitcher';
-import { RpSettingsContextContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
+import { RpSettingsContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 
 const { Text } = Typography;
 
@@ -22,7 +22,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
       unextractableVol: initUnextractableVol,
     },
     setRpSettings,
-  } = useContext(RpSettingsContextContext) as RpSettingsContextType;
+  } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   const [rpActivity, setRpActivity] = useState(initRpActivity);
   const [mesureTime, setMesureTime] = useState(initMesureTime);

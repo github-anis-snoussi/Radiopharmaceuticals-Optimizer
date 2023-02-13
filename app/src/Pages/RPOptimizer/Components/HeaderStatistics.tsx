@@ -1,20 +1,24 @@
 import { Row, Statistic, Progress } from 'antd';
+import { useContext } from 'react';
+import { NowStatsContext, NowStatsTypeContextType } from '../../../context/NowStatsContext';
 
 const HeaderStatistics = ({
   rpActivity,
   mesureTime,
   rpVol,
   rpHalfLife,
-  now,
   total,
 }: {
   rpActivity: any;
   mesureTime: any;
   rpVol: any;
   rpHalfLife: any;
-  now?: any;
   total: any;
 }) => {
+  const {
+    nowStats: { totalRemainingActivity },
+  } = useContext(NowStatsContext) as NowStatsTypeContextType;
+
   return (
     <>
       <Row>
@@ -31,14 +35,14 @@ const HeaderStatistics = ({
         <Statistic title="RP Half Life" suffix="min" value={rpHalfLife} style={{ margin: 10 }} />
       </Row>
       <Row>
-        {now && Object.keys(now).length !== 0 ? (
+        {totalRemainingActivity ? (
           <Progress
             style={{ paddingRight: 20 }}
             strokeColor={{
               '0%': 'red',
               '100%': 'green',
             }}
-            percent={(now.totalActivityNow / total) * 100}
+            percent={(totalRemainingActivity / total) * 100}
             format={percent => `${((percent ? percent * total : 0) / 100).toFixed(0)} MBq`}
           />
         ) : null}
