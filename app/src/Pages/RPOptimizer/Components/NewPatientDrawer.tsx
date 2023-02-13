@@ -34,7 +34,7 @@ const NewPatientDrawer = ({
         duration: modifiedPatient?.duration ?? 0,
       });
     }
-  }, [modifiedPatientId, patientsList]);
+  }, [modifiedPatientId, patientsList, form]);
 
   const finishedEdit = () => {
     if (modifiedPatientId) {

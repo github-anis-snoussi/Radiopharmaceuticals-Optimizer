@@ -1,25 +1,23 @@
+import { useContext } from 'react';
+import { NowStatsContext, NowStatsTypeContextType } from '../../../context/NowStatsContext';
 import { Statistic, Row, Col, Typography } from 'antd';
 import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import useMediaQuery from '../../../hooks/useMediaQuery';
 const { Title, Text } = Typography;
 
-const Expectations = ({
-  totalRemainingActivity,
-  usableRemainingActivity,
-  totalRemainingVol,
-  usableRemainingVol,
-  remainingActivityTime,
-}: {
-  totalRemainingActivity?: any;
-  usableRemainingActivity?: any;
-  totalRemainingVol?: any;
-  usableRemainingVol?: any;
-  remainingActivityTime?: any;
-}) => {
+const Expectations = () => {
   const { currentTheme } = useThemeSwitcher();
-
   const position = useMediaQuery('(max-width: 767px)', 'center', 'flex-end');
+  const {
+    nowStats: {
+      totalRemainingActivity,
+      usableRemainingActivity,
+      totalRemainingVol,
+      usableRemainingVol,
+      remainingActivityTime,
+    },
+  } = useContext(NowStatsContext) as NowStatsTypeContextType;
 
   return (
     <div style={{ marginTop: 20 }}>

@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
@@ -9,6 +8,7 @@ import { initAmplitude } from './utils/amplitude';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
 import { PatientsContextProvider } from './context/PatientsContext';
 import { RpSettingsContextProvider } from './context/RpSettingsContext';
+import { NowStatsContextProvider } from './context/NowStatsContext';
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/dark-theme.css`,
@@ -34,7 +34,9 @@ const AppWrapper = () => {
     <ThemeSwitcherProvider themeMap={themes} defaultTheme="light">
       <RpSettingsContextProvider>
         <PatientsContextProvider>
-          <App />
+          <NowStatsContextProvider>
+            <App />
+          </NowStatsContextProvider>
         </PatientsContextProvider>
       </RpSettingsContextProvider>
     </ThemeSwitcherProvider>
