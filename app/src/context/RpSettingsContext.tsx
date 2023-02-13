@@ -16,7 +16,7 @@ export interface RpSettingsContextType {
   setRpSettings: (settings: RpSettingsType) => void;
 }
 
-const RpSettingsContextContext = React.createContext<RpSettingsContextType | null>(null);
+const RpSettingsContext = React.createContext<RpSettingsContextType | null>(null);
 
 const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // rpSettings
@@ -66,7 +66,7 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   };
 
   return (
-    <RpSettingsContextContext.Provider
+    <RpSettingsContext.Provider
       value={{
         rpSettings: {
           rpActivity,
@@ -82,8 +82,8 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       }}
     >
       {children}
-    </RpSettingsContextContext.Provider>
+    </RpSettingsContext.Provider>
   );
 };
 
-export { RpSettingsContextProvider, RpSettingsContextContext };
+export { RpSettingsContextProvider, RpSettingsContext };
