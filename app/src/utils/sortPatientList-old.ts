@@ -1,4 +1,4 @@
-const diffTime = (date1: any, date2: any) => {
+const diffTimeMinutes = (date1: any, date2: any) => {
   const diffMs = Math.abs(date1 - date2);
   const diffMinutes = Math.round(diffMs / 60000);
   return diffMinutes;
@@ -13,7 +13,7 @@ const activityAtFirstInj = (patientInjTimeList: any, rpSettings: any) => {
   const ta = decay(
     rpSettings.rpActivity,
     rpSettings.rpHalfLife,
-    diffTime(patientInjTimeList[0], rpSettings.mesureTime)
+    diffTimeMinutes(patientInjTimeList[0], rpSettings.mesureTime)
   );
   const ra =
     (ta * (rpSettings.rpVol - rpSettings.wastedVol)) / rpSettings.rpVol;
@@ -53,6 +53,94 @@ const generatePatientInjTimeList = (
   patientList.pop();
 
   return patientInjTimeList;
+};
+
+const activityNow = (patientList: any, rpSettings: any) => {
+  let nowDict: any = {};
+
+  let injectedPatientsList = patientList.filter((x: any) => x.isInjected);
+  let k = injectedPatientsList.length;
+
+  injectedPatientsList = injectedPatientsList.map((x: any) => ({
+    ...x,
+    realInjectionTime: x.realInjectionTime
+      ? new Date(x.realInjectionTime)
+      : null,
+  }));
+  rpSettings = {
+    ...rpSettings,
+    mesureTime: new Date(rpSettings.mesureTime),
+    firstInjTime: new Date(rpSettings.firstInjTime),
+  };
+
+  if (k === 0) {
+    nowDict.totalVolNow = rpSettings.rpVol - rpSettings.wastedVol;
+    nowDict.usableVolNow = nowDict.totalVolNow - rpSettings.unextractableVol;
+    nowDict.totalActivityNowBeforePrime = decay(
+      rpSettings.rpActivity,
+      rpSettings.rpHalfLife,
+      diffTimeMinutes(new Date(), rpSettings.mesureTime)
+    );
+    nowDict.totalActivityNow =
+      (nowDict.totalActivityNowBeforePrime * nowDict.totalVolNow) /
+      rpSettings.rpVol;
+    nowDict.usableActivityNow = usableActivity(
+      nowDict.totalActivityNow,
+      nowDict.totalVolNow,
+      rpSettings.unextractableVol
+    );
+  } else {
+    let patientDoseList = injectedPatientsList.map((x: any) => x.dose);
+    let patientInjTimeList = injectedPatientsList.map(
+      (x: any) => x.realInjectionTime
+    );
+    let injTimeActivityList = Array(k).fill(0);
+    let remainingActivityList = Array(k).fill(0);
+    let patientInjVolList = Array(k).fill(0);
+    let remainingVolList = Array(k).fill(0);
+
+    for (var i = 0; i < k; i++) {
+      if (i === 0) {
+        injTimeActivityList[i] = activityAtFirstInj(
+          patientInjTimeList,
+          rpSettings
+        );
+        remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
+        patientInjVolList[i] =
+          (patientDoseList[i] * (rpSettings.rpVol - rpSettings.wastedVol)) /
+          injTimeActivityList[i];
+        remainingVolList[i] =
+          rpSettings.rpVol - rpSettings.wastedVol - patientInjVolList[i];
+      } else {
+        injTimeActivityList[i] = decay(
+          remainingActivityList[i - 1],
+          rpSettings.rpHalfLife,
+          diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
+        );
+        remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
+        patientInjVolList[i] =
+          (patientDoseList[i] * remainingVolList[i - 1]) /
+          injTimeActivityList[i];
+        remainingVolList[i] = remainingVolList[i - 1] - patientInjVolList[i];
+      }
+    }
+
+    nowDict.totalVolNow = remainingVolList[k - 1];
+    nowDict.usableVolNow =
+      remainingVolList[k - 1] - rpSettings.unextractableVol;
+    nowDict.totalActivityNow = decay(
+      remainingActivityList[k - 1],
+      rpSettings.rpHalfLife,
+      diffTimeMinutes(new Date(), patientInjTimeList[k - 1])
+    );
+    nowDict.usableActivityNow = usableActivity(
+      nowDict.totalActivityNow,
+      remainingVolList[k - 1],
+      rpSettings.unextractableVol
+    );
+  }
+
+  return nowDict;
 };
 
 const firstSorting = (patientListOg: any) => {
@@ -133,93 +221,7 @@ const sortPatientList = (patientListOg: any, rpSettings: any) => {
   return sortedList;
 };
 
-const activityNow = (patientList: any, rpSettings: any) => {
-  let nowDict: any = {};
 
-  let injectedPatientsList = patientList.filter((x: any) => x.isInjected);
-  let k = injectedPatientsList.length;
-
-  injectedPatientsList = injectedPatientsList.map((x: any) => ({
-    ...x,
-    realInjectionTime: x.realInjectionTime
-      ? new Date(x.realInjectionTime)
-      : null,
-  }));
-  rpSettings = {
-    ...rpSettings,
-    mesureTime: new Date(rpSettings.mesureTime),
-    firstInjTime: new Date(rpSettings.firstInjTime),
-  };
-
-  if (k === 0) {
-    nowDict.totalVolNow = rpSettings.rpVol - rpSettings.wastedVol;
-    nowDict.usableVolNow = nowDict.totalVolNow - rpSettings.unextractableVol;
-    nowDict.totalActivityNowBeforePrime = decay(
-      rpSettings.rpActivity,
-      rpSettings.rpHalfLife,
-      diffTime(new Date(), rpSettings.mesureTime)
-    );
-    nowDict.totalActivityNow =
-      (nowDict.totalActivityNowBeforePrime * nowDict.totalVolNow) /
-      rpSettings.rpVol;
-    nowDict.usableActivityNow = usableActivity(
-      nowDict.totalActivityNow,
-      nowDict.totalVolNow,
-      rpSettings.unextractableVol
-    );
-  } else {
-    let patientDoseList = injectedPatientsList.map((x: any) => x.dose);
-    let patientInjTimeList = injectedPatientsList.map(
-      (x: any) => x.realInjectionTime
-    );
-    let injTimeActivityList = Array(k).fill(0);
-    let remainingActivityList = Array(k).fill(0);
-    let patientInjVolList = Array(k).fill(0);
-    let remainingVolList = Array(k).fill(0);
-
-    for (var i = 0; i < k; i++) {
-      if (i === 0) {
-        injTimeActivityList[i] = activityAtFirstInj(
-          patientInjTimeList,
-          rpSettings
-        );
-        remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
-        patientInjVolList[i] =
-          (patientDoseList[i] * (rpSettings.rpVol - rpSettings.wastedVol)) /
-          injTimeActivityList[i];
-        remainingVolList[i] =
-          rpSettings.rpVol - rpSettings.wastedVol - patientInjVolList[i];
-      } else {
-        injTimeActivityList[i] = decay(
-          remainingActivityList[i - 1],
-          rpSettings.rpHalfLife,
-          diffTime(patientInjTimeList[i], patientInjTimeList[i - 1])
-        );
-        remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
-        patientInjVolList[i] =
-          (patientDoseList[i] * remainingVolList[i - 1]) /
-          injTimeActivityList[i];
-        remainingVolList[i] = remainingVolList[i - 1] - patientInjVolList[i];
-      }
-    }
-
-    nowDict.totalVolNow = remainingVolList[k - 1];
-    nowDict.usableVolNow =
-      remainingVolList[k - 1] - rpSettings.unextractableVol;
-    nowDict.totalActivityNow = decay(
-      remainingActivityList[k - 1],
-      rpSettings.rpHalfLife,
-      diffTime(new Date(), patientInjTimeList[k - 1])
-    );
-    nowDict.usableActivityNow = usableActivity(
-      nowDict.totalActivityNow,
-      remainingVolList[k - 1],
-      rpSettings.unextractableVol
-    );
-  }
-
-  return nowDict;
-};
 
 const sortingAfterEveryInjection = (patientList: any) => {
   patientList.sort((a: any, b: any) => {
@@ -275,7 +277,7 @@ const calculFinalExpectedActivity = (patientList: any, rpSettings: any) => {
       injTimeActivityList[i] = decay(
         remainingActivityList[i - 1],
         rpSettings.rpHalfLife,
-        diffTime(patientInjTimeList[i], patientInjTimeList[i - 1])
+        diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
       );
       remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
       patientInjVolList[i] =
