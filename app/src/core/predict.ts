@@ -3,7 +3,7 @@ import { RpSettingsType } from "../context/RpSettingsContext";
 import { activityAtFirstInj, decay, diffTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
 
 
-export const calculFinalExpectedActivity = (patientList: PatientType[], rpSettings: RpSettingsType) => {
+export const predict = (patientList: PatientType[], rpSettings: RpSettingsType) => {
     patientList = patientList.map((x: any) => ({
         ...x,
         realInjectionTime: x.realInjectionTime
