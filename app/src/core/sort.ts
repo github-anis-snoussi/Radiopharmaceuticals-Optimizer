@@ -2,7 +2,7 @@ import { message } from "antd";
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { sortingAfterEveryInjection } from "./helpers";
-import { calculFinalExpectedActivity } from "./predict";
+import { predict } from "./predict";
 
 
 const firstSorting = (patientList: PatientType[]) => {
@@ -17,14 +17,14 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
     let sortingCondition = true;
     while (sortingCondition) {
         sortingCondition = false;
-        for (var i = 0; i < patientList.length - 1; i++) {
+        for (let i = 0; i < patientList.length - 1; i++) {
             if (patientList[i].isInjected === false) {
                 // some logging
                 // console.log("=============================")
                 // console.log(`+++ Swapping [${i}] & [${i+1}] +++`)
                 // console.log("=============================")
 
-                let before = calculFinalExpectedActivity(
+                let before = predict(
                     patientList,
                     rpSettings
                 ).usableRemainingActivity;
@@ -37,7 +37,7 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
                 patientList[i] = patientList[i + 1];
                 patientList[i + 1] = aux1;
 
-                let after = calculFinalExpectedActivity(
+                let after = predict(
                     patientList,
                     rpSettings
                 ).usableRemainingActivity;
@@ -61,11 +61,11 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
     }
 };
 
-export const sortPatientsList = (patientListOg: PatientType[], rpSettings: RpSettingsType): PatientType[] => {
-    let patientList = [...patientListOg];
-    sortingAfterEveryInjection(patientList);
+export const sort = (patientListOg: PatientType[], rpSettings: RpSettingsType): PatientType[] => {
+    let patientList = [...sortingAfterEveryInjection(patientListOg)];
+
     let sortedList = firstSorting(patientList);
-    secondSorting(sortedList, rpSettings);
+    // secondSorting(sortedList, rpSettings);
     message.success("Patients sorted");
     return sortedList;
 };
