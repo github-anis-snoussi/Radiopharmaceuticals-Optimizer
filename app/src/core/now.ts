@@ -2,7 +2,7 @@ import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { activityAtFirstInj, decay, diffTimeMinutes, usableActivity } from "./maths";
 
-export const activityNow = (patientList: PatientType[], rpSettings: RpSettingsType) => {
+export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
     let nowDict: any = {};
 
     let injectedPatientsList = patientList.filter((x: any) => x.isInjected);

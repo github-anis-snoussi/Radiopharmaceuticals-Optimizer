@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import { PatientsContext, PatientsContextType } from '../../context/PatientsContext';
 import { RpSettingsContext, RpSettingsContextType } from '../../context/RpSettingsContext';
-import { sortPatientsList } from '../../core/sort';
+import { sort } from '../../core/sort';
 
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
@@ -23,7 +23,7 @@ const RPOptimizer = () => {
 
   // FUNCTIONS TO IMPLEMENT
   const sortPatients = () => {
-    updatePatientsList(sortPatientsList(patientsList, rpSettings));
+    updatePatientsList(sort(patientsList, rpSettings));
   };
   const deletAllPatients = () => {
     updatePatientsList([]);
