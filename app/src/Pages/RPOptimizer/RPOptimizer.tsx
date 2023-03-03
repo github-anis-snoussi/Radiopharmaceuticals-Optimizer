@@ -9,11 +9,13 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { PatientsContext, PatientsContextType } from '../../context/PatientsContext';
-import { sortPatientsList } from '../../utils/sortPatientList';
+import { RpSettingsContext, RpSettingsContextType } from '../../context/RpSettingsContext';
+import { sortPatientsList } from '../../core/sort';
 
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
   const { patientsList, updatePatientsList } = useContext(PatientsContext) as PatientsContextType;
+  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -21,7 +23,7 @@ const RPOptimizer = () => {
 
   // FUNCTIONS TO IMPLEMENT
   const sortPatients = () => {
-    updatePatientsList(sortPatientsList(patientsList));
+    updatePatientsList(sortPatientsList(patientsList, rpSettings));
   };
   const deletAllPatients = () => {
     updatePatientsList([]);
