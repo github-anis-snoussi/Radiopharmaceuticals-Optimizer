@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { AppHeader, PatientsTable, Expectations, WelcomeModal, NewPatientDrawer } from './Components';
 import {
@@ -8,17 +8,24 @@ import {
   UsergroupDeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
+import { PatientsContext, PatientsContextType } from '../../context/PatientsContext';
+import { sortPatientsList } from '../../utils/sortPatientList';
 
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
+  const { patientsList, updatePatientsList } = useContext(PatientsContext) as PatientsContextType;
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(true);
 
   // FUNCTIONS TO IMPLEMENT
-  const sortPatients = () => {};
-  const deletAllPatients = () => {};
+  const sortPatients = () => {
+    updatePatientsList(sortPatientsList(patientsList));
+  };
+  const deletAllPatients = () => {
+    updatePatientsList([]);
+  };
   const generateExpectations = () => {
     console.log('generating expectations');
   };
