@@ -33,6 +33,10 @@ const NewPatientDrawer = ({
         dose: modifiedPatient?.dose ?? 0,
         duration: modifiedPatient?.duration ?? 0,
       });
+      // Also update state with patients values
+      setName(modifiedPatient?.name ?? '');
+      setDose(modifiedPatient?.dose ?? 0);
+      setDuration(modifiedPatient?.duration ?? 0);
     }
   }, [modifiedPatientId, patientsList, form]);
 
