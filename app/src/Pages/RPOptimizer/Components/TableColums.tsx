@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Space, Button, Popconfirm, DatePicker, Typography } from 'antd';
+import { Space, Button, Popconfirm, Typography } from 'antd';
 import {
   MenuOutlined,
   ClockCircleOutlined,
@@ -10,20 +9,19 @@ import {
   ExperimentOutlined,
 } from '@ant-design/icons';
 import { SortableHandle } from 'react-sortable-hoc';
+import InjectionTimePicker from './InjectionTimePicker';
 
 const { Text } = Typography;
 
 const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'pointer', color: '#999' }} />);
 
 const TableColums = (
-  injectPatient: (id: string) => void,
+  injectPatient: (id: string, injectionTime: string | null) => void,
   deletePatient: (id: string) => void,
-  setInjTime: (time: string) => void,
   modifyPatient: (id: string) => void,
 ) => {
-  useEffect(() => {
-    console.log('re-render');
-  }, []);
+  
+
 
   return [
     {
@@ -144,33 +142,7 @@ const TableColums = (
           )}
 
           {record.isInjected === false ? (
-            <Popconfirm
-              title={
-                <>
-                  <div>Select Injection Time for {record.name}</div>
-                  <DatePicker
-                    showTime
-                    size="small"
-                    style={{
-                      width: '100%',
-                      marginRight: 10,
-                      marginTop: 10,
-                      marginBottom: 10,
-                    }}
-                    onChange={(date, dateString) => {
-                      setInjTime(dateString);
-                    }}
-                  />
-                </>
-              }
-              onConfirm={() => {
-                injectPatient(record.id);
-              }}
-              okText="Inject"
-              cancelText="Cancel"
-            >
-              <Button size="small"> 💉 Inject {record.name}</Button>
-            </Popconfirm>
+            <InjectionTimePicker record={record} injectPatient={injectPatient} />
           ) : (
             <Button size="small" disabled>
               💉 Inject {record.name}
