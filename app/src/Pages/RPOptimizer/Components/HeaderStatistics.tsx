@@ -1,6 +1,6 @@
 import { Row, Statistic, Progress } from 'antd';
 import { useContext } from 'react';
-import { NowStatsContext, NowStatsTypeContextType } from '../../../context/NowStatsContext';
+import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
 
 const HeaderStatistics = ({
   rpActivity,
@@ -16,8 +16,8 @@ const HeaderStatistics = ({
   total: any;
 }) => {
   const {
-    nowStats: { totalRemainingActivity },
-  } = useContext(NowStatsContext) as NowStatsTypeContextType;
+    futureStats: { totalRemainingActivity },
+  } = useContext(StatisticsContext) as StatisticsContextType;
 
   return (
     <>
