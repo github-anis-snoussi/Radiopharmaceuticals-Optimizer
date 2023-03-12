@@ -74,6 +74,9 @@ npm start
 npm run test
 ```
 
+## 🏝️ Codesandbox
+This is a codesandbox to test the sorting / prediction logic in isolation : [Link](https://codesandbox.io/s/rpo-sandbox-29y7qv)
+
 ## 🤝 Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
