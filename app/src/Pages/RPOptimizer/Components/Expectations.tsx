@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { NowStatsContext, NowStatsTypeContextType } from '../../../context/NowStatsContext';
+import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
 import { Statistic, Row, Col, Typography } from 'antd';
 import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
@@ -10,14 +10,14 @@ const Expectations = () => {
   const { currentTheme } = useThemeSwitcher();
   const position = useMediaQuery('(max-width: 767px)', 'center', 'flex-end');
   const {
-    nowStats: {
+    futureStats: {
       totalRemainingActivity,
       usableRemainingActivity,
       totalRemainingVol,
       usableRemainingVol,
       remainingActivityTime,
     },
-  } = useContext(NowStatsContext) as NowStatsTypeContextType;
+  } = useContext(StatisticsContext) as StatisticsContextType;
 
   return (
     <div style={{ marginTop: 20 }}>
