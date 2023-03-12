@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 
 export interface NowStatsType {
+  totalVolNow: number | null;
+  usableVolNow: number | null;
+  totalActivityNow: number | null;
+  usableActivityNow: number | null;
+}
+
+export interface FutureStatsType {
   totalRemainingActivity: number | null;
   usableRemainingActivity: number | null;
   totalRemainingVol: number | null;
@@ -8,28 +15,37 @@ export interface NowStatsType {
   remainingActivityTime: string | null;
 }
 
-export interface NowStatsTypeContextType {
+
+export interface StatisticsContextType {
   nowStats: NowStatsType;
   setNowStats: (stats: NowStatsType) => void;
+  futureStats: FutureStatsType;
+  setFutureStats: (stats: FutureStatsType) => void;
 }
 
-const NowStatsContext = React.createContext<NowStatsTypeContextType | null>(null);
+const StatisticsContext = React.createContext<StatisticsContextType | null>(null);
 
-const NowStatsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // Current stats of the Lab
+  const [totalVolNow, setTotalVolNow] = useState<number | null>(null);
+  const [usableVolNow, setUsableVolNow] = useState<number | null>(null);
+  const [totalActivityNow, setTotalActivityNow] = useState<number | null>(null);
+  const [usableActivityNow, setUsableActivityNow] = useState<number | null>(null);
+
+  // Predictions stats of the Lab
   const [totalRemainingActivity, setTotalRemainingActivity] = useState<number | null>(null);
   const [usableRemainingActivity, setUsableRemainingActivity] = useState<number | null>(null);
   const [totalRemainingVol, setTotalRemainingVol] = useState<number | null>(null);
   const [usableRemainingVol, setUsableRemainingVol] = useState<number | null>(null);
   const [remainingActivityTime, setRemainingActivityTime] = useState<string | null>(null);
 
-  const setNowStats = ({
+  const setFutureStats = ({
     totalRemainingActivity,
     usableRemainingActivity,
     totalRemainingVol,
     usableRemainingVol,
     remainingActivityTime,
-  }: NowStatsType) => {
+  }: FutureStatsType) => {
     if (totalRemainingActivity) {
       setTotalRemainingActivity(totalRemainingActivity);
     }
@@ -47,22 +63,49 @@ const NowStatsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     }
   };
 
+  const setNowStats = ({
+    totalVolNow,
+    usableVolNow,
+    totalActivityNow,
+    usableActivityNow,
+  }: NowStatsType) => {
+    if (totalVolNow) {
+      setTotalVolNow(totalVolNow);
+    }
+    if (usableVolNow) {
+      setUsableVolNow(usableVolNow);
+    }
+    if (totalActivityNow) {
+      setTotalActivityNow(totalActivityNow);
+    }
+    if (usableActivityNow) {
+      setUsableActivityNow(usableActivityNow);
+    }
+  };
+
   return (
-    <NowStatsContext.Provider
+    <StatisticsContext.Provider
       value={{
         nowStats: {
+          totalVolNow,
+          usableVolNow,
+          totalActivityNow,
+          usableActivityNow
+        },
+        setNowStats,
+        futureStats: {
           totalRemainingActivity,
           usableRemainingActivity,
           totalRemainingVol,
           usableRemainingVol,
           remainingActivityTime,
         },
-        setNowStats,
+        setFutureStats,
       }}
     >
       {children}
-    </NowStatsContext.Provider>
+    </StatisticsContext.Provider>
   );
 };
 
-export { NowStatsContextProvider, NowStatsContext };
+export { StatisticsContextProvider, StatisticsContext };
