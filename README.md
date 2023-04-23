@@ -25,8 +25,6 @@ The project is undergoing a **HUGE** code refactoring and optimization !
 
 **Description** : Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans.
 
-This app was designed and built with one goal in mind : **_use IT to make an impact and give back to the community as much as possible._**
-
 <img align="right" width="200" src="./docs/bw.png">
 <h3> Case Study </h3>
 
