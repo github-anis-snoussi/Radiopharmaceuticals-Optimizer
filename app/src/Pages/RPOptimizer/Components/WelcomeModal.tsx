@@ -17,7 +17,6 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
       rpVol: initRpVol,
       rpHalfLife: initRpHalfLife,
       mesureTime: initMesureTime,
-      firstInjTime: initFirstInjTime,
       wastedVol: initWastedVol,
       unextractableVol: initUnextractableVol,
     },
@@ -26,7 +25,6 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
 
   const [rpActivity, setRpActivity] = useState(initRpActivity);
   const [mesureTime, setMesureTime] = useState(initMesureTime);
-  const [firstInjTime, setFirstInjTime] = useState(initFirstInjTime);
   const [rpHalfLife, setRpHalfLife] = useState(initRpHalfLife);
   const [rpVol, setRpVol] = useState(initRpVol);
   const [wastedVol, setWastedVol] = useState(initWastedVol);
@@ -37,7 +35,6 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
     setRpSettings({
       rpActivity,
       mesureTime,
-      firstInjTime,
       rpHalfLife,
       rpVol,
       wastedVol,
@@ -56,7 +53,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
       visible={isModalVisible}
       onCancel={closeModal}
       footer={[
-        <Button key={1} type="primary" htmlType="submit" onClick={finishEdit} disabled={!mesureTime || !firstInjTime}>
+        <Button key={1} type="primary" htmlType="submit" onClick={finishEdit} disabled={!mesureTime}>
           Confirm
         </Button>,
       ]}
@@ -111,22 +108,6 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
             value={mesureTime ? moment(mesureTime) : null}
             onChange={(date, dateString) => {
               setMesureTime(new Date(dateString));
-            }}
-          />
-        </Col>
-      </Row>
-
-      <Row gutter={16} style={{ marginBottom: 10 }}>
-        <Col className="gutter-row" span={10}>
-          <Text type="secondary">First Injection Time</Text>
-        </Col>
-        <Col className="gutter-row" span={14}>
-          <DatePicker
-            showTime
-            style={{ width: '100%' }}
-            value={firstInjTime ? moment(firstInjTime) : null}
-            onChange={(date, dateString) => {
-              setFirstInjTime(new Date(dateString));
             }}
           />
         </Col>
