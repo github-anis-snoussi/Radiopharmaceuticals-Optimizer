@@ -130,3 +130,6 @@ dist
 
 app/cypress/videos
 app/cypress/screenshots
+
+# Jest cache
+.jest-cache

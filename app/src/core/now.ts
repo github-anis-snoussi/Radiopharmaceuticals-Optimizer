@@ -1,6 +1,6 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
-import { activityAtFirstInj, decay, diffTimeMinutes, usableActivity } from "./maths";
+import { activityAtFirstInj, decay, diffMsTimeMinutes, usableActivity } from "./maths";
 
 export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
     let nowDict: any = {};
@@ -21,7 +21,7 @@ export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
         nowDict.totalActivityNowBeforePrime = decay(
             rpSettings.rpActivity,
             rpSettings.rpHalfLife,
-            diffTimeMinutes(new Date().getTime(), new Date(rpSettings.mesureTime).getTime())
+            diffMsTimeMinutes(new Date().getTime(), new Date(rpSettings.mesureTime).getTime())
         );
         nowDict.totalActivityNow =
             (nowDict.totalActivityNowBeforePrime * nowDict.totalVolNow) /
@@ -57,7 +57,7 @@ export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
                 injTimeActivityList[i] = decay(
                     remainingActivityList[i - 1],
                     rpSettings.rpHalfLife,
-                    diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
+                    diffMsTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
                 );
                 remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
                 patientInjVolList[i] =
@@ -73,7 +73,7 @@ export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
         nowDict.totalActivityNow = decay(
             remainingActivityList[k - 1],
             rpSettings.rpHalfLife,
-            diffTimeMinutes(new Date().getTime(), patientInjTimeList[k - 1])
+            diffMsTimeMinutes(new Date().getTime(), patientInjTimeList[k - 1])
         );
         nowDict.usableActivityNow = usableActivity(
             nowDict.totalActivityNow,

@@ -1,7 +1,7 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { FutureStatsType } from "../context/StatisticsContext";
-import { activityAtFirstInj, decay, diffTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
+import { activityAtFirstInj, decay, diffMsTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
 
 
 export const predict = (patientList: PatientType[], rpSettings: RpSettingsType): FutureStatsType => {
@@ -43,7 +43,7 @@ export const predict = (patientList: PatientType[], rpSettings: RpSettingsType):
             injTimeActivityList[i] = decay(
                 remainingActivityList[i - 1],
                 rpSettings.rpHalfLife,
-                diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
+                diffMsTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
             );
             remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
             patientInjVolList[i] =
