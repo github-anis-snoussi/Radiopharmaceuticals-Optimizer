@@ -110,7 +110,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
             style={{ width: '100%' }}
             value={mesureTime ? moment(mesureTime) : null}
             onChange={(date, dateString) => {
-              setMesureTime(dateString);
+              setMesureTime(new Date(dateString));
             }}
           />
         </Col>
@@ -126,7 +126,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
             style={{ width: '100%' }}
             value={firstInjTime ? moment(firstInjTime) : null}
             onChange={(date, dateString) => {
-              setFirstInjTime(dateString);
+              setFirstInjTime(new Date(dateString));
             }}
           />
         </Col>

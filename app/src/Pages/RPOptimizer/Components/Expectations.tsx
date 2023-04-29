@@ -1,9 +1,13 @@
-import { useContext } from 'react';
-import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
+import { useContext, useEffect } from 'react';
 import { Statistic, Row, Col, Typography } from 'antd';
 import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
+import { RpSettingsContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 import useMediaQuery from '../../../hooks/useMediaQuery';
+import { PatientsContext, PatientsContextType } from '../../../context/PatientsContext';
+import {predict} from "../../../core/predict"
+
 const { Title, Text } = Typography;
 
 const Expectations = () => {
@@ -17,7 +21,19 @@ const Expectations = () => {
       usableRemainingVol,
       remainingActivityTime,
     },
+    setFutureStats
   } = useContext(StatisticsContext) as StatisticsContextType;
+  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
+  const { patientsList } = useContext(PatientsContext) as PatientsContextType;
+  
+
+  useEffect(() => {
+    const statisticsInterval = setInterval(() => {
+      const perdictions = predict(patientsList, rpSettings)
+      setFutureStats(perdictions);
+    }, 5000);
+    return () => clearInterval(statisticsInterval);
+  }, []);
 
   return (
     <div style={{ marginTop: 20 }}>

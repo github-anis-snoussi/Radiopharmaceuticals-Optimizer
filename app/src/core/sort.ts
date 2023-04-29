@@ -45,7 +45,7 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
                 // final activity after swapping
                 // console.log(`==> AFTER : ${after}`)
 
-                if (parseInt(before, 10) >= parseInt(after, 10)) {
+                if (before >= after) {
                     // console.log("<|-|-|-| FINISHED |-|-|-|>")
 
                     let aux2 = patientList[i];
