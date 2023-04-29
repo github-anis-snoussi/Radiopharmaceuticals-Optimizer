@@ -1,8 +1,12 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext"
 
-
-export const diffTimeMinutes = (date1: number, date2: number) => {
+/**
+* Returns the difference in minutes between two dates in ms
+* @param {number} date1 - The start time in ms
+* @param {number} date1 - The end time in ms
+*/
+export const diffMsTimeMinutes = (date1: number, date2: number) => {
     const diffMs = Math.abs(date1 - date2);
     const diffMinutes = Math.round(diffMs / 60000);
     return diffMinutes;
@@ -17,7 +21,7 @@ export const activityAtFirstInj = (patientInjTimeList: number[], rpSettings: RpS
     const ta = decay(
         rpSettings.rpActivity,
         rpSettings.rpHalfLife,
-        diffTimeMinutes(patientInjTimeList[0], new Date(rpSettings.mesureTime).getTime())
+        diffMsTimeMinutes(patientInjTimeList[0], new Date(rpSettings.mesureTime).getTime())
     );
     const ra =
         (ta * (rpSettings.rpVol - rpSettings.wastedVol)) / rpSettings.rpVol;
