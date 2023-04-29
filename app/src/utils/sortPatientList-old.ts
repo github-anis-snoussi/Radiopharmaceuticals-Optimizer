@@ -1,4 +1,4 @@
-const diffTimeMinutes = (date1: any, date2: any) => {
+const diffMsTimeMinutes = (date1: any, date2: any) => {
   const diffMs = Math.abs(date1 - date2);
   const diffMinutes = Math.round(diffMs / 60000);
   return diffMinutes;
@@ -13,7 +13,7 @@ const activityAtFirstInj = (patientInjTimeList: any, rpSettings: any) => {
   const ta = decay(
     rpSettings.rpActivity,
     rpSettings.rpHalfLife,
-    diffTimeMinutes(patientInjTimeList[0], rpSettings.mesureTime)
+    diffMsTimeMinutes(patientInjTimeList[0], rpSettings.mesureTime)
   );
   const ra =
     (ta * (rpSettings.rpVol - rpSettings.wastedVol)) / rpSettings.rpVol;
@@ -79,7 +79,7 @@ const activityNow = (patientList: any, rpSettings: any) => {
     nowDict.totalActivityNowBeforePrime = decay(
       rpSettings.rpActivity,
       rpSettings.rpHalfLife,
-      diffTimeMinutes(new Date(), rpSettings.mesureTime)
+      diffMsTimeMinutes(new Date(), rpSettings.mesureTime)
     );
     nowDict.totalActivityNow =
       (nowDict.totalActivityNowBeforePrime * nowDict.totalVolNow) /
@@ -115,7 +115,7 @@ const activityNow = (patientList: any, rpSettings: any) => {
         injTimeActivityList[i] = decay(
           remainingActivityList[i - 1],
           rpSettings.rpHalfLife,
-          diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
+          diffMsTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
         );
         remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
         patientInjVolList[i] =
@@ -131,7 +131,7 @@ const activityNow = (patientList: any, rpSettings: any) => {
     nowDict.totalActivityNow = decay(
       remainingActivityList[k - 1],
       rpSettings.rpHalfLife,
-      diffTimeMinutes(new Date(), patientInjTimeList[k - 1])
+      diffMsTimeMinutes(new Date(), patientInjTimeList[k - 1])
     );
     nowDict.usableActivityNow = usableActivity(
       nowDict.totalActivityNow,
@@ -277,7 +277,7 @@ const calculFinalExpectedActivity = (patientList: any, rpSettings: any) => {
       injTimeActivityList[i] = decay(
         remainingActivityList[i - 1],
         rpSettings.rpHalfLife,
-        diffTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
+        diffMsTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
       );
       remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
       patientInjVolList[i] =
