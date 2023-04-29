@@ -1,4 +1,5 @@
-import { diffMsTimeMinutes, decay, usableActivity } from './maths';
+import { RpSettingsType } from '../context/RpSettingsContext';
+import { diffMsTimeMinutes, decay, usableActivity, activityAtFirstInj } from './maths';
 
 describe('maths helpers', () => {
     describe('should correctly calculate time difference between 2 time instances', () => {
@@ -70,6 +71,84 @@ describe('maths helpers', () => {
         });
         test('half radioactivity if half volume is wasted', () => {
             expect(usableActivity(3824, 40, 20)).toBe(1912);
+        });
+    });
+
+    describe('should correctly calculates usable radioactivity when injecting the first patient', () => {
+        test('we do not know injection time yet', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 3824,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 8.5,
+                wastedVol: 0,
+                unextractableVol: 0,
+                labName: "Dexter's Laboratory"
+            }
+            expect(activityAtFirstInj([], rpSettings)).toBe(3824);
+        });
+        test('throw if injected before measure', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 3824,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 8.5,
+                wastedVol: 0,
+                unextractableVol: 0,
+                labName: "Dexter's Laboratory"
+            }
+            expect(() => activityAtFirstInj([new Date(2021, 5, 10, 6, 59).getTime()], rpSettings)).toThrowError(Error);
+            expect(() => activityAtFirstInj([new Date(2021, 5, 10, 6, 0).getTime()], rpSettings)).toThrowError(Error);
+            expect(() => activityAtFirstInj([new Date(2021, 5, 10, 7, 0).getTime()], rpSettings)).not.toThrowError(Error);
+            expect(() => activityAtFirstInj([new Date(2021, 5, 10, 8, 0).getTime()], rpSettings)).not.toThrowError(Error);
+        });
+        test('injecting after half life has passed', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 3824,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 8.5,
+                wastedVol: 0,
+                unextractableVol: 0,
+                labName: "Dexter's Laboratory"
+            }
+            expect(activityAtFirstInj([new Date(2021, 5, 10, 7, 53).getTime()], rpSettings)).toBe(1912);
+        });
+        test('take into account wastedVol', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 6000,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 6,
+                wastedVol: 2,
+                unextractableVol: 0,
+                labName: "Dexter's Laboratory"
+            }
+            expect(activityAtFirstInj([new Date(2021, 5, 10, 7, 53).getTime()], rpSettings)).toBe(2000);
+        });
+        test('take into account unextractableVol', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 6000,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 6,
+                wastedVol: 0,
+                unextractableVol: 2,
+                labName: "Dexter's Laboratory"
+            }
+            expect(activityAtFirstInj([new Date(2021, 5, 10, 7, 53).getTime()], rpSettings)).toBe(2000);
+        });
+        test('take into account wastedVol and unextractableVol combined', () => {
+            const rpSettings: RpSettingsType = {
+                rpActivity: 3824,
+                mesureTime: new Date(2021, 5, 10, 7, 0),
+                rpHalfLife: 53,
+                rpVol: 6,
+                wastedVol: 1.5,
+                unextractableVol: 1.5,
+                labName: "Dexter's Laboratory"
+            }
+            expect(activityAtFirstInj([new Date(2021, 5, 10, 7, 53).getTime()], rpSettings)).toBe(956);
         });
     });
 });

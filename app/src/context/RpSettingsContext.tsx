@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 export interface RpSettingsType {
   rpActivity: number;
   mesureTime: Date;
-  firstInjTime: Date;
   rpHalfLife: number;
   rpVol: number;
   wastedVol: number;
@@ -22,7 +21,6 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // rpSettings
   const [rpActivity, setRpActivity] = useState<number>(0);
   const [mesureTime, setMesureTime] = useState<Date>(new Date());
-  const [firstInjTime, setFirstInjTime] = useState<Date>(new Date());
   const [rpHalfLife, setRpHalfLife] = useState<number>(0);
   const [rpVol, setRpVol] = useState<number>(0);
   const [wastedVol, setWastedVol] = useState<number>(0);
@@ -32,7 +30,6 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const setRpSettings = ({
     rpActivity,
     mesureTime,
-    firstInjTime,
     rpHalfLife,
     rpVol,
     wastedVol,
@@ -40,25 +37,11 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     labName,
   }: RpSettingsType) => {
 
-    console.debug({
-      rpActivity,
-      mesureTime,
-      firstInjTime,
-      rpHalfLife,
-      rpVol,
-      wastedVol,
-      unextractableVol,
-      labName
-    });
-
     if (rpActivity) {
       setRpActivity(rpActivity);
     }
     if (mesureTime) {
       setMesureTime(mesureTime);
-    }
-    if (firstInjTime) {
-      setFirstInjTime(firstInjTime);
     }
     if (rpHalfLife) {
       setRpHalfLife(rpHalfLife);
@@ -83,7 +66,6 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
         rpSettings: {
           rpActivity,
           mesureTime,
-          firstInjTime,
           rpHalfLife,
           rpVol,
           wastedVol,
