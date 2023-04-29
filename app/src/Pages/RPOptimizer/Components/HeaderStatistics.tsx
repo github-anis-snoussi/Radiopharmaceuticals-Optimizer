@@ -1,5 +1,5 @@
+import { useContext, useEffect } from 'react';
 import { Row, Statistic, Progress } from 'antd';
-import { useContext } from 'react';
 import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
 
 const HeaderStatistics = ({

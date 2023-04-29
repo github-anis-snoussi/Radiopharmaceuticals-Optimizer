@@ -1,9 +1,10 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
+import { FutureStatsType } from "../context/StatisticsContext";
 import { activityAtFirstInj, decay, diffTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
 
 
-export const predict = (patientList: PatientType[], rpSettings: RpSettingsType) => {
+export const predict = (patientList: PatientType[], rpSettings: RpSettingsType): FutureStatsType => {
     patientList = patientList.map((x: any) => ({
         ...x,
         realInjectionTime: x.realInjectionTime
@@ -21,10 +22,10 @@ export const predict = (patientList: PatientType[], rpSettings: RpSettingsType) 
 
     patientDoseList.push(0);
 
-    let injTimeActivityList = Array(patientDoseList.length).fill(0);
-    let remainingActivityList = [...injTimeActivityList];
-    let patientInjVolList = [...injTimeActivityList];
-    let remainingVolList = [...injTimeActivityList];
+    let injTimeActivityList: number[] = Array(patientDoseList.length).fill(0);
+    let remainingActivityList: number[] = [...injTimeActivityList];
+    let patientInjVolList: number[] = [...injTimeActivityList];
+    let remainingVolList: number[] = [...injTimeActivityList];
 
     patientDoseList.forEach((x: any, i: any) => {
         if (i === 0) {
@@ -58,13 +59,11 @@ export const predict = (patientList: PatientType[], rpSettings: RpSettingsType) 
     );
     patientInjVolList.pop();
     const expected = {
-        totalRemainingActivity: remainingActivityList.slice(-1)[0].toFixed(0),
-        usableRemainingActivity: usableRemainingActivity.toFixed(0),
+        totalRemainingActivity: remainingActivityList.slice(-1)[0],
+        usableRemainingActivity: usableRemainingActivity,
 
-        totalRemainingVol: remainingVolList.slice(-1)[0].toFixed(2),
-        usableRemainingVol: (
-            remainingVolList.slice(-1)[0] - rpSettings.unextractableVol
-        ).toFixed(2),
+        totalRemainingVol: remainingVolList.slice(-1)[0],
+        usableRemainingVol: remainingVolList.slice(-1)[0] - rpSettings.unextractableVol,
 
         remainingActivityTime: new Date(patientInjTimeList.slice(-1)[0]),
 

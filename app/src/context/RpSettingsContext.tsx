@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export interface RpSettingsType {
   rpActivity: number;
-  mesureTime: string | null;
-  firstInjTime: string | null;
+  mesureTime: Date;
+  firstInjTime: Date;
   rpHalfLife: number;
   rpVol: number;
   wastedVol: number;
@@ -21,8 +21,8 @@ const RpSettingsContext = React.createContext<RpSettingsContextType | null>(null
 const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // rpSettings
   const [rpActivity, setRpActivity] = useState<number>(0);
-  const [mesureTime, setMesureTime] = useState<string | null>(null);
-  const [firstInjTime, setFirstInjTime] = useState<string | null>(null);
+  const [mesureTime, setMesureTime] = useState<Date>(new Date());
+  const [firstInjTime, setFirstInjTime] = useState<Date>(new Date());
   const [rpHalfLife, setRpHalfLife] = useState<number>(0);
   const [rpVol, setRpVol] = useState<number>(0);
   const [wastedVol, setWastedVol] = useState<number>(0);
@@ -39,6 +39,18 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     unextractableVol,
     labName,
   }: RpSettingsType) => {
+
+    console.debug({
+      rpActivity,
+      mesureTime,
+      firstInjTime,
+      rpHalfLife,
+      rpVol,
+      wastedVol,
+      unextractableVol,
+      labName
+    });
+
     if (rpActivity) {
       setRpActivity(rpActivity);
     }

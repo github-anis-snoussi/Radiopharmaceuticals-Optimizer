@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 
 export interface NowStatsType {
-  totalVolNow: number | null;
-  usableVolNow: number | null;
-  totalActivityNow: number | null;
-  usableActivityNow: number | null;
+  totalVolNow: number;
+  usableVolNow: number;
+  totalActivityNow: number;
+  usableActivityNow: number;
 }
 
 export interface FutureStatsType {
-  totalRemainingActivity: number | null;
-  usableRemainingActivity: number | null;
-  totalRemainingVol: number | null;
-  usableRemainingVol: number | null;
-  remainingActivityTime: string | null;
+  totalRemainingActivity: number;
+  usableRemainingActivity: number;
+  totalRemainingVol: number;
+  usableRemainingVol: number;
+  remainingActivityTime: Date;
 }
 
 
@@ -27,17 +27,17 @@ const StatisticsContext = React.createContext<StatisticsContextType | null>(null
 
 const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   // Current stats of the Lab
-  const [totalVolNow, setTotalVolNow] = useState<number | null>(null);
-  const [usableVolNow, setUsableVolNow] = useState<number | null>(null);
-  const [totalActivityNow, setTotalActivityNow] = useState<number | null>(null);
-  const [usableActivityNow, setUsableActivityNow] = useState<number | null>(null);
+  const [totalVolNow, setTotalVolNow] = useState<number>(0);
+  const [usableVolNow, setUsableVolNow] = useState<number>(0);
+  const [totalActivityNow, setTotalActivityNow] = useState<number>(0);
+  const [usableActivityNow, setUsableActivityNow] = useState<number>(0);
 
   // Predictions stats of the Lab
-  const [totalRemainingActivity, setTotalRemainingActivity] = useState<number | null>(null);
-  const [usableRemainingActivity, setUsableRemainingActivity] = useState<number | null>(null);
-  const [totalRemainingVol, setTotalRemainingVol] = useState<number | null>(null);
-  const [usableRemainingVol, setUsableRemainingVol] = useState<number | null>(null);
-  const [remainingActivityTime, setRemainingActivityTime] = useState<string | null>(null);
+  const [totalRemainingActivity, setTotalRemainingActivity] = useState<number>(0);
+  const [usableRemainingActivity, setUsableRemainingActivity] = useState<number>(0);
+  const [totalRemainingVol, setTotalRemainingVol] = useState<number>(0);
+  const [usableRemainingVol, setUsableRemainingVol] = useState<number>(0);
+  const [remainingActivityTime, setRemainingActivityTime] = useState<Date>(new Date());
 
   const setFutureStats = ({
     totalRemainingActivity,
