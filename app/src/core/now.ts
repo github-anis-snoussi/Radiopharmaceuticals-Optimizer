@@ -21,7 +21,7 @@ export const now = (patientList: PatientType[], rpSettings: RpSettingsType) => {
         nowDict.totalActivityNowBeforePrime = decay(
             rpSettings.rpActivity,
             rpSettings.rpHalfLife,
-            diffTimeMinutes(new Date().getTime(), new Date(rpSettings.mesureTime as string).getTime())
+            diffTimeMinutes(new Date().getTime(), new Date(rpSettings.mesureTime).getTime())
         );
         nowDict.totalActivityNow =
             (nowDict.totalActivityNowBeforePrime * nowDict.totalVolNow) /

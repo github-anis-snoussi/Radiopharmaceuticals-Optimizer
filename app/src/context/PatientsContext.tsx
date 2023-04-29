@@ -6,9 +6,9 @@ export interface PatientType {
   dose: number;
   duration: number;
   isInjected: boolean;
-  realInjectionTime?: string;
+  realInjectionTime?: Date;
   realInjectionVolume?: number;
-  expectedInjectionTime?: string;
+  expectedInjectionTime?: Date;
   expectedInjectionVolume?: number;
 }
 

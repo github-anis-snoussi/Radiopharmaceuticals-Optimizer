@@ -17,7 +17,7 @@ export const activityAtFirstInj = (patientInjTimeList: number[], rpSettings: RpS
     const ta = decay(
         rpSettings.rpActivity,
         rpSettings.rpHalfLife,
-        diffTimeMinutes(patientInjTimeList[0], new Date(rpSettings.mesureTime as string).getTime())
+        diffTimeMinutes(patientInjTimeList[0], new Date(rpSettings.mesureTime).getTime())
     );
     const ra =
         (ta * (rpSettings.rpVol - rpSettings.wastedVol)) / rpSettings.rpVol;
