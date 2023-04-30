@@ -27,13 +27,13 @@ const Expectations = () => {
   const { patientsList } = useContext(PatientsContext) as PatientsContextType;
   
 
-  useEffect(() => {
-    const statisticsInterval = setInterval(() => {
-      const perdictions = predict(patientsList, rpSettings)
-      setFutureStats(perdictions);
-    }, 5000);
-    return () => clearInterval(statisticsInterval);
-  }, []);
+  // useEffect(() => {
+  //   const statisticsInterval = setInterval(() => {
+  //     const perdictions = predict(patientsList, rpSettings)
+  //     setFutureStats(perdictions);
+  //   }, 5000);
+  //   return () => clearInterval(statisticsInterval);
+  // }, []);
 
   return (
     <div style={{ marginTop: 20 }}>
