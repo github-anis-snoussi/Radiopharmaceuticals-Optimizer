@@ -57,14 +57,14 @@ export const activityAtFirstInj = (patientInjTimeMsList: number[], rpSettings: R
     return remainingActivity;
 };
 
-export const generatepatientInjTimeMsList = (
+export const generatePatientInjTimeList = (
     patientList: PatientType[],
     patientScanTimeList: number[],
     rpSettings: RpSettingsType
 ): number[] => {
 
     patientScanTimeList.push(0);
-    let patientInjTimeMsList = Array(patientScanTimeList.length).fill(0);
+    let patientInjTimeList = Array(patientScanTimeList.length).fill(0);
     patientList.push({
         id: 'filler-patient-id',
         name: 'placeholder patient',
@@ -75,13 +75,13 @@ export const generatepatientInjTimeMsList = (
 
     patientList.forEach((patient: PatientType, index: number) => {
         if (patient.isInjected) {
-            patientInjTimeMsList[index] = patient.realInjectionTime;
+            patientInjTimeList[index] = patient.realInjectionTime;
         } else if (index === 0) {
             // patientInjTimeMsList[index] = rpSettings.firstInjTime;
-            patientInjTimeMsList[index] = 0;
+            patientInjTimeList[index] = 0;
         } else {
-            patientInjTimeMsList[index] = new Date(patientInjTimeMsList[index - 1]).setMinutes(
-                new Date(patientInjTimeMsList[index - 1]).getMinutes() +
+            patientInjTimeList[index] = new Date(patientInjTimeList[index - 1]).setMinutes(
+                new Date(patientInjTimeList[index - 1]).getMinutes() +
                 patientScanTimeList[index - 1]
             );
         }
@@ -90,5 +90,5 @@ export const generatepatientInjTimeMsList = (
     patientScanTimeList.pop();
     patientList.pop();
 
-    return patientInjTimeMsList;
+    return patientInjTimeList;
 };
