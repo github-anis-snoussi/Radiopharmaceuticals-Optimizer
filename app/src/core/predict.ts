@@ -14,9 +14,10 @@ export const predict = (patientList: PatientType[], rpSettings: RpSettingsType):
 
     let patientDoseList = patientList.map((x: any) => x.dose);
     let patientScanTimeList = patientList.map((x: any) => x.duration);
-    let patientInjTimeList = generatePatientInjTimeList(
+    let patientInjTimeList: any[] = []
+    generatePatientInjTimeList(
         patientList,
-        patientScanTimeList,
+        new Date(),
         rpSettings
     );
 

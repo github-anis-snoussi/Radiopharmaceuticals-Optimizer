@@ -1,7 +1,43 @@
+import { PatientType } from '../context/PatientsContext';
 import { RpSettingsType } from '../context/RpSettingsContext';
-import { diffMsTimeMinutes, decay, usableActivity, activityAtFirstInj } from './maths';
+import { diffMsTimeMinutes, decay, usableActivity, activityAtFirstInj, generatePatientInjTimeList } from './maths';
 
 describe('maths helpers', () => {
+
+    const exampleRpSettings: RpSettingsType = {
+        rpActivity: 3824,
+        mesureTime: new Date(2021, 5, 10, 6, 0),
+        rpHalfLife: 53,
+        rpVol: 8.5,
+        wastedVol: 0,
+        unextractableVol: 0,
+        labName: "Dexter's Laboratory"
+    }
+
+    const examplePatient1 = {
+        id: 'patient-id-1',
+        name: 'patient-1',
+        dose: 30,
+        duration: 45,
+        isInjected: false
+    }
+
+    const examplePatient2 = {
+        id: 'patient-id-2',
+        name: 'patient-2',
+        dose: 30,
+        duration: 45,
+        isInjected: false
+    }
+
+    const examplePatient3 = {
+        id: 'patient-id-3',
+        name: 'patient-3',
+        dose: 30,
+        duration: 45,
+        isInjected: false
+    }
+
     describe('should correctly calculate time difference between 2 time instances', () => {
         test('difference between 2 positive time inputs', () => {
             expect(diffMsTimeMinutes(0, 0)).toBe(0);
@@ -150,5 +186,97 @@ describe('maths helpers', () => {
             }
             expect(activityAtFirstInj([new Date(2021, 5, 10, 7, 53).getTime()], rpSettings)).toBe(956);
         });
+    });
+
+    describe('should correctly generate expected injection time given a patients list', () => {
+        test('does not update expected injection time of injected patients', () => {
+
+            let patientsList: PatientType[] = [
+                {
+                    ...examplePatient1,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 0)
+                },
+                {
+                    ...examplePatient2,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 45)
+                },
+                {
+                    ...examplePatient3,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 8, 30)
+                }
+            ];
+
+            generatePatientInjTimeList(patientsList, new Date(2021, 5, 10, 7, 0), exampleRpSettings);
+
+            patientsList.forEach((patient) => {
+                expect(patient.expectedInjectionTime).toBeTruthy();
+                expect(patient.expectedInjectionTime?.getTime).toBe(patient.realInjectionTime?.getTime)
+            })
+        });
+
+        test('does not allow first injection to be before measure time', () => {
+
+            const rpSettingsOverriden: RpSettingsType = {
+                ...exampleRpSettings,
+                mesureTime: new Date(2021, 5, 10, 6, 0)
+            }
+
+            expect(() => generatePatientInjTimeList([], new Date(2021, 5, 10, 5, 0), rpSettingsOverriden)).toThrowError(Error);
+            expect(() => generatePatientInjTimeList([], new Date(2021, 5, 10, 7, 0), rpSettingsOverriden)).not.toThrowError(Error);
+        });
+
+        test('does not accept unordred list of patients', () => {
+            let patientsList: PatientType[] = [
+                {
+                    ...examplePatient1,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 0)
+                },
+                {
+                    ...examplePatient2,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 45)
+                },
+                {
+                    ...examplePatient3,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 8, 30)
+                }
+            ];
+            expect(() => generatePatientInjTimeList(patientsList, new Date(2021, 5, 10, 7, 0), exampleRpSettings)).not.toThrowError(Error);
+
+            patientsList[1].isInjected = false;
+            expect(() => generatePatientInjTimeList(patientsList, new Date(2021, 5, 10, 7, 0), exampleRpSettings)).toThrowError(Error);
+
+            patientsList[0].isInjected = false;
+            patientsList[2].isInjected = false;
+            expect(() => generatePatientInjTimeList(patientsList, new Date(2021, 5, 10, 7, 0), exampleRpSettings)).not.toThrowError(Error);
+        });
+
+        test('correctly calculate the expected inejection time', () => {
+            let patientsList: PatientType[] = [
+                {
+                    ...examplePatient1,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 0)
+                },
+                {
+                    ...examplePatient2,
+                    isInjected: true,
+                    realInjectionTime: new Date(2021, 5, 10, 7, 45)
+                },
+                examplePatient3
+            ];
+
+            generatePatientInjTimeList(patientsList, new Date(2021, 5, 10, 7, 0), exampleRpSettings)
+
+            expect(patientsList[0].expectedInjectionTime).toBe(patientsList[0].realInjectionTime);
+            expect(patientsList[1].expectedInjectionTime).toBe(patientsList[1].realInjectionTime);
+            expect(patientsList[2].expectedInjectionTime?.getTime()).toBe(new Date((patientsList[1].realInjectionTime ?? new Date()).getTime() + patientsList[1].duration * 60000).getTime());
+        });
+
     });
 });
