@@ -57,38 +57,43 @@ export const activityAtFirstInj = (patientInjTimeMsList: number[], rpSettings: R
     return remainingActivity;
 };
 
+/**
+* Given a first injection time, update the patients expected injection time 
+* @param {PatientType[]} patientList - List of patients list
+* @param {Date} date - Date object for the first injection time
+* @param {RpSettingsType} rpSettings - the general settings for the system
+*/
 export const generatePatientInjTimeList = (
     patientList: PatientType[],
-    patientScanTimeList: number[],
+    date: Date,
     rpSettings: RpSettingsType
-): number[] => {
+): void => {
 
-    patientScanTimeList.push(0);
-    let patientInjTimeList = Array(patientScanTimeList.length).fill(0);
-    patientList.push({
-        id: 'filler-patient-id',
-        name: 'placeholder patient',
-        dose: 0,
-        duration: 0,
-        isInjected: false,
-    });
+    if (date.getTime() < rpSettings.mesureTime.getTime()) {
+        throw new Error("Cannot inject patient before measure time.")
+    }
+
+    const firstInjectedPatientIndex = patientList.findIndex(patient => patient.isInjected === false);
+    const firstHalf = patientList.slice(0, firstInjectedPatientIndex);
+    const lastHalf = patientList.slice(firstInjectedPatientIndex, patientList.length);
+
+    if (firstInjectedPatientIndex !== -1) {
+        if (firstHalf.some(patient => patient.isInjected === false) || lastHalf.some(patient => patient.isInjected === true)) {
+            throw new Error("Injected pataients should always be at the first of the list")
+        }
+    }
 
     patientList.forEach((patient: PatientType, index: number) => {
         if (patient.isInjected) {
-            patientInjTimeList[index] = patient.realInjectionTime;
+            if (!patient.realInjectionTime) {
+                throw new Error("Patient injected but missing real injection time")
+            }
+            patientList[index].expectedInjectionTime = patient.realInjectionTime;
         } else if (index === 0) {
-            // patientInjTimeMsList[index] = rpSettings.firstInjTime;
-            patientInjTimeList[index] = 0;
+            patientList[index].expectedInjectionTime = new Date(date.getTime());
         } else {
-            patientInjTimeList[index] = new Date(patientInjTimeList[index - 1]).setMinutes(
-                new Date(patientInjTimeList[index - 1]).getMinutes() +
-                patientScanTimeList[index - 1]
-            );
+            patientList[index].expectedInjectionTime = new Date((patientList[index - 1].expectedInjectionTime ?? new Date()).getTime() + patientList[index - 1].duration * 60000)
         }
-    });
 
-    patientScanTimeList.pop();
-    patientList.pop();
-
-    return patientInjTimeList;
+    })
 };
