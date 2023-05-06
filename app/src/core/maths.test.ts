@@ -14,7 +14,7 @@ describe('maths helpers', () => {
         labName: "Dexter's Laboratory"
     }
 
-    const examplePatient1 = {
+    const examplePatient1: PatientType = {
         id: 'patient-id-1',
         name: 'patient-1',
         dose: 30,
@@ -22,7 +22,7 @@ describe('maths helpers', () => {
         isInjected: false
     }
 
-    const examplePatient2 = {
+    const examplePatient2: PatientType = {
         id: 'patient-id-2',
         name: 'patient-2',
         dose: 30,
@@ -30,7 +30,7 @@ describe('maths helpers', () => {
         isInjected: false
     }
 
-    const examplePatient3 = {
+    const examplePatient3: PatientType = {
         id: 'patient-id-3',
         name: 'patient-3',
         dose: 30,
@@ -122,6 +122,7 @@ describe('maths helpers', () => {
                 labName: "Dexter's Laboratory"
             }
             expect(activityAtFirstInj([], rpSettings)).toBe(3824);
+            expect(activityAtFirstInj([undefined], rpSettings)).toBe(3824);
         });
         test('throw if injected before measure', () => {
             const rpSettings: RpSettingsType = {
