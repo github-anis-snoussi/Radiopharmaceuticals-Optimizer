@@ -13,6 +13,7 @@ export interface FutureStatsType {
   totalRemainingVol: number;
   usableRemainingVol: number;
   remainingActivityTime: Date;
+  totalExpectedInjectedPatients: number
 }
 
 
@@ -38,6 +39,7 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [totalRemainingVol, setTotalRemainingVol] = useState<number>(0);
   const [usableRemainingVol, setUsableRemainingVol] = useState<number>(0);
   const [remainingActivityTime, setRemainingActivityTime] = useState<Date>(new Date());
+  const [totalExpectedInjectedPatients, setTotalExpectedInjectedPatients] = useState<number>(0);
 
   const setFutureStats = ({
     totalRemainingActivity,
@@ -45,6 +47,7 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     totalRemainingVol,
     usableRemainingVol,
     remainingActivityTime,
+    totalExpectedInjectedPatients,
   }: FutureStatsType) => {
     if (totalRemainingActivity) {
       setTotalRemainingActivity(totalRemainingActivity);
@@ -60,6 +63,9 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     }
     if (remainingActivityTime) {
       setRemainingActivityTime(remainingActivityTime);
+    }
+    if (totalExpectedInjectedPatients) {
+      setTotalExpectedInjectedPatients(totalExpectedInjectedPatients);
     }
   };
 
@@ -99,6 +105,7 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
           totalRemainingVol,
           usableRemainingVol,
           remainingActivityTime,
+          totalExpectedInjectedPatients
         },
         setFutureStats,
       }}

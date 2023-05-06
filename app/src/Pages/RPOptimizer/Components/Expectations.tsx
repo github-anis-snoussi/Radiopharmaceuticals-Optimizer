@@ -20,6 +20,7 @@ const Expectations = () => {
       totalRemainingVol,
       usableRemainingVol,
       remainingActivityTime,
+      totalExpectedInjectedPatients
     },
     setFutureStats
   } = useContext(StatisticsContext) as StatisticsContextType;
@@ -90,7 +91,7 @@ const Expectations = () => {
             }}
           >
             <Statistic
-              title="Expectations at :"
+              title={`Expected to finish injecting ${totalExpectedInjectedPatients} patient(s) at :`}
               value={
                 remainingActivityTime
                   ? new Date(remainingActivityTime).toLocaleTimeString('en-GB', {

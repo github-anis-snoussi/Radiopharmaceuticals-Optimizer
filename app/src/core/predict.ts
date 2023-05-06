@@ -1,76 +1,92 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { FutureStatsType } from "../context/StatisticsContext";
+import { moveInjectedToListHead } from "./helpers";
 import { activityAtFirstInj, decay, diffMsTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
 
 
-export const predict = (patientList: PatientType[], rpSettings: RpSettingsType): FutureStatsType => {
-    patientList = patientList.map((x: any) => ({
-        ...x,
-        realInjectionTime: x.realInjectionTime
-            ? new Date(x.realInjectionTime)
-            : null,
-    }));
+/**
+* Outputs a prediction for the
+* @param {PatientType[]} patientList - The list of patients
+* @param {RpSettingsType} rpSettings - the general settings for the system
+* @param {Date} firstInjectionTime - (optional) The Date for injecting the first pattient in the list
+*/
+export const predict = (patientList: PatientType[], rpSettings: RpSettingsType, firstInjectionTime: Date = new Date()): FutureStatsType => {
 
-    let patientDoseList = patientList.map((x: any) => x.dose);
-    let patientScanTimeList = patientList.map((x: any) => x.duration);
-    let patientInjTimeList: any[] = []
+    // move injected patients to the head of the list
+    moveInjectedToListHead(patientList);
+
+    // generate the patients injection time
     generatePatientInjTimeList(
         patientList,
-        new Date(),
+        firstInjectionTime,
         rpSettings
     );
 
-    patientDoseList.push(0);
+    // init FutureStatsType
+    const futureStats: FutureStatsType = {
+        totalExpectedInjectedPatients: 0,
+        totalRemainingVol: rpSettings.rpVol,
+        usableRemainingVol: rpSettings.rpVol - rpSettings.wastedVol - rpSettings.unextractableVol,
 
-    let injTimeActivityList: number[] = Array(patientDoseList.length).fill(0);
-    let remainingActivityList: number[] = [...injTimeActivityList];
-    let patientInjVolList: number[] = [...injTimeActivityList];
-    let remainingVolList: number[] = [...injTimeActivityList];
+        remainingActivityTime: patientList[0].expectedInjectionTime ?? rpSettings.mesureTime,
+        totalRemainingActivity: activityAtFirstInj(
+            patientList.map(patient => (patient.expectedInjectionTime?.getTime())),
+            rpSettings
+        ),
+        usableRemainingActivity: (rpSettings.rpVol - rpSettings.wastedVol - rpSettings.unextractableVol / rpSettings.rpVol) * activityAtFirstInj(
+            patientList.map(patient => (patient.expectedInjectionTime?.getTime())),
+            rpSettings
+        ),
+    }
 
-    patientDoseList.forEach((x: any, i: any) => {
-        if (i === 0) {
-            injTimeActivityList[i] = activityAtFirstInj(
-                patientInjTimeList,
-                rpSettings
-            );
-            remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
-            patientInjVolList[i] =
-                (patientDoseList[i] * (rpSettings.rpVol - rpSettings.wastedVol)) /
-                injTimeActivityList[i];
-            remainingVolList[i] =
-                rpSettings.rpVol - rpSettings.wastedVol - patientInjVolList[i];
-        } else {
-            injTimeActivityList[i] = decay(
-                remainingActivityList[i - 1],
-                rpSettings.rpHalfLife,
-                diffMsTimeMinutes(patientInjTimeList[i], patientInjTimeList[i - 1])
-            );
-            remainingActivityList[i] = injTimeActivityList[i] - patientDoseList[i];
-            patientInjVolList[i] =
-                (patientDoseList[i] * remainingVolList[i - 1]) / injTimeActivityList[i];
-            remainingVolList[i] = remainingVolList[i - 1] - patientInjVolList[i];
+    // if we reach a patient we cannot inject; we no longer check the other patients in the list
+    let hasReachedUninjectablePatient = false;
+
+    // iterate through the patient list and update the futureStats
+    patientList.forEach((patient, index, patientList) => {
+
+        if (hasReachedUninjectablePatient) {
+            return;
         }
-    });
 
-    const usableRemainingActivity = usableActivity(
-        remainingActivityList.slice(-1)[0],
-        remainingVolList.slice(-1)[0],
-        rpSettings.unextractableVol
-    );
-    patientInjVolList.pop();
-    const expected = {
-        totalRemainingActivity: remainingActivityList.slice(-1)[0],
-        usableRemainingActivity: usableRemainingActivity,
+        // this should never happen, but it's a safenet in case generatePatientInjTimeList fails
+        if (!patient.expectedInjectionTime || patient.expectedInjectionTime.getTime() > futureStats.remainingActivityTime.getTime()) {
+            throw new Error("Cannot inject while previous PET scan ongoing")
+        }
 
-        totalRemainingVol: remainingVolList.slice(-1)[0],
-        usableRemainingVol: remainingVolList.slice(-1)[0] - rpSettings.unextractableVol,
+        // we calculate the usable activity at injection time
+        const usableActivityAtInjection = decay(
+            futureStats.usableRemainingActivity,
+            rpSettings.rpHalfLife,
+            diffMsTimeMinutes(futureStats.remainingActivityTime.getTime(), patient.expectedInjectionTime.getTime())
+        )
 
-        remainingActivityTime: new Date(patientInjTimeList.slice(-1)[0]),
+        if (patient.dose > usableActivityAtInjection) {
+            hasReachedUninjectablePatient = true;
+            return;
+        }
 
-        patientInjTimeList: patientInjTimeList.slice(0, -1).map((x) => new Date(x)), // a new column
-        patientInjVolList: patientInjVolList, // a new column
-    };
+        // We can inject current patient :
+        futureStats.totalExpectedInjectedPatients += 1;
 
-    return expected;
+        // the volume of the injection
+        const injectionVol = (patient.dose / usableActivityAtInjection) * futureStats.usableRemainingVol;
+        patientList[index].expectedInjectionVolume = injectionVol;
+
+        futureStats.totalRemainingVol -= injectionVol;
+        futureStats.usableRemainingVol -= injectionVol;
+
+        futureStats.usableRemainingActivity = decay(
+            usableActivityAtInjection - patient.dose,
+            rpSettings.rpHalfLife,
+            patient.duration
+        )
+
+        futureStats.totalRemainingActivity = futureStats.usableRemainingActivity * (futureStats.totalRemainingVol / futureStats.usableRemainingVol)
+
+        futureStats.remainingActivityTime = new Date(patient.expectedInjectionTime.getTime() + patient.duration * 60000)
+    })
+
+    return futureStats;
 };
