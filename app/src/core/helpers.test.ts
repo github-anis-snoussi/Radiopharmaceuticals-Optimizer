@@ -1,7 +1,7 @@
 import { PatientType } from '../context/PatientsContext';
-import { sortingAfterEveryInjection } from './helpers';
+import { moveInjectedToListHead } from './helpers';
 
-describe('maths helpers', () => {
+describe('helper functions', () => {
 
     const examplePatient1: PatientType = {
         id: 'patient-id-1',
@@ -40,7 +40,7 @@ describe('maths helpers', () => {
                     ...examplePatient3,
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-1");
@@ -64,7 +64,7 @@ describe('maths helpers', () => {
                     realInjectionTime: new Date(2021, 5, 10, 7, 0),
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-3");
@@ -88,7 +88,7 @@ describe('maths helpers', () => {
                     ...examplePatient3,
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-2");
@@ -112,7 +112,7 @@ describe('maths helpers', () => {
                     ...examplePatient3,
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-1");
@@ -138,7 +138,7 @@ describe('maths helpers', () => {
                     ...examplePatient3,
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-1");
@@ -166,7 +166,7 @@ describe('maths helpers', () => {
                     realInjectionTime: new Date(2021, 5, 10, 8, 30),
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-1");
@@ -194,7 +194,7 @@ describe('maths helpers', () => {
                     realInjectionTime: new Date(2021, 5, 10, 8, 30),
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-1");
@@ -222,7 +222,7 @@ describe('maths helpers', () => {
                     realInjectionTime: new Date(2021, 5, 10, 8, 30),
                 }
             ]
-            sortingAfterEveryInjection(patientList)
+            moveInjectedToListHead(patientList)
 
             expect(patientList.length).toBe(3);
             expect(patientList[0].id).toBe("patient-id-2");

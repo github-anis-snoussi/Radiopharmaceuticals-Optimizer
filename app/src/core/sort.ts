@@ -1,7 +1,7 @@
 import { message } from "antd";
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
-import { sortingAfterEveryInjection } from "./helpers";
+import { moveInjectedToListHead } from "./helpers";
 import { predict } from "./predict";
 
 
@@ -62,9 +62,9 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
 };
 
 export const sort = (patientListOg: PatientType[], rpSettings: RpSettingsType): PatientType[] => {
-    let patientList = [...sortingAfterEveryInjection(patientListOg)];
+    moveInjectedToListHead(patientListOg);
 
-    let sortedList = firstSorting(patientList);
+    let sortedList = firstSorting(patientListOg);
     // secondSorting(sortedList, rpSettings);
     message.success("Patients sorted");
     return sortedList;

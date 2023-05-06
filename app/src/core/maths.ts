@@ -38,9 +38,9 @@ export const usableActivity = (totalRpActivity: number, totalRpVol: number, unex
 * @param {number[]} patientInjTimeMsList - List of injection times timestaps
 * @param {RpSettingsType} rpSettings - the general settings for the system
 */
-export const activityAtFirstInj = (patientInjTimeMsList: number[], rpSettings: RpSettingsType): number => {
+export const activityAtFirstInj = (patientInjTimeMsList: (number | undefined)[], rpSettings: RpSettingsType): number => {
 
-    if (!patientInjTimeMsList || patientInjTimeMsList.length === 0) {
+    if (!patientInjTimeMsList || patientInjTimeMsList.length === 0 || !patientInjTimeMsList[0]) {
         return usableActivity(rpSettings.rpActivity, rpSettings.rpVol, rpSettings.wastedVol + rpSettings.unextractableVol)
     }
 
