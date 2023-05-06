@@ -9,9 +9,9 @@ describe('prediction algorithms helpers', () => {
         rpActivity: 3824,
         mesureTime: new Date(2021, 5, 10, 6, 0),
         rpHalfLife: 53,
-        rpVol: 8.5,
-        wastedVol: 0,
-        unextractableVol: 0,
+        rpVol: 4,
+        wastedVol: 1,
+        unextractableVol: 1,
         labName: "Dexter's Laboratory"
     }
 
@@ -40,19 +40,38 @@ describe('prediction algorithms helpers', () => {
     }
 
     describe('should correctly predict the finish state of the system', () => {
-        test('should output prediction', () => {
+        test('will always output prediction', () => {
             const result: FutureStatsType = predict(
                 [examplePatient1, examplePatient2, examplePatient3],
                 exampleRpSettings,
                 new Date(2021, 5, 10, 7, 45),
-            )
+            );
+            expect(result.remainingActivityTime).toBeDefined();
+            expect(result.totalExpectedInjectedPatients).toBeDefined();
+            expect(result.totalRemainingActivity).toBeDefined();
+            expect(result.usableRemainingActivity).toBeDefined();
+            expect(result.totalRemainingVol).toBeDefined();
+            expect(result.usableRemainingVol).toBeDefined();
+        });
 
-            expect(result.remainingActivityTime).toBeTruthy();
-            expect(result.totalExpectedInjectedPatients).toBeTruthy();
-            expect(result.totalRemainingActivity).toBeTruthy();
-            expect(result.usableRemainingActivity).toBeTruthy();
-            expect(result.totalRemainingVol).toBeTruthy();
-            expect(result.usableRemainingVol).toBeTruthy();
+        test('stops once a patient is not injectable - 1', () => {
+            const result: FutureStatsType = predict(
+                [{ ...examplePatient1, dose: 4000 }, examplePatient2, examplePatient3],
+                exampleRpSettings,
+                new Date(2021, 5, 10, 7, 45),
+            );
+            expect(result.totalExpectedInjectedPatients).toBeDefined();
+            expect(result.totalExpectedInjectedPatients).toBe(0);
+        });
+
+        test('stops once a patient is not injectable - 2', () => {
+            const result: FutureStatsType = predict(
+                [examplePatient1, { ...examplePatient2, dose: 4000 }, examplePatient3],
+                exampleRpSettings,
+                new Date(2021, 5, 10, 7, 45),
+            );
+            expect(result.totalExpectedInjectedPatients).toBeDefined();
+            expect(result.totalExpectedInjectedPatients).toBe(1);
         });
 
     });
