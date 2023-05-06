@@ -34,7 +34,7 @@ export const predict = (patientList: PatientType[], rpSettings: RpSettingsType, 
             patientList.map(patient => (patient.expectedInjectionTime?.getTime())),
             rpSettings
         ),
-        usableRemainingActivity: (rpSettings.rpVol - rpSettings.wastedVol - rpSettings.unextractableVol / rpSettings.rpVol) * activityAtFirstInj(
+        usableRemainingActivity: ((rpSettings.rpVol - rpSettings.wastedVol - rpSettings.unextractableVol) / rpSettings.rpVol) * activityAtFirstInj(
             patientList.map(patient => (patient.expectedInjectionTime?.getTime())),
             rpSettings
         ),
