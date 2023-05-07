@@ -5,7 +5,7 @@ import { moveInjectedToListHead } from "./helpers";
 import { predict } from "./predict";
 
 
-const firstSorting = (patientList: PatientType[]) => {
+const greedySort = (patientList: PatientType[]) => {
     return patientList.sort((a, b) => {
         let aRatio = a.isInjected ? 0 : a.duration / a.dose;
         let bRatio = b.isInjected ? 0 : b.duration / b.dose;
@@ -13,7 +13,7 @@ const firstSorting = (patientList: PatientType[]) => {
     });
 };
 
-const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) => {
+const slidingWindowSort = (patientList: PatientType[], rpSettings: RpSettingsType) => {
     let sortingCondition = true;
     while (sortingCondition) {
         sortingCondition = false;
@@ -61,10 +61,15 @@ const secondSorting = (patientList: PatientType[], rpSettings: RpSettingsType) =
     }
 };
 
+/**
+* Plugable sort function, will output the best order to inject patients using a limited supply of radioactive substance
+* @param {PatientType[]} patientList - The list of patients
+* @param {RpSettingsType} rpSettings - the general settings for the system
+*/
 export const sort = (patientListOg: PatientType[], rpSettings: RpSettingsType): PatientType[] => {
     moveInjectedToListHead(patientListOg);
 
-    let sortedList = firstSorting(patientListOg);
+    let sortedList = greedySort(patientListOg);
     // secondSorting(sortedList, rpSettings);
     message.success("Patients sorted");
     return sortedList;
