@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export interface PatientType {
   id: string;
@@ -25,11 +25,6 @@ const PatientsContext = React.createContext<PatientsContextType | null>(null);
 const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   //patients list
   const [patientsList, setPatientsList] = useState<PatientType[]>([]);
-
-  // DEBUG
-  useEffect(() => {
-    console.log(patientsList);
-  }, [patientsList]);
 
   const addPatient = (newPatient: PatientType) => {
     setPatientsList(prevPatients => [...prevPatients, newPatient]);
