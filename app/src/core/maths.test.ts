@@ -89,6 +89,11 @@ describe('maths helpers', () => {
         test('radioactivity approaches 0 as time passes', () => {
             expect(decay(3824, 109.8, 999999)).toBeLessThan(0.1);
         });
+        test('shorter half life means faster decay', () => {
+            const decay1 = decay(3824, 109.8, 60);
+            const decay2 = decay(3824, 60, 60);
+            expect(decay2).toBeLessThan(decay1);
+        });
         // testing some random cases, and verifying using : https://www.omnicalculator.com/chemistry/half-life
         test('radioactivity is correctly calculated', () => {
             expect(decay(3824, 109.8, 1)).toBe(3799.935828439785);
