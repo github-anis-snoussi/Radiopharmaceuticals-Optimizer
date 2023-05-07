@@ -42,7 +42,7 @@ describe('present state calculator algorithm', () => {
 
     describe('should correctly calculates the current state of the system', () => {
 
-        beforeAll(() => {
+        beforeEach(() => {
             jest.useFakeTimers();
             jest.setSystemTime(new Date(2021, 5, 10, 7, 0));
 
@@ -187,6 +187,65 @@ describe('present state calculator algorithm', () => {
             expect(resultAtInjecting.usableVolNow).toBe(resultBeforeInjecting.usableVolNow);
         });
 
+        test('radioactivity decreases in time - 1', () => {
+            const result1: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+            jest.setSystemTime(new Date(2021, 5, 10, 7, 10));
+            const result2: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+            expect(result2.totalVolNow).toBe(result1.totalVolNow);
+            expect(result2.usableVolNow).toBe(result1.usableVolNow);
+
+            expect(result2.totalActivityNow).toBeLessThan(result1.totalActivityNow);
+            expect(result2.usableActivityNow).toBeLessThan(result1.usableActivityNow);
+
+        });
+
+        test('radioactivity decreases in time - 2', () => {
+            const result1: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            jest.setSystemTime(new Date(2021, 5, 10, 7, 10));
+            const result2: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            expect(result2.totalVolNow).toBe(result1.totalVolNow);
+            expect(result2.usableVolNow).toBe(result1.usableVolNow);
+
+            expect(result2.totalActivityNow).toBeLessThan(result1.totalActivityNow);
+            expect(result2.usableActivityNow).toBeLessThan(result1.usableActivityNow);
+
+        });
+
+        test('injecting sooner leads to more remaining radioactivity', () => {
+            const result1: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, realInjectionTime: new Date(2021, 5, 10, 6, 0), realInjectionVolume: 1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            const result2: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, realInjectionTime: new Date(2021, 5, 10, 6, 10), realInjectionVolume: 1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            expect(result2.totalVolNow).toBe(result1.totalVolNow);
+            expect(result2.usableVolNow).toBe(result1.usableVolNow);
+
+            expect(result2.totalActivityNow).toBeLessThan(result1.totalActivityNow);
+            expect(result2.usableActivityNow).toBeLessThan(result1.usableActivityNow);
+
+        });
+
         test('test case 1', () => {
             const resultBeforeInjecting: NowStatsType = currentStats(
                 [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
@@ -201,13 +260,62 @@ describe('present state calculator algorithm', () => {
                 { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
             );
 
-            console.log("BEFORE:", resultBeforeInjecting)
-            console.log("T0:", resultAtInjecting)
-
             expect(resultAtInjecting.totalActivityNow).toBe(resultBeforeInjecting.totalActivityNow - patientDose);
             expect(resultAtInjecting.totalVolNow).toBe(resultBeforeInjecting.totalVolNow - patientVol);
             expect(resultAtInjecting.usableActivityNow).toBe(resultBeforeInjecting.usableActivityNow - patientDose);
             expect(resultAtInjecting.usableVolNow).toBe(resultBeforeInjecting.usableVolNow - patientVol);
+        });
+
+        test('test case 2', () => {
+
+            const patientDose = 100;
+            const patientVol = 0.5;
+
+            // the state right at the measure time
+            jest.setSystemTime(new Date(2021, 5, 10, 7, 0));
+            const result1: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+            // the state after passing 10min
+            jest.setSystemTime(new Date(2021, 5, 10, 7, 10));
+            const result2: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+            // the state when injecting a patient at 10min
+            const result3: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, dose: patientDose, realInjectionVolume: patientVol, realInjectionTime: new Date(2021, 5, 10, 7, 10) }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+
+            // the state after passing 20min and injecting a patient at 10min
+            jest.setSystemTime(new Date(2021, 5, 10, 7, 20));
+            const result4: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, dose: patientDose, realInjectionVolume: patientVol, realInjectionTime: new Date(2021, 5, 10, 7, 10) }, { ...examplePatient2 }, { ...examplePatient3 }],
+                exampleRpSettings,
+            );
+
+            expect(result1.totalVolNow).toBe(result2.totalVolNow);
+            expect(result1.usableVolNow).toBe(result2.usableVolNow);
+
+            expect(result3.totalVolNow).toBe(result4.totalVolNow);
+            expect(result3.usableVolNow).toBe(result4.usableVolNow);
+
+            expect(result4.totalVolNow).toBeLessThan(result1.totalVolNow);
+            expect(result4.usableVolNow).toBeLessThan(result1.usableVolNow);
+
+            expect(result4.totalActivityNow).toBeLessThan(result3.totalActivityNow);
+            expect(result3.totalActivityNow).toBeLessThan(result2.totalActivityNow);
+            expect(result2.totalActivityNow).toBeLessThan(result1.totalActivityNow);
+
+            expect(result4.usableActivityNow).toBeLessThan(result3.usableActivityNow);
+            expect(result3.usableActivityNow).toBeLessThan(result2.usableActivityNow);
+            expect(result2.usableActivityNow).toBeLessThan(result1.usableActivityNow);
+
         });
 
     });
