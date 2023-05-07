@@ -29,48 +29,11 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
         return nowStats;
     }
 
-    // 🌝
-    let hasReachedEndOfTime = false;
-
-    const injectedPatientsList = patientList.filter((patient) => patient.isInjected);
+    const injectedPatientsList = patientList.filter((patient) => patient.isInjected && patient.realInjectionTime && patient.realInjectionTime.getTime() <= currentTime.getTime());
 
     injectedPatientsList.forEach((patient, index, patientList) => {
-        if (hasReachedEndOfTime) {
-            return;
-        }
-
         if (!patient.realInjectionTime) {
             throw new Error("Patient is injected but realInjectionTime is not defined")
-        }
-
-        // if next patient injection time is still in the future
-        if (patient.realInjectionTime.getTime() > currentTime.getTime()) {
-            hasReachedEndOfTime = true;
-            if (index === 0) {
-                const totalActivityNow = decay(
-                    rpSettings.rpActivity,
-                    rpSettings.rpHalfLife,
-                    diffMsTimeMinutes(rpSettings.mesureTime.getTime(), currentTime.getTime())
-                );
-                nowStats.totalActivityNow = totalActivityNow;
-                nowStats.usableActivityNow = totalActivityNow * ((rpSettings.rpVol - rpSettings.unextractableVol - rpSettings.wastedVol) / rpSettings.rpVol)
-            } else {
-                // just to silence eslint
-                const previousPatient = patientList[index - 1]
-                if (!previousPatient.realInjectionTime) {
-                    throw new Error("Patient is injected but realInjectionTime is not defined")
-                }
-
-                const totalActivityNow = decay(
-                    nowStats.totalActivityNow,
-                    rpSettings.rpHalfLife,
-                    diffMsTimeMinutes(previousPatient.realInjectionTime.getTime(), currentTime.getTime())
-                );
-
-                nowStats.totalActivityNow = totalActivityNow;
-                nowStats.usableActivityNow = totalActivityNow * ((rpSettings.rpVol - rpSettings.unextractableVol - rpSettings.wastedVol) / rpSettings.rpVol)
-            }
-            return;
         }
 
         // if current time allows for injecting next patient
@@ -107,17 +70,32 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
     })
 
     // if we never reached a patient whose injected in the future, we calculate the decay after injecting all patients
-    if (!hasReachedEndOfTime && injectedPatientsList.length === 0) {
-        const lastPatient = patientList[patientList.length - 1];
-        const startTime = lastPatient?.realInjectionTime ? lastPatient.realInjectionTime.getTime() : rpSettings.mesureTime.getTime();
+    if (injectedPatientsList.length === 0) {
         const totalActivityNow = decay(
             nowStats.totalActivityNow,
             rpSettings.rpHalfLife,
-            diffMsTimeMinutes(startTime, currentTime.getTime())
+            diffMsTimeMinutes(rpSettings.mesureTime.getTime(), currentTime.getTime())
         );
 
         nowStats.totalActivityNow = totalActivityNow;
         nowStats.usableActivityNow = totalActivityNow * ((rpSettings.rpVol - rpSettings.unextractableVol - rpSettings.wastedVol) / rpSettings.rpVol)
+    }
+    else {
+        const lastPatient = injectedPatientsList.slice(-1)[0] as PatientType & { realInjectionTime: Date }
+        const totalActivityNow = decay(
+            nowStats.totalActivityNow,
+            rpSettings.rpHalfLife,
+            diffMsTimeMinutes(lastPatient.realInjectionTime.getTime(), currentTime.getTime())
+        );
+
+        nowStats.totalActivityNow = totalActivityNow;
+
+        const usableActivityNow = decay(
+            nowStats.usableActivityNow,
+            rpSettings.rpHalfLife,
+            diffMsTimeMinutes(lastPatient.realInjectionTime.getTime(), currentTime.getTime())
+        );
+        nowStats.usableActivityNow = usableActivityNow
     }
 
 
