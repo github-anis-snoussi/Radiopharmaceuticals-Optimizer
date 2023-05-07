@@ -2,6 +2,7 @@ import { PatientType } from '../context/PatientsContext';
 import { RpSettingsType } from '../context/RpSettingsContext';
 import { NowStatsType } from '../context/StatisticsContext';
 import { currentStats } from './now';
+import { decay, diffMsTimeMinutes } from "./maths";
 
 describe('present state calculator algorithm', () => {
 
@@ -98,6 +99,116 @@ describe('present state calculator algorithm', () => {
             expect(result.usableActivityNow).toBe(exampleRpSettings.rpActivity * ((exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol) / exampleRpSettings.rpVol));
         });
 
+        test('radioactivity decreases by itself', () => {
+            const mockedMeasureTime = new Date(2021, 5, 10, 6, 0)
+            const result: NowStatsType = currentStats(
+                [examplePatient1, examplePatient2, examplePatient3],
+                { ...exampleRpSettings, mesureTime: mockedMeasureTime },
+            );
+
+            const totalVolume = exampleRpSettings.rpVol;
+            const usabeVolume = exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol;
+            const totalActivity = decay(
+                exampleRpSettings.rpActivity,
+                exampleRpSettings.rpHalfLife,
+                diffMsTimeMinutes(mockedMeasureTime.getTime(), new Date().getTime())
+            );
+
+            const usableActivity = totalActivity * (usabeVolume / totalVolume)
+
+            expect(result.totalActivityNow).toBe(totalActivity);
+            expect(result.usableActivityNow).toBe(usableActivity);
+            expect(result.totalVolNow).toBe(totalVolume);
+            expect(result.usableVolNow).toBe(usabeVolume);
+        });
+
+        test('non injected patients are irrelevant', () => {
+            const result1: NowStatsType = currentStats(
+                [examplePatient1, examplePatient2, examplePatient3],
+                exampleRpSettings,
+            );
+
+            const result2: NowStatsType = currentStats(
+                [{ ...examplePatient1, dose: 200 }, { ...examplePatient2, dose: 1, duration: 10 }, examplePatient3],
+                exampleRpSettings,
+            );
+
+            expect(result1.totalVolNow).toBe(result2.totalVolNow);
+            expect(result1.usableVolNow).toBe(result2.usableVolNow);
+            expect(result1.totalActivityNow).toBe(result2.totalActivityNow);
+            expect(result1.usableActivityNow).toBe(result2.usableActivityNow);
+        });
+
+        test('patient injected in the future are irrelevant - 1', () => {
+            const resultBeforeInjecting: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            const resultAtInjecting: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, realInjectionTime: new Date(new Date().getTime() + 10000) }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            expect(resultAtInjecting.totalActivityNow).toBe(resultBeforeInjecting.totalActivityNow);
+            expect(resultAtInjecting.totalVolNow).toBe(resultBeforeInjecting.totalVolNow);
+            expect(resultAtInjecting.usableActivityNow).toBe(resultBeforeInjecting.usableActivityNow);
+            expect(resultAtInjecting.usableVolNow).toBe(resultBeforeInjecting.usableVolNow);
+        });
+
+        test('patient injected in the future are irrelevant - 2', () => {
+            const resultBeforeInjecting: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            const resultAtInjecting: NowStatsType = currentStats(
+                [
+                    {
+                        ...examplePatient1,
+                        isInjected: true,
+                        realInjectionTime: new Date(new Date().getTime() + 10000)
+                    },
+                    {
+                        ...examplePatient2,
+                        isInjected: true,
+                        realInjectionTime: new Date(new Date().getTime() + 20000)
+                    },
+                    {
+                        ...examplePatient3
+                    }
+                ],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            expect(resultAtInjecting.totalActivityNow).toBe(resultBeforeInjecting.totalActivityNow);
+            expect(resultAtInjecting.totalVolNow).toBe(resultBeforeInjecting.totalVolNow);
+            expect(resultAtInjecting.usableActivityNow).toBe(resultBeforeInjecting.usableActivityNow);
+            expect(resultAtInjecting.usableVolNow).toBe(resultBeforeInjecting.usableVolNow);
+        });
+
+        test('test case 1', () => {
+            const resultBeforeInjecting: NowStatsType = currentStats(
+                [{ ...examplePatient1 }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            const patientDose = 100;
+            const patientVol = 1;
+
+            const resultAtInjecting: NowStatsType = currentStats(
+                [{ ...examplePatient1, isInjected: true, dose: patientDose, realInjectionVolume: patientVol, realInjectionTime: new Date() }, { ...examplePatient2 }, { ...examplePatient3 }],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 6, 0) },
+            );
+
+            console.log("BEFORE:", resultBeforeInjecting)
+            console.log("T0:", resultAtInjecting)
+
+            expect(resultAtInjecting.totalActivityNow).toBe(resultBeforeInjecting.totalActivityNow - patientDose);
+            expect(resultAtInjecting.totalVolNow).toBe(resultBeforeInjecting.totalVolNow - patientVol);
+            expect(resultAtInjecting.usableActivityNow).toBe(resultBeforeInjecting.usableActivityNow - patientDose);
+            expect(resultAtInjecting.usableVolNow).toBe(resultBeforeInjecting.usableVolNow - patientVol);
+        });
 
     });
 

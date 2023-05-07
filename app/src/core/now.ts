@@ -13,7 +13,6 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
 
     // move injected patients to the head of the list
     moveInjectedToListHead(patientList);
-    const injectedPatientsList = patientList.filter((patient) => patient.isInjected);
 
     const currentTime = new Date();
 
@@ -32,6 +31,8 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
 
     // 🌝
     let hasReachedEndOfTime = false;
+
+    const injectedPatientsList = patientList.filter((patient) => patient.isInjected);
 
     injectedPatientsList.forEach((patient, index, patientList) => {
         if (hasReachedEndOfTime) {
@@ -106,7 +107,7 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
     })
 
     // if we never reached a patient whose injected in the future, we calculate the decay after injecting all patients
-    if (!hasReachedEndOfTime && injectedPatientsList.length > 0) {
+    if (!hasReachedEndOfTime && injectedPatientsList.length === 0) {
         const lastPatient = patientList[patientList.length - 1];
         const startTime = lastPatient?.realInjectionTime ? lastPatient.realInjectionTime.getTime() : rpSettings.mesureTime.getTime();
         const totalActivityNow = decay(
