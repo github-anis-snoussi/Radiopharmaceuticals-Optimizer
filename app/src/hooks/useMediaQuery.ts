@@ -21,12 +21,3 @@ const useMediaQuery = (query: any, whenTrue: any, whenFalse: any) => {
 
 
 export default useMediaQuery
-
-
-// Usage example :
-
-// const text = useMediaQuery(
-//     '(max-width: 400px)',
-//     'Less than 400px wide',
-//     'More than 400px wide'
-//   );

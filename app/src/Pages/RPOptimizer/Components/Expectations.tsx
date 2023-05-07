@@ -1,12 +1,9 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Statistic, Row, Col, Typography } from 'antd';
 import { BranchesOutlined, ExperimentOutlined } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
-import { RpSettingsContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 import useMediaQuery from '../../../hooks/useMediaQuery';
-import { PatientsContext, PatientsContextType } from '../../../context/PatientsContext';
-import {predict} from "../../../core/predict"
 
 const { Title, Text } = Typography;
 
@@ -21,20 +18,8 @@ const Expectations = () => {
       usableRemainingVol,
       remainingActivityTime,
       totalExpectedInjectedPatients
-    },
-    setFutureStats
+    }
   } = useContext(StatisticsContext) as StatisticsContextType;
-  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
-  const { patientsList } = useContext(PatientsContext) as PatientsContextType;
-  
-
-  // useEffect(() => {
-  //   const statisticsInterval = setInterval(() => {
-  //     const perdictions = predict(patientsList, rpSettings)
-  //     setFutureStats(perdictions);
-  //   }, 5000);
-  //   return () => clearInterval(statisticsInterval);
-  // }, []);
 
   return (
     <div style={{ marginTop: 20 }}>
@@ -69,12 +54,12 @@ const Expectations = () => {
           </div>
         </Col>
         <Col xs={12} md={5}>
-          <Statistic title="Total Remaining Activity" value={totalRemainingActivity || '?'} suffix="MBq" />
-          <Statistic title="Usable Remaining Activity" value={usableRemainingActivity || '?'} suffix="MBq" />
+          <Statistic title="Total Remaining Activity" value={totalRemainingActivity.toFixed(2) || '?'} suffix="MBq" />
+          <Statistic title="Usable Remaining Activity" value={usableRemainingActivity.toFixed(2) || '?'} suffix="MBq" />
         </Col>
         <Col xs={12} md={5}>
-          <Statistic title="Total Remaining Volume" value={totalRemainingVol || '?'} suffix="ml" />
-          <Statistic title="Usable Remaining Volume" value={usableRemainingVol || '?'} suffix="ml" />
+          <Statistic title="Total Remaining Volume" value={totalRemainingVol.toFixed(2) || '?'} suffix="ml" />
+          <Statistic title="Usable Remaining Volume" value={usableRemainingVol.toFixed(2) || '?'} suffix="ml" />
         </Col>
       </Row>
 
