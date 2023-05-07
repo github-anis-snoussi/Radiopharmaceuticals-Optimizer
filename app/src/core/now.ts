@@ -69,6 +69,7 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
                 nowStats.totalActivityNow = totalActivityNow;
                 nowStats.usableActivityNow = totalActivityNow * ((rpSettings.rpVol - rpSettings.unextractableVol - rpSettings.wastedVol) / rpSettings.rpVol)
             }
+            return;
         }
 
         // if current time allows for injecting next patient
@@ -105,7 +106,7 @@ export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsT
     })
 
     // if we never reached a patient whose injected in the future, we calculate the decay after injecting all patients
-    if (!hasReachedEndOfTime) {
+    if (!hasReachedEndOfTime && injectedPatientsList.length > 0) {
         const lastPatient = patientList[patientList.length - 1];
         const startTime = lastPatient?.realInjectionTime ? lastPatient.realInjectionTime.getTime() : rpSettings.mesureTime.getTime();
         const totalActivityNow = decay(
