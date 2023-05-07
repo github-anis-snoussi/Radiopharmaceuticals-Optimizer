@@ -7,7 +7,7 @@ describe('present state calculator algorithm', () => {
 
     const exampleRpSettings: RpSettingsType = {
         rpActivity: 3824,
-        mesureTime: new Date(2021, 5, 10, 6, 0),
+        mesureTime: new Date(2021, 5, 10, 7, 0),
         rpHalfLife: 53,
         rpVol: 4,
         wastedVol: 1,
@@ -44,10 +44,16 @@ describe('present state calculator algorithm', () => {
         beforeAll(() => {
             jest.useFakeTimers();
             jest.setSystemTime(new Date(2021, 5, 10, 7, 0));
+
+            jest.spyOn(global.console, 'warn').mockImplementation();
         });
 
         afterAll(() => {
             jest.useRealTimers();
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
         });
 
         test('will always output current state', () => {
@@ -60,6 +66,36 @@ describe('present state calculator algorithm', () => {
             expect(result.totalVolNow).toBeDefined();
             expect(result.usableActivityNow).toBeDefined();
             expect(result.usableVolNow).toBeDefined();
+        });
+
+        test('will not update if measure time in future', () => {
+            const result: NowStatsType = currentStats(
+                [examplePatient1, examplePatient2, examplePatient3],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 7, 10) },
+            );
+
+            expect(console.warn).toBeCalledTimes(1);
+            expect(console.warn).toBeCalledWith('Measure Time is set in the Future');
+
+            expect(result.totalVolNow).toBe(exampleRpSettings.rpVol);
+            expect(result.usableVolNow).toBe(exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol);
+            expect(result.totalActivityNow).toBe(exampleRpSettings.rpActivity);
+            expect(result.usableActivityNow).toBe(exampleRpSettings.rpActivity * ((exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol) / exampleRpSettings.rpVol));
+        });
+
+
+        test('no change at t=0', () => {
+            const result: NowStatsType = currentStats(
+                [examplePatient1, examplePatient2, examplePatient3],
+                { ...exampleRpSettings, mesureTime: new Date(2021, 5, 10, 7, 0) },
+            );
+
+            expect(console.warn).toBeCalledTimes(0);
+
+            expect(result.totalVolNow).toBe(exampleRpSettings.rpVol);
+            expect(result.usableVolNow).toBe(exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol);
+            expect(result.totalActivityNow).toBe(exampleRpSettings.rpActivity);
+            expect(result.usableActivityNow).toBe(exampleRpSettings.rpActivity * ((exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol) / exampleRpSettings.rpVol));
         });
 
 
