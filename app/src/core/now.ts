@@ -1,7 +1,7 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { NowStatsType } from "../context/StatisticsContext";
-import { moveInjectedToListHead } from "./helpers";
+import { moveInjectedToListHeadHelper } from "./helpers";
 import { decay, diffMsTimeMinutes } from "./maths";
 
 /**
@@ -12,7 +12,7 @@ import { decay, diffMsTimeMinutes } from "./maths";
 export const currentStats = (patientList: PatientType[], rpSettings: RpSettingsType): NowStatsType => {
 
     // move injected patients to the head of the list
-    moveInjectedToListHead(patientList);
+    moveInjectedToListHeadHelper(patientList);
 
     const currentTime = new Date();
 

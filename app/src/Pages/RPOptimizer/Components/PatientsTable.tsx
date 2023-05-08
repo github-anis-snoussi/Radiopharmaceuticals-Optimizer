@@ -3,7 +3,9 @@ import { Table, message } from 'antd';
 import { SortableContainer as BaseSortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import TableColums from './TableColums';
-import { PatientsContext, PatientsContextType } from '../../../context/PatientsContext';
+import {  PatientsContext, PatientsContextType } from '../../../context/PatientsContext';
+import { injectPatientHelper } from '../../../core/helpers';
+import { RpSettingsContext, RpSettingsContextType } from '../../../context/RpSettingsContext';
 
 const SortableItem = SortableElement((props: any) => <tr {...props} />);
 const SortableContainer = BaseSortableContainer((props: any) => <tbody {...props} />);
@@ -16,6 +18,7 @@ const PatientsTable = ({
   modifyPatient: (id: string) => void;
 }) => {
   const { patientsList, updatePatientsList, deletePatient } = useContext(PatientsContext) as PatientsContextType;
+  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: any; newIndex: any }) => {
     if (patientsList[newIndex].isInjected) {
@@ -28,11 +31,14 @@ const PatientsTable = ({
   };
 
   const injectPatient = useCallback((id: string, injectionTime: string | null) => {
-    if (!injectionTime) {
-      message.warning('Please select Injection time first.');
+    try{
+      const newPatientsList = injectPatientHelper([...patientsList], rpSettings, id, injectionTime);
+      updatePatientsList(newPatientsList)
+    } catch(error: any) {
+      message.warning(error.message ?? 'Error when injecting patient.');
     }
-    console.log('Injecting patient: ', id, ' at time : ', injectionTime);
-  }, [])
+
+  }, [patientsList, updatePatientsList])
 
   const DraggableContainer = (props: any) => (
     <SortableContainer useDragHandle disableAutoscroll helperClass="row-dragging" onSortEnd={onSortEnd} {...props} />
