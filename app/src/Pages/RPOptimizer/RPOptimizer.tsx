@@ -18,11 +18,11 @@ import { moveInjectedToListHeadHelper } from '../../core/helpers';
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
   const { patientsList, updatePatientsList } = useContext(PatientsContext) as PatientsContextType;
-  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
+  const { rpSettings, hasInitSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(!hasInitSettings);
 
   const sortPatients = () => {
     updatePatientsList(sort(patientsList, rpSettings));

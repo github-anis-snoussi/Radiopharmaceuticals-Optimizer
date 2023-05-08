@@ -21,6 +21,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
       unextractableVol: initUnextractableVol,
     },
     setRpSettings,
+    setHasInitSettings
   } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   const [rpActivity, setRpActivity] = useState(initRpActivity);
@@ -43,6 +44,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
     });
     closeModal();
 
+    setHasInitSettings(true);
     message.success('Session initialized.');
     sendAmplitudeData(amplitudeLogsTypes.UPDATED_RP_SETTINGS);
   };
