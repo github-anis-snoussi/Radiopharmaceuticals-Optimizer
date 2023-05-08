@@ -1,0 +1,16 @@
+name: jest
+on:
+  push:
+    pull_request:
+      - dev
+jobs:
+  utests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: yarn
+        working-directory: ./app
+      - name: Run tests
+        run: yarn test
+        working-directory: ./app
