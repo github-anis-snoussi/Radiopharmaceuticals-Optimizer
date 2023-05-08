@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { AppHeader, PatientsTable, Expectations, WelcomeModal, NewPatientDrawer } from './Components';
 import {
@@ -10,37 +10,19 @@ import {
 } from '@ant-design/icons';
 import { PatientsContext, PatientsContextType } from '../../context/PatientsContext';
 import { RpSettingsContext, RpSettingsContextType } from '../../context/RpSettingsContext';
-import { StatisticsContext, StatisticsContextType } from '../../context/StatisticsContext';
 import { sort } from '../../core/sort';
-import { predict } from '../../core/predict';
-import { currentStats } from '../../core/now';
+import { generatePatientInjTimeList } from '../../core/maths';
+import { moveInjectedToListHeadHelper } from '../../core/helpers';
 
 
 const RPOptimizer = () => {
   const [modifiedPatientId, setModifiedPatientId] = useState<string | undefined>(undefined);
   const { patientsList, updatePatientsList } = useContext(PatientsContext) as PatientsContextType;
   const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
-  const { setFutureStats, setNowStats } = useContext(StatisticsContext) as StatisticsContextType;
 
   // app status
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(true);
-
-  const updateStats = () => {
-    const perdictions = predict(patientsList, rpSettings);
-    const currentState = currentStats(patientsList, rpSettings)
-    setFutureStats(perdictions);
-    setNowStats(currentState);
-  }
-
-  // Listens for changes and update the prediction / current state
-  useEffect(() => {
-    const statisticsInterval = setInterval(() => {
-      updateStats()
-    }, 60000);
-    return () => clearInterval(statisticsInterval);
-  }, [patientsList, rpSettings]);
-
 
   const sortPatients = () => {
     updatePatientsList(sort(patientsList, rpSettings));
@@ -51,7 +33,12 @@ const RPOptimizer = () => {
   };
 
   const generateExpectations = () => {
-    updateStats();
+    const newPatientlist = [...patientsList];
+    moveInjectedToListHeadHelper(newPatientlist);
+    const firstInjectionTime = newPatientlist[0].isInjected && newPatientlist[0].realInjectionTime ? newPatientlist[0].realInjectionTime : new Date()
+    generatePatientInjTimeList(newPatientlist, firstInjectionTime,rpSettings)
+    
+    updatePatientsList(newPatientlist)
   };
   
   const modifyPatient = (id: string) => {

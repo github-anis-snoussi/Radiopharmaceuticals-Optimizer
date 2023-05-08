@@ -1,7 +1,7 @@
 import { message } from "antd";
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
-import { moveInjectedToListHead } from "./helpers";
+import { moveInjectedToListHeadHelper } from "./helpers";
 import { predict } from "./predict";
 
 
@@ -67,10 +67,10 @@ const slidingWindowSort = (patientList: PatientType[], rpSettings: RpSettingsTyp
 * @param {RpSettingsType} rpSettings - the general settings for the system
 */
 export const sort = (patientListOg: PatientType[], rpSettings: RpSettingsType): PatientType[] => {
-    moveInjectedToListHead(patientListOg);
+    moveInjectedToListHeadHelper(patientListOg);
 
-    let sortedList = greedySort(patientListOg);
-    // secondSorting(sortedList, rpSettings);
+    let sortedList = greedySort([...patientListOg]);
+    slidingWindowSort(sortedList, rpSettings);
     message.success("Patients sorted");
-    return sortedList;
+    return [...sortedList];
 };

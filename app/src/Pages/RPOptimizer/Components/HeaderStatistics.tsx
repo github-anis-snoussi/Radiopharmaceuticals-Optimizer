@@ -16,7 +16,7 @@ const HeaderStatistics = ({
   total: any;
 }) => {
   const {
-    futureStats: { totalRemainingActivity },
+    nowStats: {  totalActivityNow },
   } = useContext(StatisticsContext) as StatisticsContextType;
 
   return (
@@ -35,14 +35,14 @@ const HeaderStatistics = ({
         <Statistic title="RP Half Life" suffix="min" value={rpHalfLife} style={{ margin: 10 }} />
       </Row>
       <Row>
-        {totalRemainingActivity ? (
+        { totalActivityNow ? (
           <Progress
             style={{ paddingRight: 20 }}
             strokeColor={{
               '0%': 'red',
               '100%': 'green',
             }}
-            percent={(totalRemainingActivity / total) * 100}
+            percent={( totalActivityNow / total) * 100}
             format={percent => `${((percent ? percent * total : 0) / 100).toFixed(0)} MBq`}
           />
         ) : null}
