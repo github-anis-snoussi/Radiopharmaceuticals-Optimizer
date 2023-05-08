@@ -13,6 +13,8 @@ export interface RpSettingsType {
 export interface RpSettingsContextType {
   rpSettings: RpSettingsType;
   setRpSettings: (settings: RpSettingsType) => void;
+  hasInitSettings: boolean;
+  setHasInitSettings: (value: boolean) => void;
 }
 
 const RpSettingsContext = React.createContext<RpSettingsContextType | null>(null);
@@ -26,6 +28,10 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [wastedVol, setWastedVol] = useState<number>(0);
   const [unextractableVol, setUnextractableVol] = useState<number>(0);
   const [labName, setLabName] = useState<string>('Rp Optimizer');
+
+  // to only show welcome modal at first
+  const [hasInitSettings, setHasInitSettings] = useState<boolean>(false);
+
 
   const setRpSettings = ({
     rpActivity,
@@ -73,6 +79,8 @@ const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
           labName,
         },
         setRpSettings,
+        hasInitSettings,
+        setHasInitSettings
       }}
     >
       {children}
