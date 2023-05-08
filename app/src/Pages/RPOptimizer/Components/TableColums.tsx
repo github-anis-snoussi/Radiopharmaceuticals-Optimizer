@@ -55,12 +55,15 @@ const TableColums = (
       width: 100,
       dataIndex: 'expectedInjectionTime',
       key: 'expectedInjectionTime',
-      render(text: string) {
+      render(text: Date) {
         return {
           props: {
             style: { background: 'rgba(245, 206, 39, 0.41)' },
           },
-          children: <Text>{text || '?'}</Text>,
+          children: <Text>{text?.toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }) || '?'}</Text>,
         };
       },
     },
@@ -75,12 +78,12 @@ const TableColums = (
       width: 100,
       dataIndex: 'expectedInjectionVolume',
       key: 'expectedInjectionVolume',
-      render(text: string) {
+      render(text: number) {
         return {
           props: {
             style: { background: 'rgba(245, 206, 39, 0.41)' },
           },
-          children: <Text>{text || '?'}</Text>,
+          children: <Text>{text?.toFixed(3) || '?'}</Text>,
         };
       },
     },

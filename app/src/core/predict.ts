@@ -1,7 +1,7 @@
 import { PatientType } from "../context/PatientsContext";
 import { RpSettingsType } from "../context/RpSettingsContext";
 import { FutureStatsType } from "../context/StatisticsContext";
-import { moveInjectedToListHead } from "./helpers";
+import { moveInjectedToListHeadHelper } from "./helpers";
 import { activityAtFirstInj, decay, diffMsTimeMinutes, generatePatientInjTimeList, usableActivity } from "./maths";
 
 
@@ -13,8 +13,21 @@ import { activityAtFirstInj, decay, diffMsTimeMinutes, generatePatientInjTimeLis
 */
 export const predict = (patientList: PatientType[], rpSettings: RpSettingsType, firstInjectionTime: Date = new Date()): FutureStatsType => {
 
+    // if no patients are added yet
+    if (patientList.length === 0) {
+        return {
+            totalExpectedInjectedPatients: 0,
+            totalRemainingVol: rpSettings.rpVol,
+            usableRemainingVol: rpSettings.rpVol - rpSettings.wastedVol - rpSettings.unextractableVol,
+
+            remainingActivityTime: rpSettings.mesureTime,
+            totalRemainingActivity: rpSettings.rpActivity,
+            usableRemainingActivity: usableActivity(rpSettings.rpActivity, rpSettings.rpVol, rpSettings.unextractableVol + rpSettings.wastedVol)
+        }
+    }
+
     // move injected patients to the head of the list
-    moveInjectedToListHead(patientList);
+    moveInjectedToListHeadHelper(patientList);
 
     // generate the patients injection time
     generatePatientInjTimeList(

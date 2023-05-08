@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { PatientsContext, PatientsContextType } from './PatientsContext';
+import { RpSettingsContext, RpSettingsContextType } from './RpSettingsContext';
+import { predict } from '../core/predict';
+import { currentStats } from '../core/now';
 
 export interface NowStatsType {
   totalVolNow: number;
@@ -19,14 +23,16 @@ export interface FutureStatsType {
 
 export interface StatisticsContextType {
   nowStats: NowStatsType;
-  setNowStats: (stats: NowStatsType) => void;
   futureStats: FutureStatsType;
-  setFutureStats: (stats: FutureStatsType) => void;
 }
 
 const StatisticsContext = React.createContext<StatisticsContextType | null>(null);
 
 const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+
+  const { patientsList } = useContext(PatientsContext) as PatientsContextType;
+  const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
+
   // Current stats of the Lab
   const [totalVolNow, setTotalVolNow] = useState<number>(0);
   const [usableVolNow, setUsableVolNow] = useState<number>(0);
@@ -40,6 +46,57 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const [usableRemainingVol, setUsableRemainingVol] = useState<number>(0);
   const [remainingActivityTime, setRemainingActivityTime] = useState<Date>(new Date());
   const [totalExpectedInjectedPatients, setTotalExpectedInjectedPatients] = useState<number>(0);
+
+  const updateStats = () => {
+    const perdictions = predict(patientsList, rpSettings);
+    const currentState = currentStats(patientsList, rpSettings)
+    setFutureStats(perdictions);
+    setNowStats(currentState);
+  }
+
+  useEffect(() => {
+    const statisticsInterval = setInterval(() => {
+      updateStats()
+    }, 60000);
+    return () => clearInterval(statisticsInterval);
+  }, [updateStats]);
+
+  useEffect(() => {
+    updateStats();
+  }, [patientsList, rpSettings]);
+
+  useEffect(()=> {
+    console.log("FUTURE STAT : ", {
+      totalRemainingActivity,
+      usableRemainingActivity,
+      totalRemainingVol,
+      usableRemainingVol,
+      remainingActivityTime,
+      totalExpectedInjectedPatients,
+    })
+  }, [
+    totalRemainingActivity,
+    usableRemainingActivity,
+    totalRemainingVol,
+    usableRemainingVol,
+    remainingActivityTime,
+    totalExpectedInjectedPatients,
+  ])
+
+  useEffect(()=> {
+    console.log("NOW STAT : ", {
+      totalVolNow,
+      usableVolNow,
+      totalActivityNow,
+      usableActivityNow,
+    })
+  }, [
+    totalVolNow,
+    usableVolNow,
+    totalActivityNow,
+    usableActivityNow,
+  ])
+
 
   const setFutureStats = ({
     totalRemainingActivity,
@@ -98,7 +155,6 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
           totalActivityNow,
           usableActivityNow
         },
-        setNowStats,
         futureStats: {
           totalRemainingActivity,
           usableRemainingActivity,
@@ -107,7 +163,6 @@ const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
           remainingActivityTime,
           totalExpectedInjectedPatients
         },
-        setFutureStats,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import { PatientType } from '../context/PatientsContext';
 import { RpSettingsType } from '../context/RpSettingsContext';
 import { FutureStatsType } from '../context/StatisticsContext';
+import { usableActivity } from './maths';
 import { predict } from './predict';
 
 describe('prediction algorithms helpers', () => {
@@ -52,6 +53,19 @@ describe('prediction algorithms helpers', () => {
             expect(result.usableRemainingActivity).toBeDefined();
             expect(result.totalRemainingVol).toBeDefined();
             expect(result.usableRemainingVol).toBeDefined();
+        });
+
+        test('will return measure values if no patients are added', () => {
+            const result: FutureStatsType = predict(
+                [],
+                exampleRpSettings,
+            );
+            expect(result.totalExpectedInjectedPatients).toBe(0);
+            expect(result.remainingActivityTime).toBe(exampleRpSettings.mesureTime);
+            expect(result.totalRemainingActivity).toBe(exampleRpSettings.rpActivity);
+            expect(result.usableRemainingActivity).toBe(usableActivity(exampleRpSettings.rpActivity, exampleRpSettings.rpVol, exampleRpSettings.unextractableVol + exampleRpSettings.wastedVol));
+            expect(result.totalRemainingVol).toBe(exampleRpSettings.rpVol);
+            expect(result.usableRemainingVol).toBe(exampleRpSettings.rpVol - exampleRpSettings.unextractableVol - exampleRpSettings.wastedVol);
         });
 
         test('stops once a patient is not injectable - 1', () => {
