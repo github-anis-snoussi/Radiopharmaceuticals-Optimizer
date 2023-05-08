@@ -1,9 +1,10 @@
 import { Typography, Divider } from 'antd';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { GithubOutlined } from '@ant-design/icons';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { FeedbackForm } from './Components';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph, Text, Link } = Typography;
 
 const Infos = () => {
   const { currentTheme } = useThemeSwitcher();
@@ -25,11 +26,11 @@ const Infos = () => {
           <div>
             <Title>RP Optimizer</Title>
             <Paragraph>
-              Rp Optimizer (short for Radiopharmaceuticals Optimizer) is an open source web app used to make the use of
-              Radioactive pharmaceuticals used in the detection of cancerous cells more efficient during PET scans. This
-              app was designed and built with one goal in mind :{' '}
-              <Text strong>use IT to make an impact and give back to the community as much as possible</Text>.
+            <Text strong>Rp Optimizer</Text>{' '} (short for Radiopharmaceuticals Optimizer) is an open source web app that optimizes the usage of limited supply
+              of Radioactive pharmaceuticals during PET scans to detect cancerous cells.
             </Paragraph>
+            <Link href='https://github.com/ansnoussi/Radiopharmaceuticals-Optimizer' target="_blank" > <GithubOutlined /> Become a contributor</Link>
+            
           </div>
           {appLogo}
         </div>
