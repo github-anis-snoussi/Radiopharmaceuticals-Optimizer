@@ -12,12 +12,12 @@
 
 </p>
 
----
+<!-- ---
 ## 🚧 Under Maintenance :
 The project is undergoing a **HUGE** code refactoring and optimization ! 
 >This was just a POC, experimental code glued together from various bursts of motivation I had at different react skill levels, there is code with class components, functional components and even code translated directly from the previous python version.
 
----
+--- -->
 
 ## 🏠 [Homepage](https://rpo-ansnoussi.vercel.app)
 
