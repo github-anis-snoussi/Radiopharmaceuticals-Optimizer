@@ -1,5 +1,6 @@
 import { Button, DatePicker, Popconfirm } from "antd";
 import { useState } from "react";
+import moment from 'moment';
 import { PatientType } from "../../../context/PatientsContext";
 
 
@@ -21,7 +22,7 @@ const InjectionTimePicker = ({record, injectPatient}: {record: PatientType, inje
             marginTop: 10,
             marginBottom: 10,
           }}
-          onChange={(date, dateString) => {
+          onChange={(date: moment.Moment | null, dateString: string) => {
             setInjectionTime(dateString);
           }}
         />
