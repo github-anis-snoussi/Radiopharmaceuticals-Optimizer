@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, ReactNode, FunctionComponent } from 'react';
 import { PatientsContext, PatientsContextType } from './PatientsContext';
 import { RpSettingsContext, RpSettingsContextType } from './RpSettingsContext';
 import { predict } from '../core/predict';
@@ -28,7 +28,11 @@ export interface StatisticsContextType {
 
 const StatisticsContext = React.createContext<StatisticsContextType | null>(null);
 
-const StatisticsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+interface StatisticsContextProviderProps {
+  children?: ReactNode;
+}
+
+const StatisticsContextProvider: FunctionComponent<StatisticsContextProviderProps> = ({ children }) => {
 
   const { patientsList } = useContext(PatientsContext) as PatientsContextType;
   const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;

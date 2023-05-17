@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, FunctionComponent, useState } from 'react';
 
 export interface RpSettingsType {
   rpActivity: number;
@@ -19,7 +19,11 @@ export interface RpSettingsContextType {
 
 const RpSettingsContext = React.createContext<RpSettingsContextType | null>(null);
 
-const RpSettingsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+interface RpSettingsContextProviderProps {
+  children?: ReactNode;
+}
+
+const RpSettingsContextProvider: FunctionComponent<RpSettingsContextProviderProps> = ({ children }) => {
   // rpSettings
   const [rpActivity, setRpActivity] = useState<number>(0);
   const [mesureTime, setMesureTime] = useState<Date>(new Date());

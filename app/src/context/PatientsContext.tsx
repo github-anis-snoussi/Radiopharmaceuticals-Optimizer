@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FunctionComponent, ReactNode } from 'react';
 
 export interface PatientType {
   id: string;
@@ -22,7 +22,11 @@ export interface PatientsContextType {
 
 const PatientsContext = React.createContext<PatientsContextType | null>(null);
 
-const PatientsContextProvider: React.FC<React.ReactNode> = ({ children }) => {
+interface PatientsContextProviderProps {
+  children?: ReactNode;
+}
+
+const PatientsContextProvider: FunctionComponent<PatientsContextProviderProps> = ({ children }) => {
   //patients list
   const [patientsList, setPatientsList] = useState<PatientType[]>([]);
 
