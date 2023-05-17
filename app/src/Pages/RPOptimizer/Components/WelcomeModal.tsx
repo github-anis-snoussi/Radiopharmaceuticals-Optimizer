@@ -65,7 +65,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
         placeholder="Lab name"
         prefix={<BankOutlined />}
         value={labName}
-        onChange={event => {
+        onChange={(event: React.ChangeEvent<HTMLInputElement>)  => {
           setLabName(event.target.value);
         }}
       />
@@ -108,7 +108,7 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
             showTime
             style={{ width: '100%' }}
             value={mesureTime ? moment(mesureTime) : null}
-            onChange={(date, dateString) => {
+            onChange={(date: moment.Moment | null, dateString: string) => {
               setMesureTime(new Date(dateString));
             }}
           />
