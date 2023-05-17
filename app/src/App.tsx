@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // styles
 import './styles/App.css';
 import './styles/index.css';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 // utils
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import useMediaQuery from './hooks/useMediaQuery';
