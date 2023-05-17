@@ -77,8 +77,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
           <InputNumber
             style={{ width: '100%' }}
             value={rpHalfLife}
-            onChange={rpHalfLife => {
-              setRpHalfLife(rpHalfLife);
+            onChange={(rpHalfLife: number | null) => {
+             if(rpHalfLife) setRpHalfLife(rpHalfLife);
             }}
           />
         </Col>
@@ -92,8 +92,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
           <InputNumber
             style={{ width: '100%' }}
             value={rpActivity}
-            onChange={rpActivity => {
-              setRpActivity(rpActivity);
+            onChange={(rpActivity: number | null) => {
+              if(rpActivity) setRpActivity(rpActivity);
             }}
           />
         </Col>
@@ -123,8 +123,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
           <InputNumber
             style={{ width: '100%' }}
             value={rpVol}
-            onChange={rpVol => {
-              setRpVol(rpVol);
+            onChange={(rpVol: number | null) => {
+             if(rpVol) setRpVol(rpVol);
             }}
           />
         </Col>
@@ -138,8 +138,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
           <InputNumber
             style={{ width: '100%' }}
             value={wastedVol}
-            onChange={wastedVol => {
-              setWastedVol(wastedVol);
+            onChange={(wastedVol: number | null) => {
+              if(wastedVol) setWastedVol(wastedVol);
             }}
           />
         </Col>
@@ -153,8 +153,8 @@ const WelcomeModal = ({ isModalVisible, closeModal }: { isModalVisible: any; clo
           <InputNumber
             style={{ width: '100%' }}
             value={unextractableVol}
-            onChange={unextractableVol => {
-              setUnextractableVol(unextractableVol);
+            onChange={(unextractableVol: number | null) => {
+              if(unextractableVol) setUnextractableVol(unextractableVol);
             }}
           />
         </Col>

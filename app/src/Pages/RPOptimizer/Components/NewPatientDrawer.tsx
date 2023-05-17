@@ -21,9 +21,9 @@ const NewPatientDrawer = ({
 
   const { patientsList, addPatient, updatePatient } = useContext(PatientsContext) as PatientsContextType;
 
-  const [name, setName] = useState('');
-  const [dose, setDose] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [name, setName] = useState<string>('');
+  const [dose, setDose] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
     if (modifiedPatientId) {
@@ -86,7 +86,7 @@ const NewPatientDrawer = ({
               <Input
                 placeholder="Please enter user name"
                 value={name}
-                onChange={name => {
+                onChange={(name : React.ChangeEvent<HTMLInputElement>) => {
                   setName(name.target.value);
                 }}
               />
@@ -101,8 +101,8 @@ const NewPatientDrawer = ({
                 style={{ width: '100%' }}
                 min={0}
                 value={dose}
-                onChange={dose => {
-                  setDose(dose);
+                onChange={(dose: number | null) => {
+                  if(dose) setDose(dose);
                 }}
               />
             </Form.Item>
@@ -118,8 +118,8 @@ const NewPatientDrawer = ({
                 style={{ width: '100%' }}
                 min={0}
                 value={duration}
-                onChange={duration => {
-                  setDuration(duration);
+                onChange={(duration: number | null) => {
+                  if(duration) setDuration(duration);
                 }}
               />
             </Form.Item>
