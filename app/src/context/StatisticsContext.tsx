@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, ReactNode, FunctionComponent } from 'react';
-import { PatientsContext, PatientsContextType } from './PatientsContext';
+import React, { useState, useEffect, useContext, useMemo, useCallback, ReactNode, FunctionComponent } from 'react';
+import { PatientType, PatientsContext, PatientsContextType } from './PatientsContext';
 import { RpSettingsContext, RpSettingsContextType } from './RpSettingsContext';
 import { predict } from '../core/predict';
 import { currentStats } from '../core/now';
@@ -24,6 +24,7 @@ export interface FutureStatsType {
 export interface StatisticsContextType {
   nowStats: NowStatsType;
   futureStats: FutureStatsType;
+  currentStatsCycle: number
 }
 
 const StatisticsContext = React.createContext<StatisticsContextType | null>(null);
@@ -34,7 +35,7 @@ interface StatisticsContextProviderProps {
 
 const StatisticsContextProvider: FunctionComponent<StatisticsContextProviderProps> = ({ children }) => {
 
-  const { patientsList } = useContext(PatientsContext) as PatientsContextType;
+  const { patientsList, updatePatientsList } = useContext(PatientsContext) as PatientsContextType;
   const { rpSettings } = useContext(RpSettingsContext) as RpSettingsContextType;
 
   // Current stats of the Lab
@@ -50,24 +51,29 @@ const StatisticsContextProvider: FunctionComponent<StatisticsContextProviderProp
   const [usableRemainingVol, setUsableRemainingVol] = useState<number>(0);
   const [remainingActivityTime, setRemainingActivityTime] = useState<Date>(new Date());
   const [totalExpectedInjectedPatients, setTotalExpectedInjectedPatients] = useState<number>(0);
+  const [currentStatsCycle, setCurrentStatsCycle] = useState<number>(0)
 
-  const updateStats = () => {
-    const perdictions = predict(patientsList, rpSettings);
-    const currentState = currentStats(patientsList, rpSettings)
+  const patientListWithoutStats = useMemo(() => {
+    return patientsList.map(({ expectedInjectionTime, expectedInjectionVolume, ...rest } : PatientType ) => rest)
+  }, [patientsList])
+
+  const updateStats =  useCallback( () => {
+    const currentState = currentStats([...patientListWithoutStats], rpSettings)
+    const newPatientList = [...patientListWithoutStats]
+    const perdictions = predict([...patientListWithoutStats], rpSettings);
+    updatePatientsList([...newPatientList])
     setFutureStats(perdictions);
     setNowStats(currentState);
-  }
+  }, [patientListWithoutStats, rpSettings, updatePatientsList])
 
+  // Update stats every 5 seconds
   useEffect(() => {
     const statisticsInterval = setInterval(() => {
+      setCurrentStatsCycle(new Date().getTime())
       updateStats()
-    }, 60000);
+    }, 5000);
     return () => clearInterval(statisticsInterval);
   }, [updateStats]);
-
-  useEffect(() => {
-    updateStats();
-  }, [patientsList, rpSettings]);
 
   useEffect(()=> {
     console.log("FUTURE STAT : ", {
@@ -153,6 +159,7 @@ const StatisticsContextProvider: FunctionComponent<StatisticsContextProviderProp
   return (
     <StatisticsContext.Provider
       value={{
+        currentStatsCycle,
         nowStats: {
           totalVolNow,
           usableVolNow,

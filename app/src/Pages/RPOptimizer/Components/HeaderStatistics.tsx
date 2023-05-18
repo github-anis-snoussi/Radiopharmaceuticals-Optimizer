@@ -1,5 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Row, Statistic, Progress } from 'antd';
+import { FunctionOutlined } from '@ant-design/icons';
 import { StatisticsContext, StatisticsContextType } from '../../../context/StatisticsContext';
 
 const HeaderStatistics = ({
@@ -16,12 +17,26 @@ const HeaderStatistics = ({
   total: any;
 }) => {
   const {
+    currentStatsCycle,
     nowStats: {  totalActivityNow },
   } = useContext(StatisticsContext) as StatisticsContextType;
+
+  const [statsProgress, setStatsProgress] = useState<number>(0);
+
+  useEffect(() => {
+    const statisticsInterval = setInterval(() => {
+      setStatsProgress( ((new Date().getTime() - currentStatsCycle) / 5000) * 100 )
+    }, 50);
+    return () => clearInterval(statisticsInterval);
+  }, [currentStatsCycle, setStatsProgress]);
 
   return (
     <>
       <Row>
+        <Progress width={60} style={{
+          alignSelf: 'center',
+          marginRight: 10
+        }} type="dashboard" percent={statsProgress} format={() => <FunctionOutlined />} />
         <Statistic title="RP Activity" suffix="MBq" value={rpActivity} style={{ margin: 10 }} />
         <Statistic
           title="Measure Time"
