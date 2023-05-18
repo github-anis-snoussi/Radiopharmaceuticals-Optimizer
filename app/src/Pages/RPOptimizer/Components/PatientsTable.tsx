@@ -27,7 +27,6 @@ const PatientsTable = ({
       const newData = arrayMove([...patientsList], oldIndex, newIndex).filter(el => !!el);
       updatePatientsList(newData);
     }
-    generateExpectations();
   };
 
   const injectPatient = useCallback((id: string, injectionTime: string | null) => {
@@ -38,7 +37,7 @@ const PatientsTable = ({
       message.warning(error.message ?? 'Error when injecting patient.');
     }
 
-  }, [patientsList, updatePatientsList])
+  }, [patientsList, updatePatientsList, rpSettings])
 
   const DraggableContainer = (props: any) => (
     <SortableContainer useDragHandle disableAutoscroll helperClass="row-dragging" onSortEnd={onSortEnd} {...props} />
