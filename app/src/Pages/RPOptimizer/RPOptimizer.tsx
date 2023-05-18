@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Button, Popconfirm } from 'antd';
-import { AppHeader, PatientsTable, Expectations, WelcomeModal, NewPatientDrawer } from './Components';
+import { AppHeader, PatientsTable, Expectations, WelcomeModal, NewPatientDrawer, StatsProgress } from './Components';
 import {
   UserAddOutlined,
   FileSearchOutlined,
@@ -90,6 +90,7 @@ const RPOptimizer = () => {
       <PatientsTable generateExpectations={generateExpectations} modifyPatient={modifyPatient} />
 
       <Expectations />
+      <StatsProgress />
       <NewPatientDrawer
         isDrawerVisible={isDrawerVisible}
         closeDrawer={() => {

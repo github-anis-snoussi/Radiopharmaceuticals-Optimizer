@@ -6,3 +6,5 @@ export { default as PatientsTable } from "./PatientsTable";
 export { default as TableColums } from "./TableColums";
 export { default as ThemeSwitcher } from "./ThemeSwitcher";
 export { default as WelcomeModal } from "./WelcomeModal";
+export { default as StatsProgress } from "./StatsProgress";
+
