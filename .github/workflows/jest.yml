@@ -1,8 +1,9 @@
 name: jest
 on:
-  push:
     pull_request:
-      - dev
+        branches:
+            - master
+            - dev
 jobs:
   utests:
     runs-on: ubuntu-latest
