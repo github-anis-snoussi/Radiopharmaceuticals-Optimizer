@@ -12,5 +12,12 @@ jobs:
         run: yarn
         working-directory: ./app
       - name: Run tests
-        run: yarn test
+        continue-on-error: true
         working-directory: ./app
+        run: yarn test --json --outputFile=jest-results.json
+      - name: Process jest results with default
+        if: always()
+        uses: im-open/process-jest-test-results@v2.1.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          results-file: 'app/jest-results.json'
